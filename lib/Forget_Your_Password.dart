@@ -272,7 +272,7 @@ class _Forget_Your_PasswordState extends State<Forget_Your_Password> {
         // Successful response, navigate to VerifyUrEmail screen
         Navigator.pushReplacement(
           context,
-          SlidePageRoute(page: VerifyUrEmail()),
+          SlidePageRoute(page: const VerifyUrEmail()),
         );
       } else {
         // Handle other status codes or errors
@@ -298,6 +298,7 @@ class _Forget_Your_PasswordState extends State<Forget_Your_Password> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(
@@ -310,14 +311,14 @@ class _Forget_Your_PasswordState extends State<Forget_Your_Password> {
                     height: MediaQuery.of(context).size.height * 0.25,
                   ),
                 ),
-                Text(
+                const Text(
                   "Forget Your Password",
                   style: TextStyle(
                     fontSize: 21.0,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Text(
+                const Text(
                   "No worries, it happens!",
                   style: TextStyle(
                     fontSize: 21.0,
@@ -348,7 +349,7 @@ class _Forget_Your_PasswordState extends State<Forget_Your_Password> {
                             right: MediaQuery.of(context).size.width * 0.09,
                           ),
                           child: RichText(
-                            text: TextSpan(
+                            text: const TextSpan(
                               children: [
                                 TextSpan(
                                   text: "Enter Email Address",
@@ -393,7 +394,7 @@ class _Forget_Your_PasswordState extends State<Forget_Your_Password> {
                         ),
                         RichText(
                           textAlign: TextAlign.center,
-                          text: TextSpan(
+                          text: const TextSpan(
                             children: [
                               TextSpan(
                                 text:
@@ -436,7 +437,7 @@ class _Forget_Your_PasswordState extends State<Forget_Your_Password> {
                                   await storeCSRFToken(csrfToken);
                                   Navigator.pushReplacement(
                                     context,
-                                    SlidePageRoute(page: VerifyUrEmail()),
+                                    SlidePageRoute(page: const VerifyUrEmail()),
                                   );
                                 }
                               }
@@ -450,6 +451,7 @@ class _Forget_Your_PasswordState extends State<Forget_Your_Password> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 70,)
               ],
             ),
           ),

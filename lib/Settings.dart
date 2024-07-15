@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hiremi_version_two/Custom_Widget/Verifiedtrue.dart';
+import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/Utils/colors.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -10,14 +13,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    const Color customRed = Color(0xFFC1272D);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
+        centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (ctx) => const NotificationScreen(),
+              ));
+            },
+            icon: const Icon(Icons.notifications_outlined),
           ),
         ],
       ),
@@ -28,63 +37,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // User info section
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.grey.shade200,
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.red,
-                      size: 40,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Harsh Pawar',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'App ID: HM 23458 73432',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.check_circle, color: Colors.white),
-                        SizedBox(width: screenWidth * 0.01),
-                        const Text(
-                          'Verified',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              const VerifiedProfileWidget(
+                  name: 'Harsh Pawar', appId: 'HM 23458 73432'),
               SizedBox(height: screenHeight * 0.02),
               // Account section
               const Text(
                 'Account',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -92,188 +52,195 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 height: screenHeight * 0.01,
               ),
               Container(
-                height: 70,
-                width: 520,
+                width: screenWidth * 0.9,
+                padding:  EdgeInsets.all(screenWidth*0.02),
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: TextButton(
-                  onPressed: () {
-
-                  },
-                  child: Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.person_outline,
-                            color: Colors.red, size: 20.0),
-                      ),
-                      SizedBox(width: screenWidth * 0.01),
-                      const Expanded(
-                        child: Text(
-                          'Personal Info',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(screenHeight*0.01),
+                ),
+                child: RawMaterialButton(
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.person_outline,
+                              color: AppColors.primary,
+                              size: screenHeight * 0.03,
+                            ),
+                            SizedBox(
+                              width: screenWidth * 0.03,
+                            ),
+                            Text(
+                              'Personal Information',
+                              style: TextStyle(fontSize: screenHeight * 0.02),
+                            ),
+                            Spacer(),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.arrow_forward_ios,
+                                size: screenHeight * 0.02,
+                              ),
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStatePropertyAll(AppColors.bgBlue)),
+                            )
+                          ],
                         ),
                       ),
-                      const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 25),
-                      SizedBox(height: screenHeight * 0.02),
+              ),
+              SizedBox(
+                height: screenHeight * 0.03,
+              ),
+              const Text(
+                'Privacy & Security',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: screenHeight * 0.01,
+              ),
+              Container(
+                width: screenWidth * 0.9,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(screenHeight*0.01),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(screenWidth * 0.04),
+                  child: Column(
+                    children: [
+                      RawMaterialButton(
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.folder_shared_rounded,
+                              color: AppColors.primary,
+                              size: screenHeight * 0.03,
+                            ),
+                            SizedBox(
+                              width: screenWidth * 0.03,
+                            ),
+                            Text(
+                              'Manage Permission',
+                              style: TextStyle(fontSize: screenHeight * 0.02),
+                            ),
+                            Spacer(),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.arrow_forward_ios,
+                                size: screenHeight * 0.02,
+                              ),
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStatePropertyAll(AppColors.bgBlue)),
+                            )
+                          ],
+                        ),
+                      ),
+                      RawMaterialButton(
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.lock_open_rounded,
+                              color: AppColors.primary,
+                              size: screenHeight * 0.03,
+                            ),
+                            SizedBox(
+                              width: screenWidth * 0.03,
+                            ),
+                            Text(
+                              'Change Password',
+                              style: TextStyle(fontSize: screenHeight * 0.02),
+                            ),
+                            Spacer(),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.arrow_forward_ios,
+                                size: screenHeight * 0.02,
+                              ),
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStatePropertyAll(AppColors.bgBlue)),
+                            )
+                          ],
+                        ),
+                      ),
+                      RawMaterialButton(
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.notifications_outlined,
+                              color: AppColors.primary,
+                              size: screenHeight * 0.03,
+                            ),
+                            SizedBox(
+                              width: screenWidth * 0.03,
+                            ),
+                            Text(
+                              'Notification',
+                              style: TextStyle(fontSize: screenHeight * 0.02),
+                            ),
+                            Spacer(),
+                            Transform.scale(
+                              scale: 0.7,
+                              child: Switch(
+                                value: false,
+                                onChanged: (value) {},
+                                activeColor: customRed,
+                                activeTrackColor: Colors.grey[300],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      RawMaterialButton(
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.location_on,
+                              color: AppColors.primary,
+                              size: screenHeight * 0.03,
+                            ),
+                            SizedBox(
+                              width: screenWidth * 0.03,
+                            ),
+                            Text(
+                              'Location',
+                              style: TextStyle(fontSize: screenHeight * 0.02),
+                            ),
+                            Spacer(),
+                            Transform.scale(
+                              scale: 0.7,
+                              child: Switch(
+                                value: true,
+                                onChanged: (value) {},
+                                activeColor: customRed,
+                                activeTrackColor: Colors.grey[300],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
               SizedBox(
-                height: screenHeight * 0.01,
+                height: screenHeight * 0.03,
               ),
-
-              const Text(
-                'Privacy & Security',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: screenHeight * 0.02,
-              ),
-              Container(
-                width: 520,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: Column(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-
-                      },
-
-                      child: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(15.0),
-                            child: Icon(Icons.folder_shared,
-                                color: Colors.red, size: 20.0),
-                          ),
-                          SizedBox(width: screenWidth * 0.01),
-                          const Expanded(
-                            child: Text(
-                              'Manage Permission',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          const Icon(Icons.arrow_forward_ios,
-                              color: Colors.grey, size: 25),
-                          const SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-
-                      },
-                      child: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(15.0),
-                            child: Icon(Icons.lock_outline,
-                                color: Colors.red, size: 20.0),
-                          ),
-                          SizedBox(width: screenWidth * 0.01),
-                          const Expanded(
-                            child: Text(
-                              'Change password',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          const Icon(Icons.arrow_forward_ios,
-                              color: Colors.grey, size: 25),
-                          SizedBox(
-                            height: screenHeight * 0.02,
-                          ),
-                        ],
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-
-                      },
-                      child: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(15.0),
-                            child: Icon(Icons.notifications_active_outlined,
-                                color: Colors.red, size: 20.0),
-                          ),
-                          SizedBox(width: screenWidth * 0.01),
-                          const Expanded(
-                            child: Text(
-                              'Notifications',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          Switch(
-                              value: false,
-                              onChanged: (value) {},
-                              activeColor: Colors.white,
-                              inactiveThumbColor: Colors.red),
-                          SizedBox(height: screenHeight * 0.02),
-                        ],
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-
-                      },
-                      child: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(15.0),
-                            child: Icon(Icons.location_on_outlined,
-                                color: Colors.red, size: 20.0),
-                          ),
-                          SizedBox(width: screenWidth * 0.01),
-                          const Expanded(
-                            child: Text(
-                              'Location',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          Switch(
-                            value: true,
-                            onChanged: (value) {},
-                            activeColor: Colors.white,
-                            activeTrackColor: Colors.red,
-                          ),
-                          SizedBox(height: screenHeight * 0.01),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: screenHeight * 0.02,
-              ),
-
               const Text(
                 'About & More',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -281,72 +248,77 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 height: screenHeight * 0.01,
               ),
               Container(
-                
-                width: 520,
+                width: screenWidth * 0.9,
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: Column(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-
-                      },
-                      child: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(15.0),
-                            child: Icon(Icons.menu_book,
-                                color: Colors.red, size: 20.0),
-                          ),
-                          SizedBox(width: screenWidth * 0.01),
-                          const Expanded(
-                            child: Text(
-                              'About Us',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(screenHeight*0.01),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(screenWidth*0.04),
+                  child: Column(
+                    children: [
+                      RawMaterialButton(
+                          onPressed: () {},
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.info,
+                                color: AppColors.primary,
+                                size: screenHeight * 0.03,
                               ),
-                            ),
-                          ),
-                          Switch(
-                            value: true,
-                            onChanged: (value) {},
-                            activeColor: Colors.white,
-                            activeTrackColor: Colors.red,
-                          ),
-                          SizedBox(height: screenHeight * 0.01),
-                        ],
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-
-                      },
-                      child: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(15.0),
-                            child: Icon(Icons.phone_forwarded_rounded,
-                                color: Colors.red, size: 20.0),
-                          ),
-                          SizedBox(width: screenWidth * 0.01),
-                          const Expanded(
-                            child: Text(
-                              'Help & Support',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
+                              SizedBox(
+                                width: screenWidth * 0.03,
                               ),
-                            ),
+                              Text(
+                                'About Us',
+                                style: TextStyle(fontSize: screenHeight * 0.02),
+                              ),
+                              Spacer(),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: screenHeight * 0.02,
+                                ),
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        WidgetStatePropertyAll(AppColors.bgBlue)),
+                              )
+                            ],
                           ),
-                          const Icon(Icons.arrow_forward_ios,
-                              color: Colors.grey, size: 25),
-                          SizedBox(height: screenHeight * 0.02),
-                        ],
-                      ),
-                    ),
-                  ],
+                        ),
+                      RawMaterialButton(
+                          onPressed: () {},
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.call,
+                                color: AppColors.primary,
+                                size: screenHeight * 0.03,
+                              ),
+                              SizedBox(
+                                width: screenWidth * 0.03,
+                              ),
+                              Text(
+                                'Help & Support',
+                                style: TextStyle(fontSize: screenHeight * 0.02),
+                              ),
+                              Spacer(),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: screenHeight * 0.02,
+                                ),
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        WidgetStatePropertyAll(AppColors.bgBlue)),
+                              )
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ],

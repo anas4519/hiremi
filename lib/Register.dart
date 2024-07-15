@@ -777,7 +777,7 @@ class _RegistersState extends State<Registers> {
             Center(
               child: RichText(
                 textAlign: TextAlign.center,
-                text: TextSpan(
+                text: const TextSpan(
                   children: [
                     TextSpan(
                       text: "Register to get started\n",
@@ -815,6 +815,7 @@ class _RegistersState extends State<Registers> {
                       "Full Name",
                       "John Doe",
                       controller: _fullNameController,
+                      obscureText: false,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your full name';
@@ -827,6 +828,7 @@ class _RegistersState extends State<Registers> {
                       "Father's Full Name",
                       "Robert Dave",
                       controller: _fatherNameController,
+                      obscureText: false,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your father\'s full name';
@@ -840,6 +842,7 @@ class _RegistersState extends State<Registers> {
                       "Email Address",
                       "yourEmail@gmail.com",
                       controller: _emailController,
+                      obscureText: false,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email address';
@@ -857,6 +860,7 @@ class _RegistersState extends State<Registers> {
                       showPositionedBox: true,
                       prefixIcon: Icons.calendar_today,
                       controller: _dobController,
+                      obscureText: false,
                       validator: (value) {
                         if (_selectedDate == null) {
                           return 'Please select your date of birth';
@@ -897,6 +901,7 @@ class _RegistersState extends State<Registers> {
                       "Phone Number",
                       "+91",
                       keyboardType: TextInputType.phone,
+                      obscureText: false,
                       controller: _phoneController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -914,6 +919,7 @@ class _RegistersState extends State<Registers> {
                       "+91",
                       keyboardType: TextInputType.phone,
                       controller: _whatsappController,
+                      obscureText: false,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your WhatsApp number';
@@ -930,6 +936,7 @@ class _RegistersState extends State<Registers> {
                       "College Name",
                       "Enter Your College Name",
                       controller: _collegeNameController,
+                      obscureText: false,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your college name';
@@ -1104,13 +1111,13 @@ class _RegistersState extends State<Registers> {
                             // Registration successful, navigate to login or next screen
                             Navigator.pushReplacement(
                               context,
-                              SlidePageRoute(page: LogIn()),
+                              SlidePageRoute(page: const LogIn()),
                             );
                           }
                           else {
                             // Show error message to user
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Text('Registration failed. Please try again.'),
                                 duration: Duration(seconds: 3),
                               ),
@@ -1136,7 +1143,7 @@ class _RegistersState extends State<Registers> {
       padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height * 0.02),
       child: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Colors.black,
@@ -1255,9 +1262,9 @@ class _RegistersState extends State<Registers> {
               children: [
                 TextSpan(
                   text: label,
-                  style: TextStyle(color: Colors.black),
+                  style: const TextStyle(color: Colors.black),
                 ),
-                TextSpan(
+                const TextSpan(
                   text: " *",
                   style: TextStyle(color: Colors.red),
                 ),
@@ -1329,7 +1336,7 @@ class _RegistersState extends State<Registers> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.12),
           child: RichText(
-            text: TextSpan(
+            text: const TextSpan(
               children: [
                 TextSpan(
                   text: 'Gender',
@@ -1352,19 +1359,19 @@ class _RegistersState extends State<Registers> {
                 groupValue: _selectedGender,
                 onChanged: _handleGenderChange,
               ),
-              Text('Male'),
+              const Text('Male'),
               Radio(
                 value: Gender.Female,
                 groupValue: _selectedGender,
                 onChanged: _handleGenderChange,
               ),
-              Text('Female'),
+              const Text('Female'),
               Radio(
                 value: Gender.Other,
                 groupValue: _selectedGender,
                 onChanged: _handleGenderChange,
               ),
-              Text('Other'),
+              const Text('Other'),
             ],
           ),
         ),

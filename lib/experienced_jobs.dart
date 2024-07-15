@@ -38,12 +38,12 @@ class _Experienced_JobsState extends State<Experienced_Jobs> {
           SizedBox(height: screenHeight*0.01,),
           const Text(
             'Hiremi’s Recruiters are planning for new jobs',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
             textAlign: TextAlign.center,
           ),
           const Text(
-            'please wait for few days',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+            'and roles, please wait for few days',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
             textAlign: TextAlign.center,
           ),
 

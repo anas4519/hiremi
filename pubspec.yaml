@@ -43,6 +43,7 @@ dependencies:
   hexcolor: ^3.0.1
   url_launcher: ^6.3.0
   google_fonts: ^6.2.1
+  flutter_riverpod: ^2.5.1
 
 dev_dependencies:
   flutter_test:

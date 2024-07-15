@@ -188,6 +188,7 @@ class _HomePageState extends State<HomePage> {
                             child: Icon(
                               Icons.spa,
                               size: screenWidth * 0.02,
+                              color: Colors.orange,
                             ),
                           ),
                           SizedBox(width: screenWidth * 0.015),
@@ -228,6 +229,7 @@ class _HomePageState extends State<HomePage> {
                             child: Icon(
                               Icons.work,
                               size: screenWidth * 0.02,
+                              color: const Color(0xFFFF3E41),
                             ),
                           ),
                           SizedBox(width: screenWidth * 0.015),
@@ -268,6 +270,7 @@ class _HomePageState extends State<HomePage> {
                             child: Icon(
                               Icons.work,
                               size: screenWidth * 0.02,
+                              color: Colors.purple,
                             ),
                           ),
                           SizedBox(width: screenWidth * 0.015),

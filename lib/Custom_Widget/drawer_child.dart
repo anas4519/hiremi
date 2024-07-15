@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Edit_Profile_Section/BasicDetails/AddBasicDetails.dart';
+import 'package:hiremi_version_two/Forget_Your_Password.dart';
 import 'package:hiremi_version_two/Help_Support.dart';
 import 'package:hiremi_version_two/Settings.dart';
 import 'package:hiremi_version_two/about_us.dart';
@@ -157,7 +158,9 @@ class DrawerChild extends StatelessWidget {
                       style: const ButtonStyle(
                           backgroundColor:
                               WidgetStatePropertyAll(Color(0xFFECF5FF))),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> Forget_Your_Password()));
+                      },
                       icon: const Icon(Icons.navigate_next))),
               SizedBox(height: screenHeight * 0.005),
               ListTile(
