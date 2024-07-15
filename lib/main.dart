@@ -6,7 +6,7 @@ import 'SplashScreen.dart';
 
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
 
-      home: const ProviderScope(child: NewNavbar())
+      home: SplashScreen()
       
     );
   }
