@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
 import 'package:hiremi_version_two/Models/register_model.dart';
 import 'package:hiremi_version_two/verification_screens/verifiaction_screen2.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class VerificationScreen1 extends StatefulWidget {
   const VerificationScreen1({Key? key}) : super(key: key);
@@ -16,6 +21,7 @@ final _formKey = GlobalKey<FormState>();
   Gender? _selectedGender = Gender.Male;
   String? _selectedState;
   DateTime? _selectedDate;
+String _userId="";
 
   // List<String> _states = ['State 1', 'State 2', 'State 3', 'State 4'];
 
@@ -99,6 +105,89 @@ final _formKey = GlobalKey<FormState>();
     _confirmPasswordController.dispose();
     super.dispose();
   }
+@override
+void initState() {
+  super.initState();
+  _fetchUserData();
+}
+Future<void> _fetchUserData() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? storedEmail = prefs.getString('email');
+  print("Stored Email: $storedEmail");
+
+  if (storedEmail != null) {
+    try {
+      final response = await http.get(
+        Uri.parse('http://13.127.81.177:8000/api/registers/'),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        print('All user data: $data');
+
+        final userData = data.firstWhere(
+              (user) => user['email'] == storedEmail,
+          orElse: () => null,
+        );
+
+        if (userData != null) {
+          print('Matched user data: $userData');
+          setState(() {
+             _userId = userData['id'].toString();
+             _phoneController.text=userData['phone_number'];
+             _whatsappController.text=userData['whatsapp_number'];
+          });
+        } else {
+          print('No user found with the stored email');
+        }
+      } else {
+        print('Failed to load user data: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  } else {
+    print('No email stored');
+  }
+}
+Future<void> _updateUserData() async {
+  if (!_isAllFieldsValid()) return;
+
+  try {
+    final response = await http.patch(
+      Uri.parse('http://13.127.81.177:8000/api/registers/$_userId/'),
+
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        // 'full_name': _fullNameController.text,
+        // 'father_name': _fatherNameController.text,
+        // 'email': _emailController.text,
+        // 'date_of_birth': _dobController.text,
+        // 'birth_place': _birthPlaceController.text,
+        // 'gender': _selectedGender.toString().split('.').last,
+        'phone_number':_phoneController.text,
+        'whatsapp_number':_whatsappController.text,
+        // Include other fields similarly
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('User data updated successfully');
+      Navigator.push(
+        context,
+        SlidePageRoute(page: VerificationScreen2()),
+      );
+    } else {
+      print("$_userId");
+      print('Failed to update user data: ${response.statusCode}');
+      print(response.body);
+    }
+  } catch (e) {
+    print('Error: $e');
+  }
+}
 
   bool _isAllFieldsValid() {
     return _formKey.currentState?.validate() ?? false;
@@ -110,7 +199,7 @@ final _formKey = GlobalKey<FormState>();
     var screenWidth = MediaQuery.of(context).size.width;
     double imageSize = MediaQuery.of(context).size.width * 0.6;
     double imageHeight = MediaQuery.of(context).size.height * 0.157;
-
+      print("Build");
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -182,9 +271,7 @@ final _formKey = GlobalKey<FormState>();
               color: Colors.grey,
             ),
 
-            // backgroundColor: Colors.white,
-            // borderColor: Colors.black,
-            // borderWidth: 0.53,
+
             Form(
               key: _formKey,
                 child: Padding(
@@ -202,89 +289,7 @@ final _formKey = GlobalKey<FormState>();
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.01),
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "Full Name",
-                      //   "John Doe",
-                      //   controller: _fullNameController,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your full name';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "Father's Full Name",
-                      //   "Robert Dave",
-                      //   controller: _fatherNameController,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your father\'s full name';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // buildGenderField(),
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "Email Address",
-                      //   "yourEmail@gmail.com",
-                      //   controller: _emailController,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your email address';
-                      //     }
-                      //     if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                      //       return 'Please enter a valid email address';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "Date Of Birth",
-                      //   "DD/MM/YYYY",
-                      //   showPositionedBox: true,
-                      //   prefixIcon: Icons.calendar_today,
-                      //   controller: _dobController,
-                      //   validator: (value) {
-                      //     if (_selectedDate == null) {
-                      //       return 'Please select your date of birth';
-                      //     }
-                      //     return null;
-                      //   },
-                      //   onTap: () async {
-                      //     final DateTime? pickedDate = await showDatePicker(
-                      //       context: context,
-                      //       initialDate: DateTime.now(),
-                      //       firstDate: DateTime(1900),
-                      //       lastDate: DateTime.now(),
-                      //     );
-                      //     if (pickedDate != null) {
-                      //       setState(() {
-                      //         _selectedDate = pickedDate;
-                      //         _dobController.text =
-                      //             DateFormat('yyyy-MM-dd').format(pickedDate);
-                      //       });
-                      //     }
-                      //   },
-                      // ),
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "Birth Place",
-                      //   "Select State",
-                      //   controller: _birthPlaceController,
-                      //   dropdownItems: _states,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your birth place';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // buildSectionHeader("Contact Information"),
+
                       buildLabeledTextField(
                         context,
                         "Phone Number",
@@ -329,8 +334,9 @@ final _formKey = GlobalKey<FormState>();
                               child: TextButton(
                                 onPressed: () {
                                   if (_isAllFieldsValid()) {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (ctx) => const VerificationScreen2()));
+                                    // Navigator.of(context).push(MaterialPageRoute(
+                                    //     builder: (ctx) => const VerificationScreen1()));
+                                    _updateUserData();
                                   } else {
                                     setState(() {});
                                   }
@@ -356,6 +362,90 @@ final _formKey = GlobalKey<FormState>();
       ),
     );
   }
+Widget buildLabeledTextField(
+    BuildContext context,
+    String label,
+    String hintText, {
+      bool showPositionedBox = false,
+      IconData? prefixIcon,
+      bool obscureText = false,
+      List<String>? dropdownItems,
+      TextEditingController? controller,
+      String? Function(String?)? validator,
+      VoidCallback? onTap,
+      TextInputType? keyboardType,
+    }) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.04),
+        child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: label,
+                style: const TextStyle(color: Colors.black),
+              ),
+              const TextSpan(
+                text: " *",
+                style: TextStyle(color: Colors.red),
+              ),
+            ],
+          ),
+        ),
+      ),
+      SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+      Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.04),
+        child: dropdownItems != null
+            ? DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            hintText: hintText,
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          value: controller?.text.isNotEmpty == true
+              ? controller?.text
+              : null,
+          hint: Text(hintText),
+          onChanged: (String? newValue) {
+            setState(() {
+              controller?.text = newValue!;
+            });
+          },
+          items: dropdownItems.map((String item) {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: Text(item),
+            );
+          }).toList(),
+          validator: validator,
+          isExpanded: true,
+        )
+            : TextFormField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hintText,
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          obscureText: obscureText,
+          validator: validator,
+          onTap: onTap,
+          keyboardType: keyboardType,
+        ),
+      ),
+      SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+    ],
+  );
+}
 
   Widget buildSectionHeader(String title) {
     return Padding(
@@ -372,156 +462,73 @@ final _formKey = GlobalKey<FormState>();
     );
   }
 
-  Widget buildLabeledTextField(
-    BuildContext context,
-    String label,
-    String hintText, {
-    bool showPositionedBox = false,
-    IconData? prefixIcon,
-    bool obscureText = false,
-    List<String>? dropdownItems,
-    TextEditingController? controller,
-    String? Function(String?)? validator,
-    VoidCallback? onTap,
-    TextInputType? keyboardType,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.04),
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: label,
-                  style: const TextStyle(color: Colors.black),
-                ),
-                const TextSpan(
-                  text: " *",
-                  style: TextStyle(color: Colors.red),
-                ),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.04),
-          child: dropdownItems != null
-              ? DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    hintText: hintText,
-                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  value: controller?.text.isNotEmpty == true
-                      ? controller?.text
-                      : null,
-                  hint: Text(hintText),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      controller?.text = newValue!;
-                    });
-                  },
-                  items: dropdownItems.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                  validator: validator,
-                  isExpanded: true,
-                )
-              : TextFormField(
-                  controller: controller,
-                  decoration: InputDecoration(
-                    hintText: hintText,
-                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  obscureText: obscureText,
-                  validator: validator,
-                  onTap: onTap,
-                  keyboardType: keyboardType,
-                ),
-        ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-      ],
-    );
-  }
 
-  Widget buildGenderField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.04),
-          child: RichText(
-            text: const TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Gender',
-                  style: TextStyle(color: Colors.black),
-                ),
-                TextSpan(
-                  text: " *",
-                  style: TextStyle(color: Colors.red),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding:
-              EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04),
-          child: Row(
-            children: [
-              Radio(
-                value: Gender.Male,
-                groupValue: _selectedGender,
-                onChanged: _handleGenderChange,
-              ),
-              const Text('Male'),
-              Radio(
-                value: Gender.Female,
-                groupValue: _selectedGender,
-                onChanged: _handleGenderChange,
-              ),
-              const Text('Female'),
-              Radio(
-                value: Gender.Other,
-                groupValue: _selectedGender,
-                onChanged: _handleGenderChange,
-              ),
-              const Text('Other'),
-            ],
-          ),
-        ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-      ],
-    );
-  }
 
-  Widget buildStateDropdown() {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width * 0.045,
-        vertical: MediaQuery.of(context).size.height * 0.01,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-        ],
-      ),
-    );
-  }
+  // Widget buildGenderField() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Padding(
+  //         padding: EdgeInsets.symmetric(
+  //             horizontal: MediaQuery.of(context).size.width * 0.04),
+  //         child: RichText(
+  //           text: const TextSpan(
+  //             children: [
+  //               TextSpan(
+  //                 text: 'Gender',
+  //                 style: TextStyle(color: Colors.black),
+  //               ),
+  //               TextSpan(
+  //                 text: " *",
+  //                 style: TextStyle(color: Colors.red),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding:
+  //             EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04),
+  //         child: Row(
+  //           children: [
+  //             Radio(
+  //               value: Gender.Male,
+  //               groupValue: _selectedGender,
+  //               onChanged: _handleGenderChange,
+  //             ),
+  //             const Text('Male'),
+  //             Radio(
+  //               value: Gender.Female,
+  //               groupValue: _selectedGender,
+  //               onChanged: _handleGenderChange,
+  //             ),
+  //             const Text('Female'),
+  //             Radio(
+  //               value: Gender.Other,
+  //               groupValue: _selectedGender,
+  //               onChanged: _handleGenderChange,
+  //             ),
+  //             const Text('Other'),
+  //           ],
+  //         ),
+  //       ),
+  //       SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+  //     ],
+  //   );
+  // }
+  //
+  // Widget buildStateDropdown() {
+  //   return Padding(
+  //     padding: EdgeInsets.symmetric(
+  //       horizontal: MediaQuery.of(context).size.width * 0.045,
+  //       vertical: MediaQuery.of(context).size.height * 0.01,
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

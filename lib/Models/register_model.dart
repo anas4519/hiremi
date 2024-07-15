@@ -39,7 +39,6 @@ class User {
       'father_name': fatherName,
       'gender': gender.toString().split('.').last,
       'email': email,
-      'address':"57 Shankar Garden Abhinav Home By pass Road ,Bhopal",
       'date_of_birth': dob,
       'birthPlace': birthPlace,
       'phone_number': phone,
@@ -55,3 +54,5 @@ class User {
 }
 
 enum Gender { Male, Female, Other }
+
+

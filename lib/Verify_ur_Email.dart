@@ -412,7 +412,7 @@ class _VerifyUrEmailState extends State<VerifyUrEmail> {
         // Store the OTP in shared preferences (example usage)
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('otp', otp);
-
+        print("Hdjhf");
         Navigator.pushReplacement(
           context,
           SlidePageRoute(page: CreateNewPassword()),
@@ -562,7 +562,10 @@ class _VerifyUrEmailState extends State<VerifyUrEmail> {
                                 body, ApiUrls.otpValidation);
 
                             if (responce.statusCode == 200) {
-
+                              Navigator.pushReplacement(
+                                context,
+                                SlidePageRoute(page: CreateNewPassword()),
+                              );
                               // ignore: use_build_context_synchronously
                               print(responce.statusCode);
                               print(responce.body);

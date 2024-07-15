@@ -1,12 +1,14 @@
+
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/Curved_Container.dart';
 import 'package:hiremi_version_two/Custom_Widget/Elevated_Button.dart';
 import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
-import 'package:hiremi_version_two/Custom_Widget/TextFeild.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/Forget_Your_Password.dart';
-import 'package:hiremi_version_two/HomePage.dart';
 import 'package:hiremi_version_two/Register.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -16,9 +18,55 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool _isObscure = true;
+
+  Future<void> _login() async {
+    if (!_formKey.currentState!.validate()) {
+      // Invalid inputs
+      return;
+    }
+
+    final String apiUrl = "http://13.127.81.177:8000/login/";
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "email": _emailController.text,
+        "password": _passwordController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // Login successful
+      print("Login successful");
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('email', _emailController.text);
+
+      Navigator.push(
+        context,
+        SlidePageRoute(page: NewNavbar(isV: false,)),
+      );
+
+    } else {
+      // Login failed
+      print("Login failed");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Your credentials may be wrong. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    double calculatedSemiCircleWidth =   MediaQuery.of(context).size.width * 0.08;
+    print("Build");
+    double calculatedSemiCircleWidth = MediaQuery.of(context).size.width * 0.08;
     double imageSize = MediaQuery.of(context).size.width * 0.6;
     double imageHeight = MediaQuery.of(context).size.height * 0.157;
 
@@ -42,208 +90,568 @@ class _LogInState extends State<LogIn> {
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Column(
-            children: [
-              // List of images generated using List.generate
-              ...imageWidgets,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                // List of images generated using List.generate
+                ...imageWidgets,
 
-              SizedBox(height: MediaQuery.of(context).size.height * 0.036),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.036),
 
-              // RichText above the reusable CurvedContainer
-              Center(
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: const TextSpan(
+                // RichText above the reusable CurvedContainer
+                Center(
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Let's sign you in,\n",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "We're waiting for you",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+
+                // Reusable CurvedContainer
+                CurvedContainer(
+                  backgroundColor: Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextSpan(
-                        text: "Let's sign you in,\n",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+                      // Padding(
+                      //   padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+                      //   child: RichText(
+                      //     text: TextSpan(
+                      //       children: [
+                      //         TextSpan(
+                      //           text: "Email Address",
+                      //           style: TextStyle(
+                      //             color: Colors.black,
+                      //           ),
+                      //         ),
+                      //         TextSpan(
+                      //           text: " *",
+                      //           style: TextStyle(color: Colors.red,), // Red asterisk
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                      //  SizedBox(height: MediaQuery.of(context).size.height * 0.0215),
+
+                      // Padding(
+                      //   padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+                      //   child: CurvedTextField(
+                      //     controller: _emailController,
+                      //     hintText: "youremail@gmail.com",
+                      //     prefixIcon: Icons.account_circle,
+                      //     obscureText: false,
+                      //     validator: (value) {
+                      //       if (value == null || value.isEmpty) {
+                      //        return 'Please enter your email';
+                      //        // print("Please enter your email");
+                      //       }
+                      //       if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                      //         return 'Please enter a valid email address';
+                      //       }
+                      //       return null;
+                      //     },
+                      //   ),
+                      // ),
+                      buildLabeledTextField(
+                        context,
+                        "Email Address",
+                        "yourEmail@gmail.com",
+                        controller: _emailController,
+                        prefixIcon: Icons.account_circle_outlined,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email address';
+                          }
+                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                            return 'Please enter a valid email address';
+                          }
+                          return null;
+                        },
+                      ),
+
+
+
+                      // SizedBox(height: MediaQuery.of(context).size.height * 0.0075),
+                      // Padding(
+                      //   padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+                      //   child: RichText(
+                      //     text: TextSpan(
+                      //       children: [
+                      //         TextSpan(
+                      //           text: "Password",
+                      //           style: TextStyle(
+                      //             color: Colors.black,
+                      //           ),
+                      //         ),
+                      //         TextSpan(
+                      //           text: " *",
+                      //           style: TextStyle(color: Colors.red), // Red asterisk
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                      // SizedBox(height: MediaQuery.of(context).size.height * 0.0205),
+                      // Padding(
+                      //   padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+                      //   child: CurvedTextField(
+                      //     controller: _passwordController,
+                      //     hintText: "********",
+                      //     prefixIcon: Icons.lock,
+                      //     obscureText: true,
+                      //     validator: (value) {
+                      //       if (value == null || value.isEmpty) {
+                      //         return 'Please enter your password';
+                      //       }
+                      //       if (value.length < 6) {
+                      //         return 'Password must be at least 6 characters long';
+                      //       }
+                      //       return null;
+                      //     },
+                      //   ),
+                      // ),
+                      // buildLabeledTextField(
+                      //   context,
+                      //   "Password",
+                      //   "Enter Your Password",
+                      //   obscureText: true,
+                      //   controller: _passwordController,
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return 'Please enter your password';
+                      //     }
+                      //     if (value.length < 8) {
+                      //       return 'Password must be at least 8 characters long';
+                      //     }
+                      //     return null;
+                      //   },
+                      // ),
+                      // buildLabeledTextField(
+                      //   context,
+                      //   "Password",
+                      //   "Enter Your Password",
+                      //   obscureText: _isObscure,
+                      //   prefixIcon: Icons.lock_outline,
+                      //   controller: _passwordController,
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return 'Please enter your password';
+                      //     }
+                      //     if (value.length < 8) {
+                      //       return 'Password must be at least 8 characters long';
+                      //     }
+                      //     return null;
+                      //   },
+                      //   suffixIcon: GestureDetector(
+                      //     onTap: () {
+                      //       setState(() {
+                      //         _isObscure = !_isObscure; // Toggle password visibility
+                      //       });
+                      //     },
+                      //     child: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                      //   ),
+                      //
+                      // ),
+                      buildLabeledTextField(
+                        context,
+                        "Password",
+                        "Enter Your Password",
+                        obscureText: _isObscure,
+                        prefixIcon: Icons.lock_outline,
+                        controller: _passwordController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          if (value.length < 8) {
+                            return 'Password must be at least 8 characters long';
+                          }
+                          return null;
+                        },
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isObscure = !_isObscure; // Toggle password visibility
+                            });
+                          },
+                          child: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                        ),
+                        // Set to true to show the box with the prefix icon
+                      ),
+
+
+
+
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.00085),
+                      Padding(
+                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.56),
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.blue, // Change this to the color you want
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              SlidePageRoute(page: Forget_Your_Password()),
+                            );
+                          },
+                          child: Text(
+                            'Forget Password?',
+                            style: TextStyle(color: Colors.blueAccent), // Adjust text color as needed
+                          ),
                         ),
                       ),
-                      TextSpan(
-                        text: "We're waiting for you",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
+
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.0027),
+                      Center(
+                        child: CustomElevatedButton(
+                          width: MediaQuery.of(context).size.width * 0.775,
+                          height: MediaQuery.of(context).size.height * 0.0625,
+                          text: 'Login',
+                          onPressed: _login,
                         ),
                       ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.009),
+                      Center(
+                        child: Text(
+                          "By clicking Login, you agree to Hiremi’s Terms & Conditions.",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.0205),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                color: Colors.grey,
+                                thickness: 1,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.01),
+                              child: Text(
+                                "or",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Divider(
+                                color: Colors.grey,
+                                thickness: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.018),
+                      Center(
+                        child: CustomElevatedButton(
+                          color: Color(0xFFF5F4F4),
+                          width: MediaQuery.of(context).size.width * 0.775,
+                          height: MediaQuery.of(context).size.height * 0.0625,
+                          text: 'Register Now',
+                          textStyle: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              SlidePageRoute(page: Registers()),
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.018),
                     ],
                   ),
                 ),
-              ),
-
-              SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-
-              // Reusable CurvedContainer
-              CurvedContainer(
-                backgroundColor: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
-                      child: RichText(
-                        text: const TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "Email Address",
-                              style: TextStyle(
-                                color: Colors.black
-                              )
-                            ),
-                            TextSpan(
-                              text: " *",
-                              style: TextStyle(color: Colors.red,), // Red asterisk
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.0215),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
-                      child: const CurvedTextField(
-                        hintText: "youremail@gmail.com",
-                        prefixIcon: Icons.account_circle,
-                        obscureText: false,
-
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
-                      child: RichText(
-                        text: const TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "Password",
-                                style: TextStyle(
-                                    color: Colors.black
-                                )
-                            ),
-                            TextSpan(
-                              text: " *",
-                              style: TextStyle(color: Colors.red), // Red asterisk
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.0205),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
-                      child: const CurvedTextField(
-                        hintText: "********",
-                        prefixIcon: Icons.lock,
-                        obscureText: true,
-                      ),
-                    ),
-
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.00085),
-                    Padding(
-                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.56),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.blue, // Change this to the color you want
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            SlidePageRoute(page: const Forget_Your_Password()),
-                          );
-                        },
-                        child: const Text(
-                          'Forget Password?',
-
-                          style: TextStyle(color: Colors.blueAccent), // Adjust text color as needed
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.0027),
-                    Center(
-                      child: CustomElevatedButton(
-                        width:  MediaQuery.of(context).size.width*0.775,
-                        height:  MediaQuery.of(context).size.height*0.0625,
-                        text: 'Login',
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            SlidePageRoute(page: const NewNavbar(isV: false,)),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.009),
-                    const Center(child: Text("By clicking Login, you agree to Hiremi’s Terms & Conditions.",style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500
-                    ),)),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.0205),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
-                      child: Row(
-                        children: [
-                          const Expanded(
-                            child: Divider(
-                              color: Colors.grey,
-                              thickness: 1,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal:  MediaQuery.of(context).size.width * 0.01),
-                            child: const Text(
-                              "or",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          const Expanded(
-                            child: Divider(
-                              color: Colors.grey,
-                              thickness: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.018),
-                    Center(
-                      child: CustomElevatedButton(
-                        color: const Color(0xFFF5F4F4),
-                        width: MediaQuery.of(context).size.width * 0.775,
-                        height: MediaQuery.of(context).size.height * 0.0625,
-                        text: 'Register Now',
-                        textStyle: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400
-
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            SlidePageRoute(page: const Registers()),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.018),
-
-
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
+  // Widget buildLabeledTextField(
+  //     BuildContext context,
+  //     String label,
+  //     String hintText, {
+  //       bool showPositionedBox = false,
+  //       IconData? prefixIcon,
+  //       bool obscureText = false,
+  //       List<String>? dropdownItems,
+  //       TextEditingController? controller,
+  //       String? Function(String?)? validator,
+  //       VoidCallback? onTap,
+  //       TextInputType? keyboardType,
+  //     }) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Padding(
+  //         padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+  //         child: RichText(
+  //           text: TextSpan(
+  //             children: [
+  //               TextSpan(
+  //                 text: label,
+  //                 style: TextStyle(color: Colors.black),
+  //               ),
+  //               TextSpan(
+  //                 text: " *",
+  //                 style: TextStyle(color: Colors.red),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //       SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+  //       Padding(
+  //         padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+  //         child: dropdownItems != null
+  //             ? DropdownButtonFormField<String>(
+  //           decoration: InputDecoration(
+  //             hintText: hintText,
+  //             prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+  //             border: OutlineInputBorder(
+  //               borderRadius: BorderRadius.circular(10),
+  //             ),
+  //           ),
+  //           value: controller?.text.isNotEmpty == true ? controller?.text : null,
+  //           hint: Text(hintText),
+  //           onChanged: (String? newValue) {
+  //             setState(() {
+  //               controller?.text = newValue!;
+  //             });
+  //           },
+  //           items: dropdownItems.map((String item) {
+  //             return DropdownMenuItem<String>(
+  //               value: item,
+  //               child: Text(item),
+  //             );
+  //           }).toList(),
+  //           validator: validator,
+  //         )
+  //             : TextFormField(
+  //           controller: controller,
+  //           decoration: InputDecoration(
+  //             hintText: hintText,
+  //             prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+  //             border: OutlineInputBorder(
+  //               borderRadius: BorderRadius.circular(10),
+  //             ),
+  //           ),
+  //           obscureText: obscureText,
+  //           validator: validator,
+  //           onTap: onTap,
+  //           keyboardType: keyboardType,
+  //         ),
+  //       ),
+  //       SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+  //     ],
+  //   );
+  // }
+  Widget buildLabeledTextField(
+      BuildContext context,
+      String label,
+      String hintText, {
+        bool showPositionedBox = false,
+        IconData? positionedIcon,
+        IconData? prefixIcon,
+        bool obscureText = false,
+        List<String>? dropdownItems,
+        TextEditingController? controller,
+        String? Function(String?)? validator,
+        VoidCallback? onTap,
+        TextInputType? keyboardType,
+        Widget? suffixIcon,
+        bool showContainer = false,
+      }) {
+    double calculatedBorderRadius = MediaQuery.of(context).size.width * 0.02;
+    double calculatedSemiCircleWidth = MediaQuery.of(context).size.width * 0.08;
+    double calculatedPaddingStart = MediaQuery.of(context).size.width * 0.1;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+          child: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: label,
+                  style: TextStyle(color: Colors.black),
+                ),
+                TextSpan(
+                  text: " *",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+          child: showContainer
+              ? Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.redAccent),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                if (showPositionedBox)
+                  Positioned(
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    child: Container(
+                      width: calculatedSemiCircleWidth,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(calculatedBorderRadius),
+                          bottomLeft: Radius.circular(calculatedBorderRadius),
+                        ),
+                        border: Border(
+                          right: BorderSide(
+                            color: const Color(0xFF808080),
+                            width: 1.0,
+                          ),
+                        ),
+                      ),
+                      child: Center(
+                        child: positionedIcon != null
+                            ? Icon(
+                          positionedIcon,
+                          color: Colors.grey[400],
+                        )
+                            : null,
+                      ),
+                    ),
+                  ),
+                Expanded(
+                  child: dropdownItems != null
+                      ? DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      hintText: hintText,
+                      border: InputBorder.none,
+                      prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+                    ),
+                    value: controller?.text.isNotEmpty == true ? controller?.text : null,
+                    hint: Text(hintText),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        controller?.text = newValue!;
+                      });
+                    },
+                    items: dropdownItems.map((String item) {
+                      return DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(item),
+                      );
+                    }).toList(),
+                    validator: validator,
+                  )
+                      : TextFormField(
+                    controller: controller,
+                    decoration: InputDecoration(
+                      hintText: hintText,
+                      border: InputBorder.none,
+                      prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+                      suffixIcon: suffixIcon,
+                    ),
+                    obscureText: obscureText,
+                    validator: validator,
+                    onTap: onTap,
+                    keyboardType: keyboardType,
+                  ),
+                ),
+                if (suffixIcon != null) suffixIcon,
+              ],
+            ),
+          )
+              : dropdownItems != null
+              ? DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              hintText: hintText,
+              prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            value: controller?.text.isNotEmpty == true ? controller?.text : null,
+            hint: Text(hintText),
+            onChanged: (String? newValue) {
+              setState(() {
+                controller?.text = newValue!;
+              });
+            },
+            items: dropdownItems.map((String item) {
+              return DropdownMenuItem<String>(
+                value: item,
+                child: Text(item),
+              );
+            }).toList(),
+            validator: validator,
+          )
+              : TextFormField(
+            controller: controller,
+            decoration: InputDecoration(
+              hintText: hintText,
+              prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              suffixIcon: suffixIcon,
+            ),
+            obscureText: obscureText,
+            validator: validator,
+            onTap: onTap,
+            keyboardType: keyboardType,
+          ),
+        ),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+      ],
+    );
+  }
+
+
 }

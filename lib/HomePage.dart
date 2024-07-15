@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:hiremi_version_two/API_Integration/Internship/Apiservices.dart';
 
 import 'package:hiremi_version_two/Custom_Widget/Circle_row.dart';
 import 'dart:ui'; // For BackdropFilter
@@ -37,11 +38,14 @@ class _HomePageState extends State<HomePage> {
 
   final ScrollController _scrollController = ScrollController();
   double _blurAmount = 10.0;
+  List<dynamic> _jobs = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    _fetchJobs();
   }
 
   @override
@@ -63,10 +67,25 @@ class _HomePageState extends State<HomePage> {
       _selectedIndex = index;
     });
   }
+  Future<void> _fetchJobs() async {
+    try {
+      final apiService = ApiService('http://13.127.81.177:8000/api/internship/');
+      final data = await apiService.fetchData();
+      setState(() {
+        _jobs = data;
+        _isLoading = false;
+      });
+    } catch (e) {
+      // Handle error
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    const percent = 0.25;
+    const percent = 0.5;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -270,46 +289,64 @@ class _HomePageState extends State<HomePage> {
                 'Latest Opportunities',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
-              SizedBox(height: screenHeight * 0.02),
-              OpportunityCard(
-                dp: Image.asset('images/Rectangle 57.png'),
-                role: 'Human Resource Intern',
-                company: 'Hiremi',
-                location: 'Bhopal, Madhya Pradesh, India',
-                stipend: '2,000-15,000',
-                mode: 'Remote',
-                type: 'Internship',
-                exp: 1,
-                daysPosted: 6,
-                isVerified: widget.isVerified,
-              ),
+             // SizedBox(height: screenHeight * 0.02),
+              // OpportunityCard(
+              //   dp: Image.asset('images/Rectangle 57.png'),
+              //   role: 'Human Resource Intern',
+              //   company: 'Hiremi',
+              //   location: 'Bhopal, Madhya Pradesh, India',
+              //   stipend: '2,000-15,000',
+              //   mode: 'Remote',
+              //   type: 'Internship',
+              //   exp: 1,
+              //   daysPosted: 6,
+              //   isVerified: widget.isVerified,
+              // ),
+             // SizedBox(height: screenHeight * 0.01),
+              // OpportunityCard(
+              //   dp: Image.asset('images/crtd1 1.png'),
+              //   role: 'Social Media Intern',
+              //   company: 'CRTD Technologies',
+              //   location: 'Bhopal, Madhya Pradesh, India',
+              //   stipend: '2,000-15,000',
+              //   mode: 'Remote',
+              //   type: 'Internship',
+              //   exp: 1,
+              //   daysPosted: 6,
+              //   isVerified: widget.isVerified,
+              // ),
               SizedBox(height: screenHeight * 0.01),
-              OpportunityCard(
-                dp: Image.asset('images/crtd1 1.png'),
-                role: 'Social Media Intern',
-                company: 'CRTD Technologies',
-                location: 'Bhopal, Madhya Pradesh, India',
-                stipend: '2,000-15,000',
+              // OpportunityCard(
+              //   dp: Image.asset('images/Rectangle 57.png'),
+              //   role: 'Data Science Intern',
+              //   company: 'Hiremi',
+              //   location: 'Bhopal, Madhya Pradesh, India',
+              //   stipend: '2,000-15,000',
+              //   mode: 'Remote',
+              //   type: 'Internship',
+              //   exp: 1,
+              //   daysPosted: 6,
+              //   isVerified: widget.isVerified,
+              // ),
+             // const SizedBox(height: 64,),
+              ..._jobs.map((job) => OpportunityCard(
+                dp: Image.asset('images/icons/logo1.png'),
+                profile: job['profile'] ?? 'N/A',
+                companyName: job['company_name'] ?? 'N/A',
+                location: job['location'] ?? 'N/A',
+                stipend: job['CTC']?.toString() ?? 'N/A',
                 mode: 'Remote',
-                type: 'Internship',
+                type: 'Job',
                 exp: 1,
-                daysPosted: 6,
+                daysPosted: 0,
                 isVerified: widget.isVerified,
-              ),
-              SizedBox(height: screenHeight * 0.01),
-              OpportunityCard(
-                dp: Image.asset('images/Rectangle 57.png'),
-                role: 'Data Science Intern',
-                company: 'Hiremi',
-                location: 'Bhopal, Madhya Pradesh, India',
-                stipend: '2,000-15,000',
-                mode: 'Remote',
-                type: 'Internship',
-                exp: 1,
-                daysPosted: 6,
-                isVerified: widget.isVerified,
-              ),
-              const SizedBox(height: 64,)
+                ctc: job['CTC']?.toString() ?? '0',
+                description: job['description'] ?? 'No description available',
+                education: job['education'],
+                skillsRequired: job['skills_required'],
+                whoCanApply: job['who_can_apply'],
+              )).toList(),
+              const SizedBox(height: 64,),
             ],
           ),
         ),

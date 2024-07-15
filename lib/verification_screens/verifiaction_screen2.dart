@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
+import 'package:hiremi_version_two/Custom_Widget/dropdown.dart';
 import 'package:hiremi_version_two/Models/register_model.dart';
 import 'package:hiremi_version_two/verification_screens/verification_screen3.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class VerificationScreen2 extends StatefulWidget {
   const VerificationScreen2({Key? key}) : super(key: key);
@@ -16,6 +22,7 @@ final _formKey = GlobalKey<FormState>();
   Gender? _selectedGender = Gender.Male;
   String? _selectedState;
   DateTime? _selectedDate;
+String _userId="";
 
   // List<String> _states = ['State 1', 'State 2', 'State 3', 'State 4'];
 
@@ -98,6 +105,152 @@ final _formKey = GlobalKey<FormState>();
     _confirmPasswordController.dispose();
     super.dispose();
   }
+@override
+void initState() {
+  super.initState();
+  _fetchUserData();
+}
+// Future<void> _fetchUserData() async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   String? storedEmail = prefs.getString('email');
+//   print("Stored Email: $storedEmail");
+//
+//   if (storedEmail != null) {
+//     try {
+//       final response = await http.get(
+//         Uri.parse('http://13.127.81.177:8000/api/registers/'),
+//       );
+//
+//       if (response.statusCode == 200) {
+//         final List<dynamic> data = jsonDecode(response.body);
+//         print('All user data: $data');
+//
+//         final userData = data.firstWhere(
+//               (user) => user['email'] == storedEmail,
+//           orElse: () => null,
+//         );
+//
+//         if (userData != null) {
+//           print('Matched user data: $userData');
+//           setState(() {
+//             _userId = userData['id'].toString();
+//             // _phoneController.text=userData['phone_number'];
+//             // _whatsappController.text=userData['whatsapp_number'];
+//             _collegeNameController.text=userData['college_name'];
+//             _collegeStateController.text=userData['college_state'];
+//             _branchController.text=userData['branch_name'];
+//             _degreeController.text=userData['degree_name'];
+//             _passingYearController.text=userData['passing_year'];
+//
+//
+//           });
+//         } else {
+//           print('No user found with the stored email');
+//         }
+//       } else {
+//         print('Failed to load user data: ${response.statusCode}');
+//       }
+//     } catch (e) {
+//       print('Error: $e');
+//     }
+//   } else {
+//     print('No email stored');
+//   }
+// }
+  Future<void> _fetchUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedEmail = prefs.getString('email');
+    print("Stored Email: $storedEmail");
+
+    if (storedEmail != null) {
+      try {
+        final response = await http.get(
+          Uri.parse('http://13.127.81.177:8000/api/registers/'),
+        );
+
+        if (response.statusCode == 200) {
+          final List<dynamic> data = jsonDecode(response.body);
+          print('All user data: $data');
+
+          final userData = data.firstWhere(
+                (user) => user['email'] == storedEmail,
+            orElse: () => null,
+          );
+
+          if (userData != null) {
+            print('Matched user data: $userData');
+            setState(() {
+              _userId = userData['id'].toString();
+
+              // Print statements to debug the data being set
+              print('Setting college name: ${userData['college_name']}');
+              _collegeNameController.text = userData['college_name'] ?? '';
+
+              print('Setting college state: ${userData['college_state']}');
+              _collegeStateController.text = userData['college_state'] ?? '';
+
+              print('Setting branch name: ${userData['branch_name']}');
+              _branchController.text = userData['branch_name'] ?? '';
+
+              print('Setting degree name: ${userData['degree_name']}');
+              _degreeController.text = userData['degree_name'] ?? '';
+
+              print('Setting passing year: ${userData['passing_year']}');
+              _passingYearController.text = (userData['passing_year'] ?? '').toString();
+            });
+          } else {
+            print('No user found with the stored email');
+          }
+        } else {
+          print('Failed to load user data: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Error: $e');
+      }
+    } else {
+      print('No email stored');
+    }
+  }
+
+
+  Future<void> _updateUserData() async {
+  if (!_isAllFieldsValid()) return;
+
+  try {
+    final response = await http.patch(
+      Uri.parse('http://13.127.81.177:8000/api/registers/$_userId/'),
+
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+
+        'college_name':_collegeNameController.text,
+        'college_state':_collegeStateController.text,
+        'branch_name':_branchController.text,
+        'degree_name':_degreeController.text,
+        'passing_year':_passingYearController.text
+
+
+        // Include other fields similarly
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('User data updated successfully');
+      Navigator.push(
+        context,
+        SlidePageRoute(page: VerificationScreen3()),
+      );
+    } else {
+      print("$_userId");
+      print('Failed to update user data: ${response.statusCode}');
+      print(response.body);
+    }
+  } catch (e) {
+    print('Error in catch: $e');
+  }
+}
 
   bool _isAllFieldsValid() {
     return _formKey.currentState?.validate() ?? false;
@@ -217,7 +370,7 @@ final _formKey = GlobalKey<FormState>();
                         "College's State",
                         "Enter Your College's State",
                         controller: _collegeStateController,
-                        dropdownItems: _states,
+                        dropdownItems:  DropdownData.states,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Please enter your College's State";
@@ -230,7 +383,7 @@ final _formKey = GlobalKey<FormState>();
                         "Branch",
                         "Enter Your Branch Name",
                         controller: _branchController,
-                        dropdownItems: ['Degree 1', 'Degree 2', 'Degree 3'],
+                        dropdownItems:  DropdownData.branch,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your branch';
@@ -243,7 +396,7 @@ final _formKey = GlobalKey<FormState>();
                         "Degree",
                         "Enter Your Degree Name",
                         controller: _degreeController,
-                        dropdownItems: ['Degree 1', 'Degree 2', 'Degree 3'],
+                        dropdownItems:  DropdownData.degrees,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your degree';
@@ -256,8 +409,8 @@ final _formKey = GlobalKey<FormState>();
                         "Passing Year",
                         "Enter Your Passing Year",
                         controller: _passingYearController,
-                  
-                        dropdownItems: ['2012', '2024', '2025'],
+
+                        dropdownItems:  DropdownData.passingyear,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your passing year';
@@ -277,8 +430,9 @@ final _formKey = GlobalKey<FormState>();
                               child: TextButton(
                                 onPressed: () {
                                   if (_isAllFieldsValid()) {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (ctx) => const VerificationScreen3()));
+                                    // Navigator.of(context).push(MaterialPageRoute(
+                                    //     builder: (ctx) => const VerificationScreen3()));
+                                    _updateUserData();
                                   } else {
                                     setState(() {});
                                   }
@@ -298,7 +452,7 @@ final _formKey = GlobalKey<FormState>();
                   ),
                 ),
               ),
-            
+
           ],
         ),
       ),
@@ -320,19 +474,24 @@ final _formKey = GlobalKey<FormState>();
     );
   }
 
+
+
+
+
   Widget buildLabeledTextField(
-    BuildContext context,
-    String label,
-    String hintText, {
-    bool showPositionedBox = false,
-    IconData? prefixIcon,
-    bool obscureText = false,
-    List<String>? dropdownItems,
-    TextEditingController? controller,
-    String? Function(String?)? validator,
-    VoidCallback? onTap,
-    TextInputType? keyboardType,
-  }) {
+      BuildContext context,
+      String label,
+      String hintText, {
+        bool showPositionedBox = false,
+        IconData? prefixIcon,
+        bool obscureText = false,
+        List<String>? dropdownItems,
+        TextEditingController? controller,
+        String? Function(String?)? validator,
+        VoidCallback? onTap,
+        TextInputType? keyboardType,
+        bool readOnly = false, // Added parameter
+      }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -360,50 +519,53 @@ final _formKey = GlobalKey<FormState>();
               horizontal: MediaQuery.of(context).size.width * 0.04),
           child: dropdownItems != null
               ? DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    hintText: hintText,
-                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  value: controller?.text.isNotEmpty == true
-                      ? controller?.text
-                      : null,
-                  hint: Text(hintText),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      controller?.text = newValue!;
-                    });
-                  },
-                  items: dropdownItems.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                  validator: validator,
-                  isExpanded: true,
-                )
+            decoration: InputDecoration(
+              hintText: hintText,
+              prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            value: controller?.text.isNotEmpty == true
+                ? controller?.text
+                : null,
+            hint: Text(hintText),
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                controller?.text = newValue;
+              }
+            },
+            items: dropdownItems.map((String item) {
+              return DropdownMenuItem<String>(
+                value: item,
+                child: Text(item),
+              );
+            }).toList(),
+            validator: validator,
+            isExpanded: true,
+          )
               : TextFormField(
-                  controller: controller,
-                  decoration: InputDecoration(
-                    hintText: hintText,
-                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  obscureText: obscureText,
-                  validator: validator,
-                  onTap: onTap,
-                  keyboardType: keyboardType,
-                ),
+            controller: controller,
+            decoration: InputDecoration(
+              hintText: hintText,
+              prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            obscureText: obscureText,
+            validator: validator,
+            onTap: onTap,
+            keyboardType: keyboardType,
+            readOnly: readOnly, // Added line
+          ),
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
       ],
     );
   }
+
+
 
   Widget buildGenderField() {
     return Column(

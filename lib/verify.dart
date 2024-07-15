@@ -1,8 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:hiremi_version_two/Controller/VerifyController.dart';
+import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
+import 'package:hiremi_version_two/Models/VerifyModel.dart';
+import 'package:hiremi_version_two/Register.dart';
 import 'package:hiremi_version_two/verification_screens/verification_screen1.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 enum Gender { Male, Female, Other }
 
 class VerificationScreen extends StatefulWidget {
@@ -17,6 +24,8 @@ final _formKey = GlobalKey<FormState>();
   Gender? _selectedGender = Gender.Male;
   String? _selectedState;
   DateTime? _selectedDate;
+   String _userId="";
+late VerifyController _verifyController;
 
   // List<String> _states = ['State 1', 'State 2', 'State 3', 'State 4'];
 
@@ -103,6 +112,153 @@ final _formKey = GlobalKey<FormState>();
   bool _isAllFieldsValid() {
     return _formKey.currentState?.validate() ?? false;
   }
+@override
+void initState() {
+  super.initState();
+  _verifyController = VerifyController();
+  _fetchUserProfile();
+}
+Future<void> _fetchUserData() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? storedEmail = prefs.getString('email');
+  print("Stored Email: $storedEmail");
+
+  if (storedEmail != null) {
+    try {
+      final response = await http.get(
+        Uri.parse('http://13.127.81.177:8000/api/registers/'),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        print('All user data: $data');
+
+        final userData = data.firstWhere(
+              (user) => user['email'] == storedEmail,
+          orElse: () => null,
+        );
+
+        if (userData != null) {
+          print('Matched user data: $userData');
+          setState(() {
+            _userId = userData['id'].toString();
+            _fullNameController.text = userData['full_name'] ?? '';
+            _fatherNameController.text = userData['father_name'] ?? '';
+            _emailController.text = userData['email'] ?? '';
+            _dobController.text = userData['date_of_birth'] ?? '';
+            _birthPlaceController.text = userData['birth_place'] ?? '';
+            _selectedGender = Gender.values.firstWhere(
+                  (e) => e.toString() == 'Gender.' + (userData['gender'] ?? ''),
+              orElse: () => Gender.Male,
+            );
+            // Populate other fields similarly
+          });
+        } else {
+          print('No user found with the stored email');
+        }
+      } else {
+        print('Failed to load user data: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  } else {
+    print('No email stored');
+  }
+}
+Future<void> _fetchUserProfile() async {
+  String? storedEmail = await _verifyController.getStoredEmail();
+  if (storedEmail != null) {
+    Verifymodel? userProfile = await _verifyController.fetchUserProfile(storedEmail);
+    if (userProfile != null) {
+      setState(() {
+        _userId = userProfile.id;
+        _fullNameController.text = userProfile.fullName ?? '';
+        _fatherNameController.text = userProfile.fatherName ?? '';
+        _emailController.text = userProfile.email ?? '';
+        _dobController.text = userProfile.dateOfBirth ?? '';
+        _birthPlaceController.text = userProfile.birthPlace ?? '';
+        _selectedGender = userProfile.gender != null
+            ? Gender.values.firstWhere(
+              (e) => e.toString() == 'Gender.' + userProfile.gender!,
+          orElse: () => Gender.Male,
+        )
+            : Gender.Male;
+        // Handle other fields similarly
+      });
+      print(_fullNameController);
+    }
+  }
+}
+
+
+// Future<void> _updateUserData() async {
+//   if (!_isAllFieldsValid()) return;
+//
+//   try {
+//     final response = await http.patch(
+//       Uri.parse('http://13.127.81.177:8000/api/registers/$_userId/'),
+//
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: jsonEncode({
+//         'full_name': _fullNameController.text,
+//         'father_name': _fatherNameController.text,
+//         'email': _emailController.text,
+//         'date_of_birth': _dobController.text,
+//         'birth_place': _birthPlaceController.text,
+//         'gender': _selectedGender.toString().split('.').last,
+//         // Include other fields similarly
+//       }),
+//     );
+//
+//     if (response.statusCode == 200) {
+//       print('User data updated successfully');
+//       Navigator.push(
+//         context,
+//         SlidePageRoute(page: VerificationScreen1()),
+//       );
+//     } else {
+//       print("$_userId");
+//       print('Failed to update user data: ${response.statusCode}');
+//       print(response.body);
+//     }
+//   } catch (e) {
+//     print('Error: $e');
+//   }
+// }
+  Future<void> _updateUserProfile() async {
+    if (!_isAllFieldsValid()) return;
+
+    Verifymodel userProfile = Verifymodel(
+      id: _userId.toString(),
+      fullName: _fullNameController.text,
+      fatherName: _fatherNameController.text,
+      email: _emailController.text,
+      dateOfBirth: _dobController.text,
+      birthPlace: _birthPlaceController.text,
+      gender: _selectedGender.toString().split('.').last, // Add gender property if necessary
+    );
+
+    bool isSuccess = await _verifyController.updateUserProfile(userProfile);
+    if (isSuccess) {
+      // Navigate to next screen on success
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => VerificationScreen1()),
+      );
+    } else {
+      // Handle error case if update fails
+      print("Updation Fails");
+    }
+  }
+
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -249,12 +405,7 @@ final _formKey = GlobalKey<FormState>();
                         showPositionedBox: true,
                         prefixIcon: Icons.calendar_today,
                         controller: _dobController,
-                        validator: (value) {
-                          if (_selectedDate == null) {
-                            return 'Please select your date of birth';
-                          }
-                          return null;
-                        },
+
                         onTap: () async {
                           final DateTime? pickedDate = await showDatePicker(
                             context: context,
@@ -270,6 +421,7 @@ final _formKey = GlobalKey<FormState>();
                             });
                           }
                         },
+                       readOnly: true
                       ),
                       buildLabeledTextField(
                         context,
@@ -284,140 +436,7 @@ final _formKey = GlobalKey<FormState>();
                           return null;
                         },
                       ),
-                      // buildSectionHeader("Contact Information"),
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "Phone Number",
-                      //   "+91",
-                      //   keyboardType: TextInputType.phone,
-                      //   controller: _phoneController,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your phone number';
-                      //     }
-                      //     if (value.length < 10) {
-                      //       return 'Please enter a valid phone number';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "WhatsApp Number",
-                      //   "+91",
-                      //   keyboardType: TextInputType.phone,
-                      //   controller: _whatsappController,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your WhatsApp number';
-                      //     }
-                      //     if (value.length < 10) {
-                      //       return 'Please enter a valid WhatsApp number';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // buildSectionHeader("Educational Information"),
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "College Name",
-                      //   "Enter Your College Name",
-                      //   controller: _collegeNameController,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your college name';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // //buildStateDropdown(),
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "College's State",
-                      //   "Enter Your College's State",
-                      //   controller: _collegeStateController,
-                      //   dropdownItems: _states,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return "Please enter your College's State";
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "Branch",
-                      //   "Enter Your Branch Name",
-                      //   controller: _branchController,
-                      //   dropdownItems: ['Degree 1', 'Degree 2', 'Degree 3'],
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your branch';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "Degree",
-                      //   "Enter Your Degree Name",
-                      //   controller: _degreeController,
-                      //   dropdownItems: ['Degree 1', 'Degree 2', 'Degree 3'],
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your degree';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "Passing Year",
-                      //   "Enter Your Passing Year",
-                      //   controller: _passingYearController,
-                  
-                      //   dropdownItems: ['2012', '2024', '2025'],
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your passing year';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // buildSectionHeader("Let's Create Password"),
-                  
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "Password",
-                      //   "Enter Your Password",
-                      //   obscureText: true,
-                      //   controller: _passwordController,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your password';
-                      //     }
-                      //     if (value.length < 8) {
-                      //       return 'Password must be at least 8 characters long';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      // buildLabeledTextField(
-                      //   context,
-                      //   "Confirm Password",
-                      //   "Enter Your Password",
-                      //   obscureText: true,
-                      //   controller: _confirmPasswordController,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter your password';
-                      //     }
-                      //     if (value != _passwordController.text) {
-                      //       return 'Passwords do not match';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
+
                       SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                       Row(
                         children: [
@@ -430,8 +449,9 @@ final _formKey = GlobalKey<FormState>();
                               child: TextButton(
                                 onPressed: () {
                                   if (_isAllFieldsValid()) {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (ctx) => const VerificationScreen1()));
+                                    // Navigator.of(context).push(MaterialPageRoute(
+                                    //     builder: (ctx) => const VerificationScreen1()));
+                                    _updateUserProfile();
                                   } else {
                                     setState(() {});
                                   }
@@ -451,7 +471,7 @@ final _formKey = GlobalKey<FormState>();
                   ),
                 ),
               ),
-            
+
           ],
         ),
       ),
@@ -473,90 +493,93 @@ final _formKey = GlobalKey<FormState>();
     );
   }
 
-  Widget buildLabeledTextField(
+
+Widget buildLabeledTextField(
     BuildContext context,
     String label,
     String hintText, {
-    bool showPositionedBox = false,
-    IconData? prefixIcon,
-    bool obscureText = false,
-    List<String>? dropdownItems,
-    TextEditingController? controller,
-    String? Function(String?)? validator,
-    VoidCallback? onTap,
-    TextInputType? keyboardType,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.04),
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: label,
-                  style: const TextStyle(color: Colors.black),
-                ),
-                const TextSpan(
-                  text: " *",
-                  style: TextStyle(color: Colors.red),
-                ),
-              ],
-            ),
+      bool showPositionedBox = false,
+      IconData? prefixIcon,
+      bool obscureText = false,
+      List<String>? dropdownItems,
+      TextEditingController? controller,
+      String? Function(String?)? validator,
+      VoidCallback? onTap,
+      TextInputType? keyboardType,
+      bool readOnly = false, // Added parameter
+    }) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.04),
+        child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: label,
+                style: const TextStyle(color: Colors.black),
+              ),
+              const TextSpan(
+                text: " *",
+                style: TextStyle(color: Colors.red),
+              ),
+            ],
           ),
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.04),
-          child: dropdownItems != null
-              ? DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    hintText: hintText,
-                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  value: controller?.text.isNotEmpty == true
-                      ? controller?.text
-                      : null,
-                  hint: Text(hintText),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      controller?.text = newValue!;
-                    });
-                  },
-                  items: dropdownItems.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                  validator: validator,
-                  isExpanded: true,
-                )
-              : TextFormField(
-                  controller: controller,
-                  decoration: InputDecoration(
-                    hintText: hintText,
-                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  obscureText: obscureText,
-                  validator: validator,
-                  onTap: onTap,
-                  keyboardType: keyboardType,
-                ),
+      ),
+      SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+      Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.04),
+        child: dropdownItems != null
+            ? DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            hintText: hintText,
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          value: controller?.text.isNotEmpty == true
+              ? controller?.text
+              : null,
+          hint: Text(hintText),
+          onChanged: (String? newValue) {
+            setState(() {
+              controller?.text = newValue!;
+            });
+          },
+          items: dropdownItems.map((String item) {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: Text(item),
+            );
+          }).toList(),
+          validator: validator,
+          isExpanded: true,
+        )
+            : TextFormField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hintText,
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          obscureText: obscureText,
+          validator: validator,
+          onTap: onTap,
+          keyboardType: keyboardType,
+          readOnly: readOnly, // Added line
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-      ],
-    );
-  }
+      ),
+      SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+    ],
+  );
+}
 
   Widget buildGenderField() {
     return Column(
