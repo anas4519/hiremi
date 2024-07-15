@@ -164,7 +164,6 @@ class _FresherJobsState extends State<FresherJobs> {
                                   type: 'Job',
                                   exp: 1,
                                   daysPosted: 0,
-                                  isVerified: widget.isVerified,
                                   ctc: job['CTC']?.toString() ?? '0',
                                   description: job['description'] ??
                                       'No description available',

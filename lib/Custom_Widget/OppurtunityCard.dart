@@ -265,12 +265,14 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Fresher_Jobs/detailedFresherJobs.dart';
 import 'package:hiremi_version_two/Internships/detailedInternship.dart';
+import 'package:hiremi_version_two/providers/verified_provider.dart';
 
 import 'Custom_alert_box.dart';
 
-class OpportunityCard extends StatelessWidget {
+class OpportunityCard extends ConsumerWidget {
   const OpportunityCard({
     Key? key,
     required this.dp,
@@ -282,7 +284,6 @@ class OpportunityCard extends StatelessWidget {
     required this.exp,
     required this.type,
     required this.daysPosted,
-    required this.isVerified,
     required this.ctc,
     required this.description,
     required this.education,
@@ -299,7 +300,6 @@ class OpportunityCard extends StatelessWidget {
   final int exp;
   final String type;
   final int daysPosted;
-  final bool isVerified;
   final String ctc;
   final String description;
   final String education;
@@ -307,7 +307,9 @@ class OpportunityCard extends StatelessWidget {
   final String whoCanApply;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool isVerified = ref.watch(verificationProvider);
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.95,
       height: MediaQuery.of(context).size.height * 0.219,
@@ -388,58 +390,73 @@ class OpportunityCard extends StatelessWidget {
               const Spacer(),
               ElevatedButton(
                 onPressed: () {
-                 Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => type == 'Job'
-                          ? DetailedFresherJobs(
-                        id: 0,
-                        profile: profile,
-                        location: location,
-                        codeRequired: '',
+                  if (!isVerified) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                            contentPadding: EdgeInsets.zero,
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            content: const CustomAlertbox());
+                      },
+                    );
+                  } else {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => type == 'Job'
+                            ? DetailedFresherJobs(
+                                id: 0,
+                                profile: profile,
+                                location: location,
+                                codeRequired: '',
 
-                        code: 0,
+                                code: 0,
 
-                        companyName: companyName,
-                        education: education,
-                        skillsRequired: skillsRequired,
-                        knowledgeStars: null,
-                        whoCanApply: '',
-                        description: description,
-                        termsAndConditions: '',
-                        ctc: double.parse(
-                            ctc), // Convert to appropriate type if needed
-                      )
-                          : DetailedInternship(
-                        id: 0,
-                        profile: profile,
-                        location: location,
-                        codeRequired: '',
-                        code: 0,
-                        companyName: companyName,
-                        education: education,
-                        skillsRequired: skillsRequired,
-                        knowledgeStars: null,
-                        whoCanApply: '',
-                        description: description,
-                        termsAndConditions: '',
-                        ctc: double.parse(
-                            ctc), // Convert to appropriate type if needed
+                                companyName: companyName,
+                                education: education,
+                                skillsRequired: skillsRequired,
+                                knowledgeStars: null,
+                                whoCanApply: '',
+                                description: description,
+                                termsAndConditions: '',
+                                ctc: double.parse(
+                                    ctc), // Convert to appropriate type if needed
+                              )
+                            : DetailedInternship(
+                                id: 0,
+                                profile: profile,
+                                location: location,
+                                codeRequired: '',
+                                code: 0,
+                                companyName: companyName,
+                                education: education,
+                                skillsRequired: skillsRequired,
+                                knowledgeStars: null,
+                                whoCanApply: '',
+                                description: description,
+                                termsAndConditions: '',
+                                ctc: double.parse(
+                                    ctc), // Convert to appropriate type if needed
+                              ),
                       ),
-                    ),
-                 );
+                    );
+                  }
                 },
                 style: ButtonStyle(
                   foregroundColor:
-                  MaterialStateProperty.all<Color>(Colors.white),
+                      MaterialStateProperty.all<Color>(Colors.white),
                   backgroundColor:
-                  MaterialStateProperty.all<Color>(const Color(0xFFC1272D)),
+                      MaterialStateProperty.all<Color>(const Color(0xFFC1272D)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0)),
                   ),
                 ),
                 child:
-                const Text('Apply Now >', style: TextStyle(fontSize: 10)),
+                    const Text('Apply Now >', style: TextStyle(fontSize: 10)),
               ),
             ],
           ),

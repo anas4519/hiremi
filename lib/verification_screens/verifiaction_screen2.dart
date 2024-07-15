@@ -429,6 +429,8 @@ void initState() {
                               ),
                               child: TextButton(
                                 onPressed: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (ctx) => const VerificationScreen3()));
                                   if (_isAllFieldsValid()) {
                                     // Navigator.of(context).push(MaterialPageRoute(
                                     //     builder: (ctx) => const VerificationScreen3()));
@@ -558,61 +560,6 @@ void initState() {
             onTap: onTap,
             keyboardType: keyboardType,
             readOnly: readOnly, // Added line
-          ),
-        ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-      ],
-    );
-  }
-
-
-
-  Widget buildGenderField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.04),
-          child: RichText(
-            text: const TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Gender',
-                  style: TextStyle(color: Colors.black),
-                ),
-                TextSpan(
-                  text: " *",
-                  style: TextStyle(color: Colors.red),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding:
-              EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04),
-          child: Row(
-            children: [
-              Radio(
-                value: Gender.Male,
-                groupValue: _selectedGender,
-                onChanged: _handleGenderChange,
-              ),
-              const Text('Male'),
-              Radio(
-                value: Gender.Female,
-                groupValue: _selectedGender,
-                onChanged: _handleGenderChange,
-              ),
-              const Text('Female'),
-              Radio(
-                value: Gender.Other,
-                groupValue: _selectedGender,
-                onChanged: _handleGenderChange,
-              ),
-              const Text('Other'),
-            ],
           ),
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.0185),

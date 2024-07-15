@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:hiremi_version_two/HomePage.dart';
 import 'package:hiremi_version_two/Profile_Screen.dart';
 
 import 'package:hiremi_version_two/applies_screen.dart';
+import 'package:hiremi_version_two/providers/verified_provider.dart';
 import 'package:hiremi_version_two/queries_screen.dart';
+import 'package:hiremi_version_two/verified_popup.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class NewNavbar extends StatefulWidget {
-  final bool isV;
-  const NewNavbar({Key? key, required this.isV}) : super(key: key);
+class NewNavbar extends ConsumerStatefulWidget {
+  
+  const NewNavbar({Key? key}) : super(key: key);
 
   @override
-  State<NewNavbar> createState() => _NewNavbarState();
+  ConsumerState<NewNavbar> createState() => _NewNavbarState();
 }
 
-class _NewNavbarState extends State<NewNavbar> {
+class _NewNavbarState extends ConsumerState<NewNavbar> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
 
@@ -23,18 +28,63 @@ class _NewNavbarState extends State<NewNavbar> {
   void initState() {
     super.initState();
     _pages = [
-      HomePage(isVerified: widget.isV),
-      AppliesScreen(isVerified: widget.isV),
-      QueriesScreen(isVerified: widget.isV,),
+      const HomePage(),
+      const AppliesScreen(),
+      const QueriesScreen(),
       ProfileScreen()
     ];
+    _checkFirstVerification();
+  }
+  Future<void> _checkFirstVerification() async {
+    final prefs = await SharedPreferences.getInstance();
+    final bool isVerified = ref.read(verificationProvider);
+    final bool isFirstVerification = prefs.getBool('isFirstVerification') ?? true;
+
+    if (isVerified && isFirstVerification) {
+      _showVerificationPopup();
+      await prefs.setBool('isFirstVerification', false);
+    }
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    _pageController.jumpToPage(index);
+    final isVerified = ref.read(verificationProvider);
+
+    if (!isVerified && (index == 2 || index == 3)) {
+      _showPopUp();
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+      _pageController.jumpToPage(index);
+    }
+  }
+  void _showPopUp(){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            contentPadding: EdgeInsets.zero,
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            content: const CustomAlertbox());
+      },
+    );
+  }
+  void _showVerificationPopup(){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            contentPadding: EdgeInsets.zero,
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            content: const VerifiedPopup());
+      },
+    );
   }
 
   @override
@@ -95,7 +145,11 @@ class _NewNavbarState extends State<NewNavbar> {
                     // SizedBox(
                     //   width: spacing,
                     // ),
-                    _buildNavItem(Icons.event_note_outlined, 'APPLIES', 1),
+                    _buildNavItem(
+                      _selectedIndex == 1 ? 'images/export_notes red.png' : 'images/export_notes (1).png',
+                      'APPLIES',
+                      1
+                    ),
                     SizedBox(
                       width: spacing*1.5,
                     ),
@@ -180,20 +234,29 @@ class _NewNavbarState extends State<NewNavbar> {
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, int index) {
+  Widget _buildNavItem(dynamic icon, String label, int index) {
     return GestureDetector(
       onTap: () => _onItemTapped(index),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: 20,
-            color: _selectedIndex == index
-                ? const Color(0xFFC1272D)
-                : Colors.black,
-          ),
+          icon is IconData
+            ? Icon(
+                icon,
+                size: 20,
+                color: _selectedIndex == index
+                  ? const Color(0xFFC1272D)
+                  : Colors.black,
+              )
+            : Image.asset(
+                icon,
+                // width: 40,
+                // height: 40,
+                color: _selectedIndex == index
+                  ? const Color(0xFFC1272D)
+                  : Colors.black,
+              ),
           Text(
             label,
             style: const TextStyle(

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/API_Integration/Internship/Apiservices.dart';
 
 import 'package:hiremi_version_two/Custom_Widget/Circle_row.dart';
@@ -18,19 +19,20 @@ import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/experienced_jobs.dart';
 import 'package:hiremi_version_two/fresherJobs.dart';
+import 'package:hiremi_version_two/providers/verified_provider.dart';
 
 
 
 
-class HomePage extends StatefulWidget {
-  final bool isVerified;
-  const HomePage({Key? key, required this.isVerified}) : super(key: key);
+class HomePage extends ConsumerStatefulWidget {
+  
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   int _selectedIndex = 0;
 
   double heightFactor = 0.5; // 50% of screen height
@@ -85,7 +87,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    const percent = 0.5;
+    final isVerified = ref.watch(verificationProvider);
+    const percent = 0.25;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -137,8 +140,8 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (!widget.isVerified) const VerificationStatus(percent: percent,),
-              if (widget.isVerified) const VerifiedProfileWidget(name: 'Harsh Pawar', appId: '00011102'),
+              if (!isVerified) const VerificationStatus(percent: percent,),
+              if (isVerified) const VerifiedProfileWidget(name: 'Harsh Pawar', appId: '00011102'),
               SizedBox(height: screenHeight * 0.02),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,7 +151,7 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   SizedBox(height: screenHeight * 0.02),
-                  AdBanner(isVerified: widget.isVerified),
+                  AdBanner(isVerified: isVerified),
                   SizedBox(height: screenHeight * 0.02),
                   const CircleRow(),
                 ],
@@ -173,7 +176,7 @@ class _HomePageState extends State<HomePage> {
                     child: TextButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => InternshipsScreen(isVerified: widget.isVerified),
+                          builder: (ctx) => InternshipsScreen(isVerified: isVerified),
                         ));
                       },
                       child: Row(
@@ -215,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>  FresherJobs(isVerified: widget.isVerified,)));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>  FresherJobs(isVerified: isVerified,)));
                       },
                       child: Row(
                         children: [
@@ -342,7 +345,6 @@ class _HomePageState extends State<HomePage> {
                 type: 'Job',
                 exp: 1,
                 daysPosted: 0,
-                isVerified: widget.isVerified,
                 ctc: job['CTC']?.toString() ?? '0',
                 description: job['description'] ?? 'No description available',
                 education: job['education'],

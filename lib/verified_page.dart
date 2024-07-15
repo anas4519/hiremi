@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
+import 'package:hiremi_version_two/providers/verified_provider.dart';
 
 
-class VerifiedPage extends StatelessWidget {
+class VerifiedPage extends ConsumerWidget {
   const VerifiedPage({Key? key, }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -118,9 +120,10 @@ class VerifiedPage extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
+                    ref.read(verificationProvider.notifier).verify();
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => const NewNavbar(isV: true,)),
+                      MaterialPageRoute(builder: (context) => const NewNavbar()),
                       (Route<dynamic> route) => false,
                     );
                   },

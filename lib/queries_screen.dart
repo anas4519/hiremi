@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 
 class QueriesScreen extends StatefulWidget {
-  final bool isVerified;
-  const QueriesScreen({Key? key, required this.isVerified}) : super(key: key);
+  
+  const QueriesScreen({Key? key}) : super(key: key);
 
   @override
   State<QueriesScreen> createState() => _QueriesScreenState();
@@ -11,14 +11,14 @@ class QueriesScreen extends StatefulWidget {
 
 class _QueriesScreenState extends State<QueriesScreen> {
   @override
-  void initState() {
-    super.initState();
-    if (!widget.isVerified) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showVerificationDialog();
-      });
-    }
-  }
+  // void initState() {
+  //   super.initState();
+  //   if (!widget.isVerified) {
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       _showVerificationDialog();
+  //     });
+  //   }
+  // }
 
   void _showVerificationDialog() {
     showDialog(
@@ -269,20 +269,20 @@ class _QueriesScreenState extends State<QueriesScreen> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        if (!widget.isVerified) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  contentPadding: EdgeInsets.zero,
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  content: const CustomAlertbox());
-                            },
-                          );
-                        }
+                        // if (!widget.isVerified) {
+                        //   showDialog(
+                        //     context: context,
+                        //     builder: (BuildContext context) {
+                        //       return AlertDialog(
+                        //           contentPadding: EdgeInsets.zero,
+                        //           backgroundColor: Colors.white,
+                        //           shape: RoundedRectangleBorder(
+                        //             borderRadius: BorderRadius.circular(20),
+                        //           ),
+                        //           content: const CustomAlertbox());
+                        //     },
+                        //   );
+                        // }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFC1272D),

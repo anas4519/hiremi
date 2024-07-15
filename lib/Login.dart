@@ -47,7 +47,7 @@ class _LogInState extends State<LogIn> {
 
       Navigator.push(
         context,
-        SlidePageRoute(page: NewNavbar(isV: false,)),
+        SlidePageRoute(page: NewNavbar()),
       );
 
     } else {

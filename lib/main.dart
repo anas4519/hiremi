@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hiremi_version_two/BottomNavbar.dart';
-import 'package:hiremi_version_two/Help_Support.dart';
-import 'package:hiremi_version_two/Settings.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
-import 'package:hiremi_version_two/verify_new.dart';
 import 'SplashScreen.dart';
 
 
@@ -33,7 +30,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
 
-      home: const NewNavbar(isV: false)
+      home: const ProviderScope(child: NewNavbar())
       
     );
   }

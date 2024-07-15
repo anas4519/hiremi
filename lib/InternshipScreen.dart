@@ -180,7 +180,6 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
                               exp: 1, // Replace with actual data if available
                               daysPosted:
                                   0, // Replace with actual data if available
-                              isVerified: widget.isVerified,
                               ctc: job['Stipend']?.toString() ??
                                   '0', // Example, replace with actual field
                               description: job['description'] ??

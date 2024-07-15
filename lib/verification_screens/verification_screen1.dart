@@ -333,6 +333,7 @@ Future<void> _updateUserData() async {
                               ),
                               child: TextButton(
                                 onPressed: () {
+                                  
                                   if (_isAllFieldsValid()) {
                                     // Navigator.of(context).push(MaterialPageRoute(
                                     //     builder: (ctx) => const VerificationScreen1()));
@@ -447,88 +448,4 @@ Widget buildLabeledTextField(
   );
 }
 
-  Widget buildSectionHeader(String title) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-          vertical: MediaQuery.of(context).size.height * 0.02),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-      ),
-    );
-  }
-
-
-
-  // Widget buildGenderField() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Padding(
-  //         padding: EdgeInsets.symmetric(
-  //             horizontal: MediaQuery.of(context).size.width * 0.04),
-  //         child: RichText(
-  //           text: const TextSpan(
-  //             children: [
-  //               TextSpan(
-  //                 text: 'Gender',
-  //                 style: TextStyle(color: Colors.black),
-  //               ),
-  //               TextSpan(
-  //                 text: " *",
-  //                 style: TextStyle(color: Colors.red),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding:
-  //             EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04),
-  //         child: Row(
-  //           children: [
-  //             Radio(
-  //               value: Gender.Male,
-  //               groupValue: _selectedGender,
-  //               onChanged: _handleGenderChange,
-  //             ),
-  //             const Text('Male'),
-  //             Radio(
-  //               value: Gender.Female,
-  //               groupValue: _selectedGender,
-  //               onChanged: _handleGenderChange,
-  //             ),
-  //             const Text('Female'),
-  //             Radio(
-  //               value: Gender.Other,
-  //               groupValue: _selectedGender,
-  //               onChanged: _handleGenderChange,
-  //             ),
-  //             const Text('Other'),
-  //           ],
-  //         ),
-  //       ),
-  //       SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-  //     ],
-  //   );
-  // }
-  //
-  // Widget buildStateDropdown() {
-  //   return Padding(
-  //     padding: EdgeInsets.symmetric(
-  //       horizontal: MediaQuery.of(context).size.width * 0.045,
-  //       vertical: MediaQuery.of(context).size.height * 0.01,
-  //     ),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-  //       ],
-  //     ),
-  //   );
-  // }
 }

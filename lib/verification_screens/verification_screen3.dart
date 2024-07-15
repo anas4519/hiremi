@@ -497,6 +497,8 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                           ),
                           child: TextButton(
                             onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (ctx) => const VerifiedPage()));
                               if (_isAllFieldsValid()) {
                                 _saveFormDetails();
                                 Navigator.of(context).push(MaterialPageRoute(
