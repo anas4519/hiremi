@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hiremi_version_two/providers/verified_provider.dart';
 import 'package:hiremi_version_two/verify.dart';
 
-class AdBanner extends StatelessWidget {
-  AdBanner({Key? key, required this.isVerified}) : super(key: key);
-  final bool isVerified;
+class AdBanner extends ConsumerWidget {
+  AdBanner({Key? key}) : super(key: key);
+  
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final isVerified = ref.watch(verificationProvider);
 
     return Container(
       decoration: BoxDecoration(
@@ -22,7 +25,7 @@ class AdBanner extends StatelessWidget {
           end: Alignment.centerRight,
         ),
       ),
-      width: screenWidth * 0.95,
+      width: screenWidth * 0.9,
       
       child: Padding(
         padding: EdgeInsets.all(screenWidth * 0.04),

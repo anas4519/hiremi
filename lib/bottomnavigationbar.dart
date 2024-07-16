@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:hiremi_version_two/HomePage.dart';
 import 'package:hiremi_version_two/Profile_Screen.dart';
-
 import 'package:hiremi_version_two/applies_screen.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
 import 'package:hiremi_version_two/queries_screen.dart';
@@ -12,7 +11,6 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewNavbar extends ConsumerStatefulWidget {
-  
   const NewNavbar({Key? key}) : super(key: key);
 
   @override
@@ -35,6 +33,7 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
     ];
     _checkFirstVerification();
   }
+
   Future<void> _checkFirstVerification() async {
     final prefs = await SharedPreferences.getInstance();
     final bool isVerified = ref.read(verificationProvider);
@@ -58,7 +57,8 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
       _pageController.jumpToPage(index);
     }
   }
-  void _showPopUp(){
+
+  void _showPopUp() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -72,7 +72,8 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
       },
     );
   }
-  void _showVerificationPopup(){
+
+  void _showVerificationPopup() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -89,6 +90,7 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
 
   @override
   Widget build(BuildContext context) {
+    final isVerified = ref.read(verificationProvider);
     double screenWidth = MediaQuery.of(context).size.width;
     double spacing = (screenWidth - (4 * 50)) / 5;
     return Scaffold(
@@ -97,6 +99,7 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
         children: [
           PageView(
             controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
             children: _pages
                 .map((page) => Navigator(
                       onGenerateRoute: (settings) {
@@ -136,54 +139,38 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16),
-
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    // SizedBox(width: spacing/2.5,),
                     _buildNavItem(Icons.home_filled, 'HOME', 0),
-                    // SizedBox(
-                    //   width: spacing,
-                    // ),
                     _buildNavItem(
-                      _selectedIndex == 1 ? 'images/export_notes red.png' : 'images/export_notes (1).png',
-                      'APPLIES',
-                      1
-                    ),
+                        _selectedIndex == 1
+                            ? 'images/export_notes red.png'
+                            : 'images/export_notes (1).png',
+                        'APPLIES',
+                        1),
                     SizedBox(
-                      width: spacing*1.5,
+                      width: spacing * 1.5,
                     ),
                     _buildNavItem(Icons.local_activity_outlined, 'QUERIES', 2),
-                    // SizedBox(
-                    //   width: spacing,
-                    // ),
                     _buildNavItem(Icons.person_outline, 'PROFILE', 3),
-                    //  SizedBox(width: spacing/2.5,),
                   ],
                 ),
               ),
             ),
           ),
-          // Positioned(
-          //     bottom:
-          //         10,
-          //     left: 0,
-          //     right: 0,
-          //     child: SizedBox(height: 100, width: 5,child: Image.asset('assets/Rectangle 50.png'))
-          //     ),
           Positioned(
-            bottom: 35,
-            left: screenWidth*0.5,
-            right: screenWidth*0.5,
+              bottom: 35,
+              left: screenWidth * 0.5,
+              right: screenWidth * 0.5,
               child: CircularPercentIndicator(
-            radius: 39,
-            lineWidth: 15,
-            percent: 0.50,
-            
-            progressColor: const Color(0xFFC1272D),
-            backgroundColor: Colors.transparent,
-            startAngle: 90,
-          )),
+                radius: 39,
+                lineWidth: 15,
+                percent: 0.50,
+                progressColor: const Color(0xFFC1272D),
+                backgroundColor: Colors.transparent,
+                startAngle: 90,
+              )),
           Positioned(
             bottom: 25,
             left: 0,
@@ -196,7 +183,9 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
                   height: 64,
                   child: FloatingActionButton(
                     onPressed: () {
-                      // Define the action for the FloatingActionButton here
+                      if(!isVerified){
+                        _showPopUp();
+                      }
                     },
                     backgroundColor: Colors.white,
                     shape: const CircleBorder(),
@@ -242,21 +231,19 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           icon is IconData
-            ? Icon(
-                icon,
-                size: 20,
-                color: _selectedIndex == index
-                  ? const Color(0xFFC1272D)
-                  : Colors.black,
-              )
-            : Image.asset(
-                icon,
-                // width: 40,
-                // height: 40,
-                color: _selectedIndex == index
-                  ? const Color(0xFFC1272D)
-                  : Colors.black,
-              ),
+              ? Icon(
+                  icon,
+                  size: 20,
+                  color: _selectedIndex == index
+                      ? const Color(0xFFC1272D)
+                      : Colors.black,
+                )
+              : Image.asset(
+                  icon,
+                  color: _selectedIndex == index
+                      ? const Color(0xFFC1272D)
+                      : Colors.black,
+                ),
           Text(
             label,
             style: const TextStyle(

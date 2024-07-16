@@ -1,4 +1,4 @@
-
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/API_Integration/Internship/Apiservices.dart';
@@ -21,11 +21,7 @@ import 'package:hiremi_version_two/experienced_jobs.dart';
 import 'package:hiremi_version_two/fresherJobs.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
 
-
-
-
 class HomePage extends ConsumerStatefulWidget {
-  
   const HomePage({Key? key}) : super(key: key);
 
   @override
@@ -60,7 +56,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   void _onScroll() {
     double offset = _scrollController.offset;
     setState(() {
-      _blurAmount = (10 - (offset / 10)).clamp(0, 10); // Adjust blur amount based on scroll
+      _blurAmount = (10 - (offset / 10))
+          .clamp(0, 10); // Adjust blur amount based on scroll
     });
   }
 
@@ -69,9 +66,11 @@ class _HomePageState extends ConsumerState<HomePage> {
       _selectedIndex = index;
     });
   }
+
   Future<void> _fetchJobs() async {
     try {
-      final apiService = ApiService('http://13.127.81.177:8000/api/internship/');
+      final apiService =
+          ApiService('http://13.127.81.177:8000/api/internship/');
       final data = await apiService.fetchData();
       setState(() {
         _jobs = data;
@@ -85,6 +84,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
   }
 
+  int _current = 0;
+  final CarouselController _controller = CarouselController();
+
   @override
   Widget build(BuildContext context) {
     final isVerified = ref.watch(verificationProvider);
@@ -94,7 +96,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      
       appBar: AppBar(
         backgroundColor: Colors.white,
         // leading: Padding(
@@ -115,7 +116,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         //       )),
         // )
         // ),
-        
+
         title: const Text(
           "Hiremi's Home",
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -129,22 +130,28 @@ class _HomePageState extends ConsumerState<HomePage> {
               ));
             },
             style: ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)
-            ),
+                backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)),
             icon: const Icon(Icons.notifications_outlined),
           ),
         ],
       ),
-      drawer: const Drawer(backgroundColor: Colors.white,child: DrawerChild(),),
-      
+      drawer: const Drawer(
+        backgroundColor: Colors.white,
+        child: DrawerChild(),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(screenWidth * 0.04),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (!isVerified) const VerificationStatus(percent: 0.25,),
-              if (isVerified) const VerifiedProfileWidget(name: 'Harsh Pawar', appId: '00011102'),
+              if (!isVerified)
+                const VerificationStatus(
+                  percent: 0.25,
+                ),
+              if (isVerified)
+                const VerifiedProfileWidget(
+                    name: 'Harsh Pawar', appId: '00011102'),
               SizedBox(height: screenHeight * 0.02),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,9 +161,53 @@ class _HomePageState extends ConsumerState<HomePage> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   SizedBox(height: screenHeight * 0.02),
-                  AdBanner(isVerified: isVerified),
+                  Column(
+                    children: [
+                      CarouselSlider(
+                        options: CarouselOptions(
+                          height: 155,
+                          viewportFraction: 0.95,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _current = index;
+                            });
+                          },
+                        ),
+                        items: [1, 2, 3, 4, 5].map((i) {
+                          return Builder(
+                            builder: (BuildContext context) {
+                              return AdBanner();
+                            },
+                          );
+                        }).toList(),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [1, 2, 3, 4, 5].asMap().entries.map((entry) {
+                          return GestureDetector(
+                            onTap: () => _controller.animateToPage(entry.key),
+                            child: Container(
+                              width: 12.0,
+                              height: 12.0,
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 4.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: (Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.white
+                                        : AppColors.primary)
+                                    .withOpacity(
+                                        _current == entry.key ? 0.9 : 0.4),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      )
+                    ],
+                  ),
                   SizedBox(height: screenHeight * 0.02),
-                  const CircleRow(),
+                  //circle row
                 ],
               ),
               SizedBox(height: screenHeight * 0.02),
@@ -179,7 +230,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     child: TextButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => InternshipsScreen(isVerified: isVerified),
+                          builder: (ctx) =>
+                              InternshipsScreen(isVerified: isVerified),
                         ));
                       },
                       child: Row(
@@ -221,7 +273,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>  FresherJobs(isVerified: isVerified,)));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => FresherJobs(
+                                  isVerified: isVerified,
+                                )));
                       },
                       child: Row(
                         children: [
@@ -262,7 +317,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>const Experienced_Jobs()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => const Experienced_Jobs()));
                       },
                       child: Row(
                         children: [
@@ -298,7 +354,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 'Latest Opportunities',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
-             // SizedBox(height: screenHeight * 0.02),
+              // SizedBox(height: screenHeight * 0.02),
               // OpportunityCard(
               //   dp: Image.asset('images/Rectangle 57.png'),
               //   role: 'Human Resource Intern',
@@ -311,7 +367,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               //   daysPosted: 6,
               //   isVerified: widget.isVerified,
               // ),
-             // SizedBox(height: screenHeight * 0.01),
+              // SizedBox(height: screenHeight * 0.01),
               // OpportunityCard(
               //   dp: Image.asset('images/crtd1 1.png'),
               //   role: 'Social Media Intern',
@@ -337,24 +393,29 @@ class _HomePageState extends ConsumerState<HomePage> {
               //   daysPosted: 6,
               //   isVerified: widget.isVerified,
               // ),
-             // const SizedBox(height: 64,),
-              ..._jobs.map((job) => OpportunityCard(
-                dp: Image.asset('images/icons/logo1.png'),
-                profile: job['profile'] ?? 'N/A',
-                companyName: job['company_name'] ?? 'N/A',
-                location: job['location'] ?? 'N/A',
-                stipend: job['CTC']?.toString() ?? 'N/A',
-                mode: 'Remote',
-                type: 'Job',
-                exp: 1,
-                daysPosted: 0,
-                ctc: job['CTC']?.toString() ?? '0',
-                description: job['description'] ?? 'No description available',
-                education: job['education'],
-                skillsRequired: job['skills_required'],
-                whoCanApply: job['who_can_apply'],
-              )).toList(),
-              const SizedBox(height: 64,),
+              // const SizedBox(height: 64,),
+              ..._jobs
+                  .map((job) => OpportunityCard(
+                        dp: Image.asset('images/icons/logo1.png'),
+                        profile: job['profile'] ?? 'N/A',
+                        companyName: job['company_name'] ?? 'N/A',
+                        location: job['location'] ?? 'N/A',
+                        stipend: job['CTC']?.toString() ?? 'N/A',
+                        mode: 'Remote',
+                        type: 'Job',
+                        exp: 1,
+                        daysPosted: 0,
+                        ctc: job['CTC']?.toString() ?? '0',
+                        description:
+                            job['description'] ?? 'No description available',
+                        education: job['education'],
+                        skillsRequired: job['skills_required'],
+                        whoCanApply: job['who_can_apply'],
+                      ))
+                  .toList(),
+              const SizedBox(
+                height: 64,
+              ),
             ],
           ),
         ),

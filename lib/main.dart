@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hiremi_version_two/bottomnavigationbar.dart';
+import 'package:hiremi_version_two/ultimate_nav_bar.dart';
 import 'SplashScreen.dart';
 
 
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Colors.white,
         fontFamily: GoogleFonts.poppins().fontFamily,
+        
       ),
 
       home: SplashScreen()
