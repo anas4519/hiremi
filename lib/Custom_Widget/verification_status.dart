@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hiremi_version_two/verification_screens/verifiaction_screen2.dart';
+import 'package:hiremi_version_two/verification_screens/verification_screen1.dart';
+import 'package:hiremi_version_two/verification_screens/verification_screen3.dart';
 import 'package:hiremi_version_two/verify.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -8,7 +11,7 @@ class VerificationStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double percentage = percent*100;
+    double percentage = percent * 100;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Container(
@@ -107,12 +110,19 @@ class VerificationStatus extends StatelessWidget {
                                         screenWidth *
                                             0.035), // Adjusted based on screen width
                                   ),
-                                  child: Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                    size: screenWidth *
-                                        0.03, // Adjusted based on screen width
-                                  ),
+                                  child: IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                        size: screenWidth * 0.03,
+                                      )),
+                                  // child: Icon(
+                                  //   Icons.check,
+                                  //   color: Colors.white,
+                                  //   size: screenWidth *
+                                  //       0.03, // Adjusted based on screen width
+                                  // ),
                                 ),
                                 SizedBox(
                                   height: screenHeight *
@@ -151,7 +161,9 @@ class VerificationStatus extends StatelessWidget {
                                       0.05, // Adjusted based on screen width
                                   height: screenHeight *
                                       0.003, // Adjusted based on screen height
-                                  color: percent>=0.50? Colors.green:Colors.white,
+                                  color: percent >= 0.50
+                                      ? Colors.green
+                                      : Colors.white,
                                 ),
                                 SizedBox(
                                   height: screenHeight *
@@ -167,17 +179,33 @@ class VerificationStatus extends StatelessWidget {
                                   height: screenWidth *
                                       0.07, // Adjusted based on screen width
                                   decoration: BoxDecoration(
-                                    color: percent>=0.50? Colors.green:Colors.white,
+                                    color: percent >= 0.50
+                                        ? Colors.green
+                                        : Colors.white,
                                     borderRadius: BorderRadius.circular(
                                         screenWidth *
                                             0.035), // Adjusted based on screen width
                                   ),
-                                  child: Icon(
-                                    Icons.call,
-                                    color: percent>=0.50? Colors.white: const Color(0xFFC1272D),
-                                    size: screenWidth *
-                                        0.03, // Adjusted based on screen width
-                                  ),
+                                  // child: Icon(
+                                  //   Icons.call,
+                                  //   color: percent>=0.50? Colors.white: const Color(0xFFC1272D),
+                                  //   size: screenWidth *
+                                  //       0.03, // Adjusted based on screen width
+                                  // ),
+                                  child: IconButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (ctx) =>
+                                                    const VerificationScreen1()));
+                                      },
+                                      icon: Icon(
+                                        Icons.call,
+                                        color: percent >= 0.50
+                                            ? Colors.white
+                                            : const Color(0xFFC1272D),
+                                        size: screenWidth * 0.03,
+                                      )),
                                 ),
                                 SizedBox(
                                   height: screenHeight *
@@ -201,7 +229,9 @@ class VerificationStatus extends StatelessWidget {
                                       0.05, // Adjusted based on screen width
                                   height: screenHeight *
                                       0.003, // Adjusted based on screen height
-                                  color: percent>=0.50? Colors.green:Colors.white,
+                                  color: percent >= 0.50
+                                      ? Colors.green
+                                      : Colors.white,
                                 ),
                                 SizedBox(
                                   height: screenHeight *
@@ -216,7 +246,9 @@ class VerificationStatus extends StatelessWidget {
                                       0.05, // Adjusted based on screen width
                                   height: screenHeight *
                                       0.003, // Adjusted based on screen height
-                                  color:percent>=0.75? Colors.green:Colors.white,
+                                  color: percent >= 0.75
+                                      ? Colors.green
+                                      : Colors.white,
                                 ),
                                 SizedBox(
                                   height: screenHeight *
@@ -232,17 +264,35 @@ class VerificationStatus extends StatelessWidget {
                                   height: screenWidth *
                                       0.07, // Adjusted based on screen width
                                   decoration: BoxDecoration(
-                                    color: percent>=0.75? Colors.green:Colors.white,
+                                    color: percent >= 0.75
+                                        ? Colors.green
+                                        : Colors.white,
                                     borderRadius: BorderRadius.circular(
                                         screenWidth *
                                             0.035), // Adjusted based on screen width
                                   ),
-                                  child: Icon(
-                                    Icons.school,
-                                    color: percent>=0.75? Colors.white: const Color(0xFFC1272D),
-                                    size: screenWidth *
-                                        0.03, // Adjusted based on screen width
-                                  ),
+                                  child: IconButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (ctx) =>
+                                                    const VerificationScreen2()));
+                                      },
+                                      icon: Icon(
+                                        Icons.school,
+                                        color: percent >= 0.75
+                                            ? Colors.white
+                                            : const Color(0xFFC1272D),
+                                        size: screenWidth * 0.03,
+                                      )),
+                                  // child: Icon(
+                                  //   Icons.school,
+                                  //   color: percent >= 0.75
+                                  //       ? Colors.white
+                                  //       : const Color(0xFFC1272D),
+                                  //   size: screenWidth *
+                                  //       0.03, // Adjusted based on screen width
+                                  // ),
                                 ),
                                 SizedBox(
                                   height: screenHeight *
@@ -266,7 +316,9 @@ class VerificationStatus extends StatelessWidget {
                                       0.05, // Adjusted based on screen width
                                   height: screenHeight *
                                       0.003, // Adjusted based on screen height
-                                  color: percent>=0.75? Colors.green:Colors.white,
+                                  color: percent >= 0.75
+                                      ? Colors.green
+                                      : Colors.white,
                                 ),
                                 SizedBox(
                                   height: screenHeight *
@@ -281,7 +333,9 @@ class VerificationStatus extends StatelessWidget {
                                       0.05, // Adjusted based on screen width
                                   height: screenHeight *
                                       0.003, // Adjusted based on screen height
-                                  color:percent>=1? Colors.green:Colors.white,
+                                  color: percent >= 1
+                                      ? Colors.green
+                                      : Colors.white,
                                 ),
                                 SizedBox(
                                   height: screenHeight *
@@ -297,17 +351,36 @@ class VerificationStatus extends StatelessWidget {
                                   height: screenWidth *
                                       0.07, // Adjusted based on screen width
                                   decoration: BoxDecoration(
-                                    color: percent>=1? Colors.green:Colors.white,
+                                    color: percent >= 1
+                                        ? Colors.green
+                                        : Colors.white,
                                     borderRadius: BorderRadius.circular(
                                         screenWidth *
                                             0.035), // Adjusted based on screen width
                                   ),
-                                  child: Icon(
-                                    Icons.account_balance,
-                                    color: percent>=1? Colors.white: const Color(0xFFC1272D),
-                                    size: screenWidth *
-                                        0.03, // Adjusted based on screen width
-                                  ),
+                                  child: IconButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (ctx) =>
+                                                    const VerificationScreen3()));
+                                      },
+                                      icon: Icon(
+                                        Icons.account_balance,
+                                        color: percent >= 1
+                                            ? Colors.white
+                                            : const Color(0xFFC1272D),
+                                        size: screenWidth * 0.03,
+                                      )),
+
+                                  // child: Icon(
+                                  //   Icons.account_balance,
+                                  //   color: percent >= 1
+                                  //       ? Colors.white
+                                  //       : const Color(0xFFC1272D),
+                                  //   size: screenWidth *
+                                  //       0.03, // Adjusted based on screen width
+                                  // ),
                                 ),
                                 SizedBox(
                                   height: screenHeight *

@@ -128,7 +128,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                 builder: (ctx) => const NotificationScreen(),
               ));
             },
-            icon: const Icon(Icons.notifications),
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)
+            ),
+            icon: const Icon(Icons.notifications_outlined),
           ),
         ],
       ),
@@ -140,7 +143,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (!isVerified) const VerificationStatus(percent: percent,),
+              if (!isVerified) const VerificationStatus(percent: 0.25,),
               if (isVerified) const VerifiedProfileWidget(name: 'Harsh Pawar', appId: '00011102'),
               SizedBox(height: screenHeight * 0.02),
               Column(

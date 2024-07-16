@@ -1,19 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:hiremi_version_two/Edit_Profile_Section/BasicDetails/AddBasicDetails.dart';
 import 'package:hiremi_version_two/Forget_Your_Password.dart';
 import 'package:hiremi_version_two/Help_Support.dart';
 import 'package:hiremi_version_two/Settings.dart';
+import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/about_us.dart';
+import 'package:hiremi_version_two/providers/verified_provider.dart';
 
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-class DrawerChild extends StatelessWidget {
+import '../Utils/colors.dart';
+
+class DrawerChild extends ConsumerWidget {
   const DrawerChild({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final isVerified = ref.watch(verificationProvider);
+
+    void _showPopUp() {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              contentPadding: EdgeInsets.zero,
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              content: const CustomAlertbox());
+        },
+      );
+    }
 
     return Drawer(
       child: SingleChildScrollView(
@@ -32,8 +54,9 @@ class DrawerChild extends StatelessWidget {
                     CircularPercentIndicator(
                       radius: screenWidth * 0.10,
                       lineWidth: 4,
-                      percent: 0.25,
-                      center: const Text('25%'),
+                      percent: isVerified ? 1 : 0.25,
+                      center:
+                          isVerified ? const Text('100%') : const Text('25%'),
                       progressColor: Colors.green,
                       backgroundColor: Colors.transparent,
                     ),
@@ -45,32 +68,68 @@ class DrawerChild extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: screenHeight * 0.005),
-                    Container(
-                      height: screenHeight * 0.03,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(screenWidth * 0.1),
-                        border: Border.all(color: const Color(0xFFC1272D)),
+                    if (!isVerified)
+                      Container(
+                        height: screenHeight * 0.03,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(screenWidth * 0.1),
+                          border: Border.all(color: const Color(0xFFC1272D)),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(screenWidth * 0.01),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                color: const Color(0xFFC1272D),
+                                size: screenWidth * 0.02,
+                              ),
+                              Text(
+                                ' Not verified',
+                                style: TextStyle(
+                                    color: const Color(0xFFC1272D),
+                                    fontSize: screenWidth * 0.02),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.all(screenWidth * 0.01),
+                    if (isVerified)
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: Sizes.responsiveVerticalSpace(context),
+                          horizontal: Sizes.responsiveHorizontalSpace(context),
+                        ),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                              width: 0.7,
+                              color: AppColors.green,
+                            )),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
-                              Icons.check_circle,
-                              color: const Color(0xFFC1272D),
-                              size: screenWidth * 0.02,
+                            Image.asset(
+                              'images/icons/verified.png',
+                              height: MediaQuery.of(context).size.width * 0.025,
+                              width: MediaQuery.of(context).size.width * 0.025,
+                            ),
+                            SizedBox(
+                              width: Sizes.responsiveXs(context),
                             ),
                             Text(
-                              ' Not verified',
+                              'Verified',
                               style: TextStyle(
-                                  color: const Color(0xFFC1272D),
-                                  fontSize: screenWidth * 0.02),
-                            ),
+                                color: AppColors.green,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                              ),
+                            )
                           ],
                         ),
                       ),
-                    ),
                     SizedBox(height: screenHeight * 0.005),
                     Text(
                       'Last updated today',
@@ -80,8 +139,12 @@ class DrawerChild extends StatelessWidget {
                     SizedBox(height: screenHeight * 0.005),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => const AddBasicDetails()));
+                        if (!isVerified) {
+                          _showPopUp();
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const AddBasicDetails()));
+                        }
                       },
                       style: ButtonStyle(
                         foregroundColor:
@@ -91,7 +154,7 @@ class DrawerChild extends StatelessWidget {
                         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(screenWidth * 0.02),
+                                BorderRadius.circular(screenWidth * 0.01),
                           ),
                         ),
                       ),
@@ -132,8 +195,12 @@ class DrawerChild extends StatelessWidget {
                           backgroundColor:
                               WidgetStatePropertyAll(Color(0xFFECF5FF))),
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => SettingsScreen()));
+                        if (!isVerified) {
+                          _showPopUp();
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => SettingsScreen()));
+                        }
                       },
                       icon: const Icon(Icons.navigate_next))),
               SizedBox(height: screenHeight * 0.005),
@@ -159,7 +226,8 @@ class DrawerChild extends StatelessWidget {
                           backgroundColor:
                               WidgetStatePropertyAll(Color(0xFFECF5FF))),
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> Forget_Your_Password()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => Forget_Your_Password()));
                       },
                       icon: const Icon(Icons.navigate_next))),
               SizedBox(height: screenHeight * 0.005),
@@ -185,8 +253,8 @@ class DrawerChild extends StatelessWidget {
                           backgroundColor:
                               WidgetStatePropertyAll(Color(0xFFECF5FF))),
                       onPressed: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (ctx) => const About_Us()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => const About_Us()));
                       },
                       icon: const Icon(Icons.navigate_next))),
               SizedBox(
@@ -214,8 +282,8 @@ class DrawerChild extends StatelessWidget {
                           backgroundColor:
                               WidgetStatePropertyAll(Color(0xFFECF5FF))),
                       onPressed: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (ctx) => const HelpSupport()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => const HelpSupport()));
                       },
                       icon: const Icon(Icons.navigate_next))),
             ],
