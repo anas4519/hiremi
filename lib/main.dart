@@ -1,6 +1,9 @@
+import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hiremi_version_two/BottomNavbar.dart';
+import 'package:hiremi_version_two/HomePage.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/ultimate_nav_bar.dart';
 import 'SplashScreen.dart';
@@ -16,27 +19,29 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final textTheme = GoogleFonts.poppinsTextTheme();
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        drawerTheme: const DrawerThemeData(
-          backgroundColor: Colors.white
+     return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          drawerTheme: const DrawerThemeData(
+            backgroundColor: Colors.white
+            
+          ),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.white
+          ),
+          scaffoldBackgroundColor: Colors.white,
+          fontFamily: GoogleFonts.poppins().fontFamily,
           
         ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white
-        ),
-        scaffoldBackgroundColor: Colors.white,
-        fontFamily: GoogleFonts.poppins().fontFamily,
-        
-      ),
-
-      home: SplashScreen()
       
-    );
+        home: NewNavbar()
+        
+      );
+    
   }
 }
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);

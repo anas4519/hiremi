@@ -17,9 +17,11 @@ import 'package:hiremi_version_two/InternshipScreen.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
+import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/experienced_jobs.dart';
 import 'package:hiremi_version_two/fresherJobs.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
+import 'package:hiremi_version_two/ultimate_nav_bar.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -95,6 +97,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -139,6 +142,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         backgroundColor: Colors.white,
         child: DrawerChild(),
       ),
+      // bottomNavigationBar: NewNavbar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(screenWidth * 0.04),
@@ -164,9 +168,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                   Column(
                     children: [
                       CarouselSlider(
+                        
                         options: CarouselOptions(
                           height: 155,
                           viewportFraction: 0.95,
+                          autoPlay: true,
+                          autoPlayInterval: Duration(seconds: 5),
+                          autoPlayAnimationDuration: Duration(milliseconds: 500),
                           onPageChanged: (index, reason) {
                             setState(() {
                               _current = index;

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
+import 'package:hiremi_version_two/Custom_Widget/drawer_child.dart';
+import 'package:hiremi_version_two/Notofication_screen.dart';
 
 class QueriesScreen extends StatefulWidget {
   
@@ -41,17 +43,22 @@ class _QueriesScreenState extends State<QueriesScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      drawer: const Drawer(
+        child: DrawerChild(),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
           "Queries",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
+        
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const NotificationScreen()));
+            },
             icon: const Icon(Icons.notifications),
           ),
         ],

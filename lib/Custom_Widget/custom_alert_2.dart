@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hiremi_version_two/bottomnavigationbar.dart';
 
 
 class CustomAlert2 extends StatefulWidget {
@@ -62,7 +63,11 @@ class _CustomAlert2State extends State<CustomAlert2> {
             SizedBox(height: screenHeight * 0.01),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const NewNavbar()),
+                      (Route<dynamic> route) => false,
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFC1272D), // Background color

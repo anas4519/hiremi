@@ -46,6 +46,7 @@ dependencies:
   flutter_riverpod: ^2.5.1
   fan_carousel_image_slider: ^1.0.1
   carousel_slider: ^4.2.1
+  custom_navigation_bar: ^0.8.2
 
 dev_dependencies:
   flutter_test:
