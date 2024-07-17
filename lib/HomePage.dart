@@ -161,6 +161,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         options: CarouselOptions(
                           height: 155,
                           viewportFraction: 0.95,
+                          autoPlay: true,
                           onPageChanged: (index, reason) {
                             setState(() {
                               _current = index;

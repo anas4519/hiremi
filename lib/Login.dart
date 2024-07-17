@@ -45,16 +45,17 @@ class _LogInState extends State<LogIn> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('email', _emailController.text);
 
+      await prefs.setString('isLogin', 'true');
       Navigator.push(
         context,
-        SlidePageRoute(page: NewNavbar()),
+          SlidePageRoute(page: const NewNavbar()),
       );
 
     } else {
       // Login failed
       print("Login failed");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Your credentials may be wrong. Please try again.'),
           backgroundColor: Colors.red,
         ),
@@ -103,7 +104,7 @@ class _LogInState extends State<LogIn> {
                 Center(
                   child: RichText(
                     textAlign: TextAlign.center,
-                    text: TextSpan(
+                    text: const TextSpan(
                       children: [
                         TextSpan(
                           text: "Let's sign you in,\n",
@@ -315,10 +316,10 @@ class _LogInState extends State<LogIn> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              SlidePageRoute(page: Forget_Your_Password()),
+                              SlidePageRoute(page: const Forget_Your_Password()),
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             'Forget Password?',
                             style: TextStyle(color: Colors.blueAccent), // Adjust text color as needed
                           ),
@@ -335,7 +336,7 @@ class _LogInState extends State<LogIn> {
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.009),
-                      Center(
+                      const Center(
                         child: Text(
                           "By clicking Login, you agree to Hiremi’s Terms & Conditions.",
                           style: TextStyle(
@@ -349,7 +350,7 @@ class _LogInState extends State<LogIn> {
                         padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
                         child: Row(
                           children: [
-                            Expanded(
+                            const Expanded(
                               child: Divider(
                                 color: Colors.grey,
                                 thickness: 1,
@@ -357,7 +358,7 @@ class _LogInState extends State<LogIn> {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.01),
-                              child: Text(
+                              child: const Text(
                                 "or",
                                 style: TextStyle(
                                   color: Colors.grey,
@@ -365,7 +366,7 @@ class _LogInState extends State<LogIn> {
                                 ),
                               ),
                             ),
-                            Expanded(
+                            const Expanded(
                               child: Divider(
                                 color: Colors.grey,
                                 thickness: 1,
@@ -377,18 +378,18 @@ class _LogInState extends State<LogIn> {
                       SizedBox(height: MediaQuery.of(context).size.height * 0.018),
                       Center(
                         child: CustomElevatedButton(
-                          color: Color(0xFFF5F4F4),
+                          color: const Color(0xFFF5F4F4),
                           width: MediaQuery.of(context).size.width * 0.775,
                           height: MediaQuery.of(context).size.height * 0.0625,
                           text: 'Register Now',
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w400,
                           ),
                           onPressed: () {
                             Navigator.push(
                               context,
-                              SlidePageRoute(page: Registers()),
+                              SlidePageRoute(page: const Registers()),
                             );
                           },
                         ),
@@ -514,9 +515,9 @@ class _LogInState extends State<LogIn> {
               children: [
                 TextSpan(
                   text: label,
-                  style: TextStyle(color: Colors.black),
+                  style: const TextStyle(color: Colors.black),
                 ),
-                TextSpan(
+                const TextSpan(
                   text: " *",
                   style: TextStyle(color: Colors.red),
                 ),
@@ -534,7 +535,7 @@ class _LogInState extends State<LogIn> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.redAccent),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               children: [
                 if (showPositionedBox)
@@ -550,9 +551,9 @@ class _LogInState extends State<LogIn> {
                           topLeft: Radius.circular(calculatedBorderRadius),
                           bottomLeft: Radius.circular(calculatedBorderRadius),
                         ),
-                        border: Border(
+                        border: const Border(
                           right: BorderSide(
-                            color: const Color(0xFF808080),
+                            color: Color(0xFF808080),
                             width: 1.0,
                           ),
                         ),

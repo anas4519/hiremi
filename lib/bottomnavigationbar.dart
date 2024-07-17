@@ -11,7 +11,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewNavbar extends ConsumerStatefulWidget {
-  const NewNavbar({Key? key}) : super(key: key);
+  const NewNavbar({super.key});
 
   @override
   ConsumerState<NewNavbar> createState() => _NewNavbarState();
@@ -143,11 +143,7 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildNavItem(Icons.home_filled, 'HOME', 0),
-                    _buildNavItem(
-                        _selectedIndex == 1
-                            ? 'images/export_notes red.png'
-                            : 'images/export_notes (1).png',
-                        'APPLIES',
+                    _buildNavItem(Icons.list_alt_rounded,'APPLIES',
                         1),
                     SizedBox(
                       width: spacing * 1.5,
