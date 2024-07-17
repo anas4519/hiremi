@@ -7,7 +7,8 @@ import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 
-import '../../../../Custom_Widget/CustomContainer/OutlinedButton.dart';
+import '../../widgets/CustomContainer/OutlinedButton.dart';
+
 
 class PersonalLinks extends StatefulWidget {
   const PersonalLinks({

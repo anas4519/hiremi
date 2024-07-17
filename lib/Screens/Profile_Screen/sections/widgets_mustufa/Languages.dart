@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/RoundedContainer/roundedContainer.dart';
+import 'package:hiremi_version_two/Screens/Profile_Screen/widgets/CustomContainer/OutlinedButton.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 
-import '../../../../Custom_Widget/CustomContainer/OutlinedButton.dart';
 
 
 class Languages extends StatelessWidget {

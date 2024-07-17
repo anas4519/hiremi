@@ -47,7 +47,7 @@
 
     Route _createRoute() {
       return PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => HiremiScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) => const HiremiScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = 0.0;
           const end = 3.0;
