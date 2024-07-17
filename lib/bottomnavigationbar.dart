@@ -11,7 +11,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewNavbar extends ConsumerStatefulWidget {
-  const NewNavbar({Key? key}) : super(key: key);
+  const NewNavbar({super.key});
 
   @override
   ConsumerState<NewNavbar> createState() => _NewNavbarState();
@@ -87,151 +87,134 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
       },
     );
   }
-   Future<bool> _onWillPop() async {
-    if (_pageController.page != 0) {
-      _pageController.previousPage(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      return false;
-    }
-    return true;
-  }
 
   @override
   Widget build(BuildContext context) {
     final isVerified = ref.read(verificationProvider);
     double screenWidth = MediaQuery.of(context).size.width;
     double spacing = (screenWidth - (4 * 50)) / 5;
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
-          children: [
-            PageView(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: _pages
-                  .map((page) => Navigator(
-                        onGenerateRoute: (settings) {
-                          return MaterialPageRoute(
-                            builder: (context) => page,
-                          );
-                        },
-                      ))
-                  .toList(),
-              onPageChanged: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-            ),
-            Positioned(
-              bottom: 10,
-              left: 20,
-              right: 20,
-              child: Container(
-                height: 64,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                    bottomLeft: Radius.circular(32),
-                    bottomRight: Radius.circular(32),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          PageView(
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: _pages
+                .map((page) => Navigator(
+                      onGenerateRoute: (settings) {
+                        return MaterialPageRoute(
+                          builder: (context) => page,
+                        );
+                      },
+                    ))
+                .toList(),
+            onPageChanged: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+          ),
+          Positioned(
+            bottom: 10,
+            left: 20,
+            right: 20,
+            child: Container(
+              height: 64,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                  bottomLeft: Radius.circular(32),
+                  bottomRight: Radius.circular(32),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 10,
-                      offset: Offset(0, 5),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildNavItem(Icons.home_filled, 'HOME', 0),
+                    _buildNavItem(Icons.list_alt_rounded,'APPLIES',
+                        1),
+                    SizedBox(
+                      width: spacing * 1.5,
                     ),
+                    _buildNavItem(Icons.local_activity_outlined, 'QUERIES', 2),
+                    _buildNavItem(Icons.person_outline, 'PROFILE', 3),
                   ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildNavItem(Icons.home_filled, 'HOME', 0),
-                      _buildNavItem(
-                          _selectedIndex == 1
-                              ? 'images/export_notes red.png'
-                              : 'images/export_notes (1).png',
-                          'APPLIES',
-                          1),
-                      SizedBox(
-                        width: spacing * 1.5,
-                      ),
-                      _buildNavItem(Icons.local_activity_outlined, 'QUERIES', 2),
-                      _buildNavItem(Icons.person_outline, 'PROFILE', 3),
-                    ],
-                  ),
-                ),
               ),
             ),
-            Positioned(
-                bottom: 35,
-                left: screenWidth * 0.5,
-                right: screenWidth * 0.5,
-                child: CircularPercentIndicator(
-                  radius: 39,
-                  lineWidth: 15,
-                  percent: 0.50,
-                  progressColor: const Color(0xFFC1272D),
-                  backgroundColor: Colors.transparent,
-                  startAngle: 90,
-                )),
-            Positioned(
-              bottom: 25,
-              left: 0,
-              right: 0,
-              child: Transform.translate(
-                offset: const Offset(0, -20),
-                child: Center(
-                  child: SizedBox(
-                    width: 64,
-                    height: 64,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        if(!isVerified){
-                          _showPopUp();
-                        }
-                      },
-                      backgroundColor: Colors.white,
-                      shape: const CircleBorder(),
-                      child: const Center(
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Icon(
-                              Icons.all_inclusive,
-                              color: Color(0xFFC1272D),
-                              size: 30,
-                            ),
-                            Text(
-                              'HIREMI',
-                              style: TextStyle(
-                                  fontSize: 7, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              '360',
-                              style: TextStyle(
-                                  fontSize: 6, color: Color(0xFFC1272D)),
-                            )
-                          ],
-                        ),
+          ),
+          Positioned(
+              bottom: 35,
+              left: screenWidth * 0.5,
+              right: screenWidth * 0.5,
+              child: CircularPercentIndicator(
+                radius: 39,
+                lineWidth: 15,
+                percent: 0.50,
+                progressColor: const Color(0xFFC1272D),
+                backgroundColor: Colors.transparent,
+                startAngle: 90,
+              )),
+          Positioned(
+            bottom: 25,
+            left: 0,
+            right: 0,
+            child: Transform.translate(
+              offset: const Offset(0, -20),
+              child: Center(
+                child: SizedBox(
+                  width: 64,
+                  height: 64,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      if(!isVerified){
+                        _showPopUp();
+                      }
+                    },
+                    backgroundColor: Colors.white,
+                    shape: const CircleBorder(),
+                    child: const Center(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Icon(
+                            Icons.all_inclusive,
+                            color: Color(0xFFC1272D),
+                            size: 30,
+                          ),
+                          Text(
+                            'HIREMI',
+                            style: TextStyle(
+                                fontSize: 7, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            '360',
+                            style: TextStyle(
+                                fontSize: 6, color: Color(0xFFC1272D)),
+                          )
+                        ],
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

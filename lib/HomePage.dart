@@ -167,8 +167,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                           height: 155,
                           viewportFraction: 0.95,
                           autoPlay: true,
-                          autoPlayInterval: Duration(seconds: 5),
-                          autoPlayAnimationDuration: Duration(milliseconds: 500),
                           onPageChanged: (index, reason) {
                             setState(() {
                               _current = index;

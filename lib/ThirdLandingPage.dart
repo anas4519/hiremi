@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/Elevated_Button.dart';
 import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
 import 'package:hiremi_version_two/Login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ThirdLandingPage extends StatelessWidget {
   const ThirdLandingPage({Key? key}) : super(key: key);
@@ -12,8 +13,10 @@ class ThirdLandingPage extends StatelessWidget {
     double imageSizeHeight = MediaQuery.of(context).size.height * 0.45;
     return Scaffold(
       body: GestureDetector(
-        onHorizontalDragUpdate: (details) {
+        onHorizontalDragUpdate: (details) async {
           if (details.primaryDelta! < -10) {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString('onBoardingComplete', 'true');
             Navigator.push(
               context,
               SlidePageRoute(page: const LogIn()),
@@ -34,17 +37,17 @@ class ThirdLandingPage extends StatelessWidget {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.095),
         
-                  Text("Get Personalized ", style: TextStyle(
+                  const Text("Get Personalized ", style: TextStyle(
                     fontSize: 28.0,
                     fontWeight: FontWeight.w500,
                   ),),
-                  Text("Career Guidance.", style: TextStyle(
+                  const Text("Career Guidance.", style: TextStyle(
                     fontSize: 28.0,
                     color:Color(0xFF34AD78),
                     fontWeight: FontWeight.w500,
                   ),),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                  Text("Receive tailored advice and insights to help you make the best hiring decisions.",
+                  const Text("Receive tailored advice and insights to help you make the best hiring decisions.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
@@ -52,10 +55,12 @@ class ThirdLandingPage extends StatelessWidget {
                   SizedBox(height: MediaQuery.of(context).size.height * 0.1235),
                   CustomElevatedButton(
                     text:  "Let's Get Started",
-                    onPressed: () {
+                    onPressed: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('onBoardingComplete', 'true');
                       Navigator.push(
                         context,
-                        SlidePageRoute(page: LogIn()),
+                        SlidePageRoute(page: const LogIn()),
                       );
                     },
                   ),

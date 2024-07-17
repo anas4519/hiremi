@@ -10,7 +10,7 @@ import 'package:hiremi_version_two/Utils/colors.dart';
 
 
 class InternshipsDetailsScreen extends StatelessWidget {
-  const InternshipsDetailsScreen({Key? key}) : super(key: key);
+  const InternshipsDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

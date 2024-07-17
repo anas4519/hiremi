@@ -28,9 +28,8 @@ class _CustomAlertboxState extends State<CustomAlertbox> {
                   const Spacer(),
                   Container(
                     width: screenWidth * 0.08,
-                    height: screenWidth * 0.08,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                      shape: BoxShape.circle,
                       border: Border.all(color: Colors.grey),
                     ),
                     child: IconButton(
@@ -47,25 +46,13 @@ class _CustomAlertboxState extends State<CustomAlertbox> {
               ),
               Row(
                 children: [
-                  Container(
-                    height: 1,
-                    width: screenWidth * 0.310, // 125/400
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                    ),
-                  ),
+                 const Expanded(child: Divider(height: 1,)),
                   Icon(
                     Icons.error_rounded,
                     color: const Color(0xFFC1272D),
                     size: screenWidth * 0.105,
                   ),
-                  Container(
-                    height: 1,
-                    width: screenWidth * 0.310, // 125/400
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                    ),
-                  ),
+                  const Expanded(child: Divider(height: 1,)),
                 ],
               ),
               SizedBox(
@@ -80,15 +67,13 @@ class _CustomAlertboxState extends State<CustomAlertbox> {
               ),
               Container(
                 padding: const EdgeInsets.all(16),
-                width: screenWidth * 0.8,
-                height: screenHeight * 0.08,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(screenWidth * 0.04),
                   color: Colors.green[100],
                 ),
                 child: const Center(
                   child: Text(
-                    'Additional Benefits will be unlocked once\n Verification Payment Completed.',
+                    'Additional Benefits will be unlocked once Verification Payment Completed.',
                     style: TextStyle(color: Colors.green, fontSize: 12),
                     textAlign: TextAlign.center,
                   ),
