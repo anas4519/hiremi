@@ -1,9 +1,7 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hiremi_version_two/HomePage.dart';
-import 'package:hiremi_version_two/Profile_Screen.dart';
+import 'package:hiremi_version_two/Screens/Profile_Screen/Profile_Screen.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/applies_screen.dart';
 import 'package:hiremi_version_two/queries_screen.dart';
@@ -22,7 +20,7 @@ class _UltimateNavBarState extends State<UltimateNavBar> {
     const HomePage(),
     const AppliesScreen(),
     const QueriesScreen(),
-    ProfileScreen()
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {

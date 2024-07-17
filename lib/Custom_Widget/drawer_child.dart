@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
-import 'package:hiremi_version_two/Edit_Profile_Section/BasicDetails/AddBasicDetails.dart';
 import 'package:hiremi_version_two/Forget_Your_Password.dart';
 import 'package:hiremi_version_two/Help_Support.dart';
+import 'package:hiremi_version_two/Screens/Profile_Screen/Edit_Profile_Section/BasicDetails/AddBasicDetails.dart';
 import 'package:hiremi_version_two/Settings.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/about_us.dart';
