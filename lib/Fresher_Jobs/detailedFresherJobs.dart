@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hiremi_version_two/Fresher_Jobs/eligibilityCriteria.dart';
-import 'package:hiremi_version_two/Fresher_Jobs/HeaderSectionFresher.dart';
+import 'package:hiremi_version_two/Custom_Widget/Alerts/SuccessfullyAppliedAlert.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
-import 'package:hiremi_version_two/Fresher_Jobs/roleDetails.dart';
-import 'package:hiremi_version_two/Fresher_Jobs/skillsRequired.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
+
+import '../Screens/Job_Details_Section/Freshers_Jobs/widgets/Eligibility_Criteria_About_Company.dart';
+import '../Screens/Job_Details_Section/Freshers_Jobs/widgets/HeaderSection.dart';
+import '../Screens/Job_Details_Section/Freshers_Jobs/widgets/Role_Details.dart';
+import '../Screens/Job_Details_Section/Freshers_Jobs/widgets/Skill_Required.dart';
 
 class DetailedFresherJobs extends StatefulWidget {
   final int id;
@@ -22,7 +24,7 @@ class DetailedFresherJobs extends StatefulWidget {
   final double ctc;
 
   const DetailedFresherJobs({
-    Key? key,
+    super.key,
     required this.id,
     required this.profile,
     required this.location,
@@ -36,7 +38,7 @@ class DetailedFresherJobs extends StatefulWidget {
     required this.description,
     required this.termsAndConditions,
     required this.ctc,
-  }) : super(key: key);
+  });
 
   @override
   State<DetailedFresherJobs> createState() => _DetailedFresherJobsState();
@@ -49,7 +51,8 @@ class _DetailedFresherJobsState extends State<DetailedFresherJobs> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Fresher Jobs'),
+        title: const Text('Fresher Jobs', style:  TextStyle(
+            fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.black),),
         actions: [
           IconButton(
             onPressed: () {
@@ -77,7 +80,20 @@ class _DetailedFresherJobsState extends State<DetailedFresherJobs> {
                 companyName: widget.companyName,
                 location: widget.location,
                 ctc: widget.ctc,
+                onTap:  ()=>showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                        contentPadding: EdgeInsets.zero,
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        content: const SuccessfullyAppliedAlert());
+                  },
+                ),
               ),
+
               SizedBox(height: Sizes.responsiveXl(context)),
 
               /// Role Details
@@ -90,7 +106,6 @@ class _DetailedFresherJobsState extends State<DetailedFresherJobs> {
               SizedBox(
                 height: Sizes.responsiveLg(context),
               ),
-
               /// Skill Required
               SkillRequiredFresher(
                 skillsRequired: widget.skillsRequired,

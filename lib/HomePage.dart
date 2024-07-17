@@ -113,7 +113,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
         title: const Text(
           "Hiremi's Home",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(),
         ),
         centerTitle: true,
         actions: [
@@ -395,7 +395,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         profile: job['profile'] ?? 'N/A',
                         companyName: job['company_name'] ?? 'N/A',
                         location: job['location'] ?? 'N/A',
-                        stipend: job['CTC']?.toString() ?? 'N/A',
+                        stipend: job['Stipend']?.toString() ?? 'N/A',
                         mode: 'Remote',
                         type: 'Job',
                         exp: 1,

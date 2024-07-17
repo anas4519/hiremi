@@ -11,20 +11,23 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewNavbar extends ConsumerStatefulWidget {
-  const NewNavbar({super.key});
+  const NewNavbar({this.initTabIndex = 0, super.key});
 
+  final int initTabIndex ;
   @override
   ConsumerState<NewNavbar> createState() => _NewNavbarState();
 }
 
 class _NewNavbarState extends ConsumerState<NewNavbar> {
-  int _selectedIndex = 0;
-  final PageController _pageController = PageController();
+  late int _selectedIndex = 0;
+  late PageController _pageController = PageController();
 
   late List<Widget> _pages;
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.initTabIndex;
+    _pageController = PageController(initialPage: _selectedIndex);
     _pages = [
       const HomePage(),
       const AppliesScreen(),
