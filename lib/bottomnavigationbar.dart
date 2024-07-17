@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:hiremi_version_two/HomePage.dart';
-import 'package:hiremi_version_two/Profile_Screen.dart';
+import 'package:hiremi_version_two/Screens/Profile_Screen/Profile_Screen.dart';
 import 'package:hiremi_version_two/applies_screen.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
 import 'package:hiremi_version_two/queries_screen.dart';
@@ -29,7 +29,7 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
       const HomePage(),
       const AppliesScreen(),
       const QueriesScreen(),
-      ProfileScreen()
+      ProfileScreen(),
     ];
     _checkFirstVerification();
   }
