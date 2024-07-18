@@ -6,7 +6,7 @@ import 'package:hiremi_version_two/Utils/colors.dart';
 
 
 class HelpSupport extends StatefulWidget {
-  const HelpSupport({super.key, });
+  const HelpSupport({Key? key, }) : super(key: key);
 
   @override
   State<HelpSupport> createState() => _HelpSupportState();

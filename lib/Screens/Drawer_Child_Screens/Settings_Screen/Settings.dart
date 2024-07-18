@@ -4,7 +4,7 @@ import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  const SettingsScreen({Key? key, }) : super(key: key);
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();

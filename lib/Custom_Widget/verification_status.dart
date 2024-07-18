@@ -3,7 +3,7 @@ import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/verify.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 class VerificationStatus extends StatelessWidget {
-  const VerificationStatus({super.key, required this.percent});
+  const VerificationStatus({Key? key, required this.percent, }) : super(key: key);
   final double percent;
 
   @override
@@ -288,12 +288,11 @@ class VerificationStatus extends StatelessWidget {
 }
 
 class CustomDivider extends StatelessWidget {
-  const CustomDivider({
-    super.key,
+  const CustomDivider({Key? key, 
     required this.screenWidth,
     required this.screenHeight,
     required this.isTrue,
-  });
+  }) : super(key: key);
 
   final double screenWidth;
   final double screenHeight;
@@ -317,14 +316,13 @@ class CustomDivider extends StatelessWidget {
 }
 
 class CircularIcon extends StatelessWidget {
-  const CircularIcon({
-    super.key,
+  const CircularIcon({Key? key, 
     required this.screenWidth,
     required this.screenHeight,
     required this.icon,
     required this.isTrue,
     required this.title,
-  });
+  }) : super(key: key);
 
   final double screenWidth;
   final double screenHeight;

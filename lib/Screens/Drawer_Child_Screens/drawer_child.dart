@@ -9,7 +9,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../Profile_Screen/Edit_Profile_Section/BasicDetails/AddBasicDetails.dart';
 
 class DrawerChild extends StatelessWidget {
-  const DrawerChild({super.key});
+  const DrawerChild({Key? key, }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

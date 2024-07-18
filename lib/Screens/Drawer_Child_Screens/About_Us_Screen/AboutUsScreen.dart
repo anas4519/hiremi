@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 // ignore: camel_case_types
 class About_Us extends StatefulWidget {
-  const About_Us({super.key, });
+  const About_Us({Key? key, }) : super(key: key);
 
   @override
   State<About_Us> createState() => _About_UsState();

@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../Apis/api.dart';
 
 class ForgetPassword extends StatefulWidget {
-  const ForgetPassword({super.key});
+  const ForgetPassword({Key? key, }) : super(key: key);
 
   @override
   State<ForgetPassword> createState() => ForgetPasswordState();

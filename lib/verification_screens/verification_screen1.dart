@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
 import 'package:hiremi_version_two/Models/register_model.dart';
 import 'package:hiremi_version_two/verification_screens/verifiaction_screen2.dart';
+import 'package:hiremi_version_two/verify.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,11 +18,10 @@ class VerificationScreen1 extends StatefulWidget {
 }
 
 class _VerificationScreen1State extends State<VerificationScreen1> {
-final _formKey = GlobalKey<FormState>();
-  Gender? _selectedGender = Gender.Male;
+  final _formKey = GlobalKey<FormState>();
   String? _selectedState;
   DateTime? _selectedDate;
-String _userId="";
+  String _userId = "";
 
   // List<String> _states = ['State 1', 'State 2', 'State 3', 'State 4'];
 
@@ -81,12 +81,6 @@ String _userId="";
       TextEditingController();
 
 
-  void _handleGenderChange(Gender? value) {
-    setState(() {
-      _selectedGender = value;
-    });
-  }
-
   @override
   void dispose() {
     // Dispose controllers to free up resources
@@ -105,89 +99,91 @@ String _userId="";
     _confirmPasswordController.dispose();
     super.dispose();
   }
-@override
-void initState() {
-  super.initState();
-  _fetchUserData();
-}
-Future<void> _fetchUserData() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? storedEmail = prefs.getString('email');
-  print("Stored Email: $storedEmail");
 
-  if (storedEmail != null) {
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedEmail = prefs.getString('email');
+    print("Stored Email: $storedEmail");
+
+    if (storedEmail != null) {
+      try {
+        final response = await http.get(
+          Uri.parse('http://13.127.81.177:8000/api/registers/'),
+        );
+
+        if (response.statusCode == 200) {
+          final List<dynamic> data = jsonDecode(response.body);
+          print('All user data: $data');
+
+          final userData = data.firstWhere(
+            (user) => user['email'] == storedEmail,
+            orElse: () => null,
+          );
+
+          if (userData != null) {
+            print('Matched user data: $userData');
+            setState(() {
+              _userId = userData['id'].toString();
+              _phoneController.text = userData['phone_number'];
+              _whatsappController.text = userData['whatsapp_number'];
+            });
+          } else {
+            print('No user found with the stored email');
+          }
+        } else {
+          print('Failed to load user data: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Error: $e');
+      }
+    } else {
+      print('No email stored');
+    }
+  }
+
+  Future<void> _updateUserData() async {
+    if (!_isAllFieldsValid()) return;
+
     try {
-      final response = await http.get(
-        Uri.parse('http://13.127.81.177:8000/api/registers/'),
+      final response = await http.patch(
+        Uri.parse('http://13.127.81.177:8000/api/registers/$_userId/'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          // 'full_name': _fullNameController.text,
+          // 'father_name': _fatherNameController.text,
+          // 'email': _emailController.text,
+          // 'date_of_birth': _dobController.text,
+          // 'birth_place': _birthPlaceController.text,
+          // 'gender': _selectedGender.toString().split('.').last,
+          'phone_number': _phoneController.text,
+          'whatsapp_number': _whatsappController.text,
+          // Include other fields similarly
+        }),
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        print('All user data: $data');
-
-        final userData = data.firstWhere(
-              (user) => user['email'] == storedEmail,
-          orElse: () => null,
+        print('User data updated successfully');
+        Navigator.push(
+          context,
+          SlidePageRoute(page: VerificationScreen2()),
         );
-
-        if (userData != null) {
-          print('Matched user data: $userData');
-          setState(() {
-             _userId = userData['id'].toString();
-             _phoneController.text=userData['phone_number'];
-             _whatsappController.text=userData['whatsapp_number'];
-          });
-        } else {
-          print('No user found with the stored email');
-        }
       } else {
-        print('Failed to load user data: ${response.statusCode}');
+        print("$_userId");
+        print('Failed to update user data: ${response.statusCode}');
+        print(response.body);
       }
     } catch (e) {
       print('Error: $e');
     }
-  } else {
-    print('No email stored');
   }
-}
-Future<void> _updateUserData() async {
-  if (!_isAllFieldsValid()) return;
-
-  try {
-    final response = await http.patch(
-      Uri.parse('http://13.127.81.177:8000/api/registers/$_userId/'),
-
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        // 'full_name': _fullNameController.text,
-        // 'father_name': _fatherNameController.text,
-        // 'email': _emailController.text,
-        // 'date_of_birth': _dobController.text,
-        // 'birth_place': _birthPlaceController.text,
-        // 'gender': _selectedGender.toString().split('.').last,
-        'phone_number':_phoneController.text,
-        'whatsapp_number':_whatsappController.text,
-        // Include other fields similarly
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      print('User data updated successfully');
-      Navigator.push(
-        context,
-        SlidePageRoute(page: const VerificationScreen2()),
-      );
-    } else {
-      print("$_userId");
-      print('Failed to update user data: ${response.statusCode}');
-      print(response.body);
-    }
-  } catch (e) {
-    print('Error: $e');
-  }
-}
 
   bool _isAllFieldsValid() {
     return _formKey.currentState?.validate() ?? false;
@@ -199,81 +195,79 @@ Future<void> _updateUserData() async {
     var screenWidth = MediaQuery.of(context).size.width;
     double imageSize = MediaQuery.of(context).size.width * 0.6;
     double imageHeight = MediaQuery.of(context).size.height * 0.157;
-      print("Build");
+    print("Build");
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Review & Verify Your Profile',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        appBar: AppBar(
+          title: const Text(
+            'Review & Verify Your Profile',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Center(
-              child: Column(
-                children: [
-                  CircularPercentIndicator(
-                    radius: screenHeight * 0.05,
-                    lineWidth: 6,
-                    percent: 0.5,
-                    center: const Text(
-                      '50%',
-                      style: TextStyle(
-                          color: Colors.green, fontWeight: FontWeight.bold),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    CircularPercentIndicator(
+                      radius: screenHeight * 0.05,
+                      lineWidth: 6,
+                      percent: 0.5,
+                      center: const Text(
+                        '50%',
+                        style: TextStyle(
+                            color: Colors.green, fontWeight: FontWeight.bold),
+                      ),
+                      progressColor: Colors.green,
+                      backgroundColor: Colors.grey.shade300,
                     ),
-                    progressColor: Colors.green,
-                    backgroundColor: Colors.grey.shade300,
-                  ),
-                  SizedBox(height: screenHeight * 0.0075),
-                  const Text(
-                    'Harsh Pawar',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: screenHeight * 0.0075),
-                  Container(
-                    // height: screenHeight * 0.03,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(screenWidth * 0.1),
-                      border: Border.all(color: const Color(0xFFC1272D)),
+                    SizedBox(height: screenHeight * 0.0075),
+                    const Text(
+                      'Harsh Pawar',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.all(screenWidth * 0.01),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.check_circle,
-                            color: const Color(0xFFC1272D),
-                            size: screenWidth * 0.02,
-                          ),
-                          Text(
-                            ' Not verified',
-                            style: TextStyle(
+                    SizedBox(height: screenHeight * 0.0075),
+                    Container(
+                      // height: screenHeight * 0.03,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(screenWidth * 0.1),
+                        border: Border.all(color: const Color(0xFFC1272D)),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(screenWidth * 0.01),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.check_circle,
                               color: const Color(0xFFC1272D),
-                              fontSize: screenWidth *
-                                  0.02, // Adjusted based on screen width
+                              size: screenWidth * 0.02,
                             ),
-                          ),
-                        ],
+                            Text(
+                              ' Not verified',
+                              style: TextStyle(
+                                color: const Color(0xFFC1272D),
+                                fontSize: screenWidth *
+                                    0.02, // Adjusted based on screen width
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-
-            SizedBox(height: MediaQuery.of(context).size.height * 0.0425),
-            Container(
-              height: 1,
-              width: screenWidth * 0.9,
-              color: Colors.grey,
-            ),
-
-
-            Form(
-              key: _formKey,
+              SizedBox(height: MediaQuery.of(context).size.height * 0.0425),
+              Container(
+                height: 1,
+                width: screenWidth * 0.9,
+                color: Colors.grey,
+              ),
+              Form(
+                key: _formKey,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -281,15 +275,15 @@ Future<void> _updateUserData() async {
                     children: [
                       SizedBox(height: screenHeight * 0.02),
                       Padding(
-                        padding: EdgeInsets.all(screenWidth*0.04),
+                        padding: EdgeInsets.all(screenWidth * 0.04),
                         child: const Text(
                           'Contact Information',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.start,
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.01),
-
                       buildLabeledTextField(
                         context,
                         "Phone Number",
@@ -300,7 +294,10 @@ Future<void> _updateUserData() async {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your phone number';
                           }
-                          if (value.length < 10) {
+                          if (value.length != 10) {
+                            return 'Please enter a valid phone number';
+                          }
+                          if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                             return 'Please enter a valid phone number';
                           }
                           return null;
@@ -316,40 +313,43 @@ Future<void> _updateUserData() async {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your WhatsApp number';
                           }
-                          if (value.length < 10) {
+                          if (value.length != 10) {
+                            return 'Please enter a valid WhatsApp number';
+                          }
+                          if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                             return 'Please enter a valid WhatsApp number';
                           }
                           return null;
                         },
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.02),
                       Row(
                         children: [
                           const Spacer(),
                           Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: const Color(0xFFC1272D),
-                              ),
-                              child: TextButton(
-                                onPressed: () {
-                                  
-                                  if (_isAllFieldsValid()) {
-                                    // Navigator.of(context).push(MaterialPageRoute(
-                                    //     builder: (ctx) => const VerificationScreen1()));
-                                    _updateUserData();
-                                  } else {
-                                    setState(() {});
-                                  }
-                                },
-                                child: Text(
-                                  'Review & Next >',
-                                  style: TextStyle(
-                                      fontSize: screenHeight * 0.015,
-                                      color: Colors.white),
-                                ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: const Color(0xFFC1272D),
+                            ),
+                            child: TextButton(
+                              onPressed: () {
+                                if (_isAllFieldsValid()) {
+                                  // Navigator.of(context).push(MaterialPageRoute(
+                                  //     builder: (ctx) => const VerificationScreen1()));
+                                  _updateUserData();
+                                } else {
+                                  setState(() {});
+                                }
+                              },
+                              child: Text(
+                                'Review & Next >',
+                                style: TextStyle(
+                                    fontSize: screenHeight * 0.015,
+                                    color: Colors.white),
                               ),
                             ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 70),
@@ -357,95 +357,95 @@ Future<void> _updateUserData() async {
                   ),
                 ),
               ),
-            
-          ],
-        ),
-      ),
-    );
-  }
-Widget buildLabeledTextField(
-    BuildContext context,
-    String label,
-    String hintText, {
-      bool showPositionedBox = false,
-      IconData? prefixIcon,
-      bool obscureText = false,
-      List<String>? dropdownItems,
-      TextEditingController? controller,
-      String? Function(String?)? validator,
-      VoidCallback? onTap,
-      TextInputType? keyboardType,
-    }) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.04),
-        child: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: label,
-                style: const TextStyle(color: Colors.black),
-              ),
-              const TextSpan(
-                text: " *",
-                style: TextStyle(color: Colors.red),
-              ),
             ],
           ),
         ),
-      ),
-      SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-      Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.04),
-        child: dropdownItems != null
-            ? DropdownButtonFormField<String>(
-          decoration: InputDecoration(
-            hintText: hintText,
-            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          value: controller?.text.isNotEmpty == true
-              ? controller?.text
-              : null,
-          hint: Text(hintText),
-          onChanged: (String? newValue) {
-            setState(() {
-              controller?.text = newValue!;
-            });
-          },
-          items: dropdownItems.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(item),
-            );
-          }).toList(),
-          validator: validator,
-          isExpanded: true,
-        )
-            : TextFormField(
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: hintText,
-            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          obscureText: obscureText,
-          validator: validator,
-          onTap: onTap,
-          keyboardType: keyboardType,
-        ),
-      ),
-      SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-    ],
-  );
-}
+      );
+    
+  }
 
+  Widget buildLabeledTextField(
+    BuildContext context,
+    String label,
+    String hintText, {
+    bool showPositionedBox = false,
+    IconData? prefixIcon,
+    bool obscureText = false,
+    List<String>? dropdownItems,
+    TextEditingController? controller,
+    String? Function(String?)? validator,
+    VoidCallback? onTap,
+    TextInputType? keyboardType,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.04),
+          child: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: label,
+                  style: const TextStyle(color: Colors.black),
+                ),
+                const TextSpan(
+                  text: " *",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.04),
+          child: dropdownItems != null
+              ? DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  value: controller?.text.isNotEmpty == true
+                      ? controller?.text
+                      : null,
+                  hint: Text(hintText),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      controller?.text = newValue!;
+                    });
+                  },
+                  items: dropdownItems.map((String item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    );
+                  }).toList(),
+                  validator: validator,
+                  isExpanded: true,
+                )
+              : TextFormField(
+                  controller: controller,
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  obscureText: obscureText,
+                  validator: validator,
+                  onTap: onTap,
+                  keyboardType: keyboardType,
+                ),
+        ),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+      ],
+    );
+  }
 }
