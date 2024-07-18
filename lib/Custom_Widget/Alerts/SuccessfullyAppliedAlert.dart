@@ -82,7 +82,7 @@ class SuccessfullyAppliedAlert extends StatelessWidget {
                       horizontal: Sizes.responsiveMdSm(context)),
                 ),
                 onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (ctx) => const NewNavbar(
+                    MaterialPageRoute(builder: (ctx) =>  NewNavbar(
                       initTabIndex: 1,
                     ))),
                 child: Row(

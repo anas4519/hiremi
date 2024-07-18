@@ -7,40 +7,40 @@ import 'package:hiremi_version_two/applies_screen.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
 import 'package:hiremi_version_two/queries_screen.dart';
 import 'package:hiremi_version_two/verified_popup.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class NewNavbar extends ConsumerStatefulWidget {
-  const NewNavbar({this.initTabIndex = 0, super.key});
+import 'Utils/AppSizes.dart';
+import 'Utils/colors.dart';
 
-  final int initTabIndex ;
+class NewNavbar extends ConsumerStatefulWidget {
+   NewNavbar({this.initTabIndex = 0, super.key});
+
+  late  int initTabIndex;
+
   @override
   ConsumerState<NewNavbar> createState() => _NewNavbarState();
 }
 
 class _NewNavbarState extends ConsumerState<NewNavbar> {
-  late int _selectedIndex = 0;
-  late PageController _pageController = PageController();
 
-  late List<Widget> _pages;
+  final List<Widget> _pages = [
+    const HomePage(),
+    const AppliesScreen(),
+    const QueriesScreen(),
+    ProfileScreen(),
+  ];
+
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.initTabIndex;
-    _pageController = PageController(initialPage: _selectedIndex);
-    _pages = [
-      const HomePage(),
-      const AppliesScreen(),
-      const QueriesScreen(),
-      ProfileScreen(),
-    ];
     _checkFirstVerification();
   }
 
   Future<void> _checkFirstVerification() async {
     final prefs = await SharedPreferences.getInstance();
     final bool isVerified = ref.read(verificationProvider);
-    final bool isFirstVerification = prefs.getBool('isFirstVerification') ?? true;
+    final bool isFirstVerification =
+        prefs.getBool('isFirstVerification') ?? true;
 
     if (isVerified && isFirstVerification) {
       _showVerificationPopup();
@@ -55,9 +55,8 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
       _showPopUp();
     } else {
       setState(() {
-        _selectedIndex = index;
+        widget.initTabIndex= index;
       });
-      _pageController.jumpToPage(index);
     }
   }
 
@@ -94,131 +93,84 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
   @override
   Widget build(BuildContext context) {
     final isVerified = ref.read(verificationProvider);
-    double screenWidth = MediaQuery.of(context).size.width;
-    double spacing = (screenWidth - (4 * 50)) / 5;
+    double screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          PageView(
-            controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: _pages
-                .map((page) => Navigator(
-                      onGenerateRoute: (settings) {
-                        return MaterialPageRoute(
-                          builder: (context) => page,
-                        );
-                      },
-                    ))
-                .toList(),
-            onPageChanged: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-          ),
-          Positioned(
-            bottom: 10,
-            left: 20,
-            right: 20,
-            child: Container(
-              height: 64,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                  bottomLeft: Radius.circular(32),
-                  bottomRight: Radius.circular(32),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 10,
-                    offset: Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildNavItem(Icons.home_filled, 'HOME', 0),
-                    _buildNavItem(Icons.list_alt_rounded,'APPLIES',
-                        1),
-                    SizedBox(
-                      width: spacing * 1.5,
-                    ),
-                    _buildNavItem(Icons.local_activity_outlined, 'QUERIES', 2),
-                    _buildNavItem(Icons.person_outline, 'PROFILE', 3),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-              bottom: 35,
-              left: screenWidth * 0.5,
-              right: screenWidth * 0.5,
-              child: CircularPercentIndicator(
-                radius: 39,
-                lineWidth: 15,
-                percent: 0.50,
-                progressColor: const Color(0xFFC1272D),
-                backgroundColor: Colors.transparent,
-                startAngle: 90,
-              )),
-          Positioned(
-            bottom: 25,
-            left: 0,
-            right: 0,
-            child: Transform.translate(
-              offset: const Offset(0, -20),
-              child: Center(
-                child: SizedBox(
-                  width: 64,
-                  height: 64,
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      if(!isVerified){
-                        _showPopUp();
-                      }
-                    },
-                    backgroundColor: Colors.white,
-                    shape: const CircleBorder(),
-                    child: const Center(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Icon(
-                            Icons.all_inclusive,
-                            color: Color(0xFFC1272D),
-                            size: 30,
-                          ),
-                          Text(
-                            'HIREMI',
-                            style: TextStyle(
-                                fontSize: 7, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '360',
-                            style: TextStyle(
-                                fontSize: 6, color: Color(0xFFC1272D)),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
+      body: IndexedStack(
+        index: widget.initTabIndex,
+        children: _pages,
       ),
+      bottomNavigationBar:
+      Container(
+        height: 64,
+        decoration: BoxDecoration(
+            color: AppColors.primary,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+              bottomLeft: Radius.circular(32),
+              bottomRight: Radius.circular(32),
+            ),
+            boxShadow: const [
+              BoxShadow(color: Colors.black38,
+                  blurRadius: 10,
+                  offset: Offset(4, 4)
+              )
+            ]
+        ),
+        child: BottomAppBar(
+          color: Colors.white,
+          shape: const CircularNotchedRectangle(),
+          notchMargin: 8,
+          child: Padding(
+            padding: EdgeInsets.all(Sizes.responsiveXxs(context)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildNavItem(Icons.home_filled, 'HOME', 0),
+                _buildNavItem(Icons.event_note_sharp, 'APPLIES', 1),
+                SizedBox(width: Sizes.responsiveXxl(context)),
+                _buildNavItem(Icons.local_activity_outlined, 'QUERIES', 2),
+                _buildNavItem(Icons.person_outline, 'PROFILE', 3),
+              ],
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            if(isVerified){
+              _showPopUp();
+            }
+          },
+          elevation: 0,
+          backgroundColor: Colors.white,
+          shape: const CircleBorder(),
+          child: const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.all_inclusive,
+                  color: Color(0xFFC1272D),
+                  size: 20,
+                ),
+                Text(
+                  'HIREMI',
+                  style: TextStyle(fontSize: 7, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '360',
+                  style: TextStyle(fontSize: 6, color: Color(0xFFC1272D)),
+                ),
+              ],
+            ),
+          )),
     );
   }
 
@@ -231,18 +183,18 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
         children: [
           icon is IconData
               ? Icon(
-                  icon,
-                  size: 20,
-                  color: _selectedIndex == index
-                      ? const Color(0xFFC1272D)
-                      : Colors.black,
-                )
+            icon,
+            size: 20,
+            color: widget.initTabIndex == index
+                ? const Color(0xFFC1272D)
+                : Colors.black,
+          )
               : Image.asset(
-                  icon,
-                  color: _selectedIndex == index
-                      ? const Color(0xFFC1272D)
-                      : Colors.black,
-                ),
+            icon,
+            color:  widget.initTabIndex == index
+                ? const Color(0xFFC1272D)
+                : Colors.black,
+          ),
           Text(
             label,
             style: const TextStyle(

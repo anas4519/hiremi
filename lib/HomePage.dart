@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/API_Integration/Internship/Apiservices.dart';
@@ -10,6 +11,8 @@ import 'package:hiremi_version_two/Custom_Widget/drawer_child.dart';
 import 'package:hiremi_version_two/Custom_Widget/verification_status.dart';
 import 'package:hiremi_version_two/InternshipScreen.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/Screens/Profile_Screen/sections/widgets_mustufa/appbar/AppBar.dart';
+import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/experienced_jobs.dart';
 import 'package:hiremi_version_two/fresherJobs.dart';
@@ -87,50 +90,61 @@ class _HomePageState extends ConsumerState<HomePage> {
     const percent = 0.25;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        // leading: Padding(
-        // padding: EdgeInsets.all(screenWidth*0.02),
-        // child: GestureDetector(
-        //   onTap: () {
-        //     Scaffold.of(context).openDrawer();
-        //   },
-        //   child: Container(
-        //       padding: EdgeInsets.all(Sizes.responsiveSm(context)),
-        //       decoration: BoxDecoration(
-        //         borderRadius: BorderRadius.circular(8.0),
-        //         color: AppColors.bgBlue,
-        //       ),
-        //       child: const Icon(
-        //         Icons.notes_rounded,
-        //         size: 22,
-        //       )),
-        // )
-        // ),
-
+        leading: Padding(
+          padding: EdgeInsets.only(left: Sizes.responsiveDefaultSpace(context),
+              top: Sizes.responsiveSm(context),
+              bottom: Sizes.responsiveSm(context)),
+          child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: AppColors.bgBlue,
+              ),
+              child: Center(
+                child: IconButton(
+                    onPressed: () => {
+                      scaffoldKey.currentState?.openDrawer(),
+                    },
+                    icon: const Icon(Icons.menu,
+                      size: 22,)
+                ),
+              )),
+        ),
         title: const Text(
-          "Hiremi's Home",
-          style: TextStyle(),
+          'Hiremi\'s Home',
+          style: TextStyle(
+              fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (ctx) => const NotificationScreen(),
-              ));
-            },
-            style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)),
-            icon: const Icon(Icons.notifications_outlined),
+          Padding(
+            padding: EdgeInsets.only(
+                right: Sizes.responsiveDefaultSpace(context)),
+            child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const NotificationScreen(),
+                      ));
+                    },
+                    icon: const Icon(Icons.notifications_outlined),
+                  ),
+                )),
           ),
         ],
       ),
       drawer: const Drawer(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
         child: DrawerChild(),
       ),
       body: SingleChildScrollView(

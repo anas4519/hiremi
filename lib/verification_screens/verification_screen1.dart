@@ -177,7 +177,7 @@ Future<void> _updateUserData() async {
       print('User data updated successfully');
       Navigator.push(
         context,
-        SlidePageRoute(page: VerificationScreen2()),
+        SlidePageRoute(page: const VerificationScreen2()),
       );
     } else {
       print("$_userId");

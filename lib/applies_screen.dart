@@ -180,10 +180,7 @@ class _AppliesScreenState extends State<AppliesScreen> {
                     ],
                   ),
                 ),
-
               )
-
-
             ],
           ),
         ],
