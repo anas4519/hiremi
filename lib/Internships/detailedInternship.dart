@@ -5,6 +5,7 @@ import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Internships/roleDetails.dart';
 import 'package:hiremi_version_two/Internships/skillsRequired.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
+import 'package:hiremi_version_two/Utils/colors.dart';
 
 class DetailedInternship extends StatefulWidget {
   final int id;
@@ -22,7 +23,7 @@ class DetailedInternship extends StatefulWidget {
   final double ctc;
 
   const DetailedInternship({
-    super.key,
+    Key? key,
     required this.id,
     required this.profile,
     required this.location,
@@ -36,7 +37,7 @@ class DetailedInternship extends StatefulWidget {
     required this.description,
     required this.termsAndConditions,
     required this.ctc,
-  });
+  }) : super(key: key);
 
   @override
   State<DetailedInternship> createState() => _DetailedInternshipState();
@@ -49,7 +50,7 @@ class _DetailedInternshipState extends State<DetailedInternship> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Internship Jobs'),
+
         actions: [
           IconButton(
             onPressed: () {

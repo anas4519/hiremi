@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class VerificationNotifier extends StateNotifier<bool> {
-  VerificationNotifier() : super(false);
+  VerificationNotifier() : super(true);
 
   void verify() {
     state = true;

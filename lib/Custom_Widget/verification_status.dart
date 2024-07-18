@@ -1,14 +1,71 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/verify.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-class VerificationStatus extends StatelessWidget {
-  const VerificationStatus({Key? key, required this.percent, }) : super(key: key);
+import 'package:shared_preferences/shared_preferences.dart';
+
+class VerificationStatus extends StatefulWidget {
+  const VerificationStatus({Key? key, required this.percent}) : super(key: key);
   final double percent;
 
   @override
+  State<VerificationStatus> createState() => _VerificationStatusState();
+}
+
+class _VerificationStatusState extends State<VerificationStatus> {
+
+  String FullName="";
+  String storedEmail="";
+  @override
+  void initState() {
+    super.initState();
+    // _scrollController.addListener(_onScroll);
+
+    fetchAndSaveFullName();
+    _printSavedEmail();
+  }
+  Future<void> _printSavedEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString('email') ?? 'No email saved';
+    print(email);
+    storedEmail=email;
+  }
+  Future<void> fetchAndSaveFullName() async {
+    const String apiUrl = "http://13.127.81.177:8000/api/registers/";
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final prefs = await SharedPreferences.getInstance();
+        storedEmail = prefs.getString('email') ?? 'No email saved';
+
+        for (var user in data) {
+          if (user['email'] == storedEmail) {
+            setState(() {
+              FullName = user['full_name'] ?? 'No name saved';
+            });
+            await prefs.setString('full_name', FullName);
+            print('Full name saved: $FullName');
+            break;
+          }
+        }
+
+        if (FullName.isEmpty) {
+          print('No matching email found');
+        }
+      } else {
+        print('Failed to fetch full name');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+  @override
   Widget build(BuildContext context) {
-    double percentage = percent * 100;
+    double percentage = widget.percent*100;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Container(
@@ -25,7 +82,7 @@ class VerificationStatus extends StatelessWidget {
             child: Container(
               width: screenWidth * 0.95,
               height:
-              screenHeight * 0.14, // Updated height based on screen height
+                  screenHeight * 0.14, // Updated height based on screen height
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(
                     screenWidth * 0.02), // Adjusted based on screen width
@@ -54,11 +111,11 @@ class VerificationStatus extends StatelessWidget {
                             0.05), // Adjusted based on screen height
                       ),
                       child: CircularPercentIndicator(
-                        radius: screenHeight * 0.05,
-                        // Adjusted based on screen height
-                        lineWidth: screenHeight * 0.0075,
-                        // Adjusted based on screen height
-                        percent: percent,
+                        radius: screenHeight *
+                            0.05, // Adjusted based on screen height
+                        lineWidth: screenHeight *
+                            0.0075, // Adjusted based on screen height
+                        percent: widget.percent,
                         center: Text(
                           '$percentage%',
                           style: TextStyle(
@@ -74,11 +131,11 @@ class VerificationStatus extends StatelessWidget {
                     ),
                     SizedBox(
                       width:
-                      screenWidth * 0.03, // Adjusted based on screen width
+                          screenWidth * 0.03, // Adjusted based on screen width
                     ),
                     Column(
                       crossAxisAlignment:
-                      CrossAxisAlignment.start, // Align text to the start
+                          CrossAxisAlignment.start, // Align text to the start
                       children: [
                         Text(
                           'Complete & Verify Your Profile.',
@@ -94,46 +151,241 @@ class VerificationStatus extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            CircularIcon(
-                              screenWidth: screenWidth,
-                              screenHeight: screenHeight,
-                              icon: Icons.check,
-                              isTrue: percent >= 0.25,
-                              title: 'Profile\nCreated',
+                            Column(
+                              children: [
+                                Container(
+                                  width: screenWidth *
+                                      0.07, // Adjusted based on screen width
+                                  height: screenWidth *
+                                      0.07, // Adjusted based on screen width
+                                  decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(
+                                        screenWidth *
+                                            0.035), // Adjusted based on screen width
+                                  ),
+                                  child: Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                    size: screenWidth *
+                                        0.03, // Adjusted based on screen width
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: screenHeight *
+                                      0.005, // Adjusted based on screen height
+                                ),
+                                Text(
+                                  'Profile\nCreated',
+                                  style: TextStyle(
+                                    fontSize: screenWidth *
+                                        0.01, // Adjusted based on screen width
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
-                            CustomDivider(
-                              screenWidth: screenWidth,
-                              screenHeight: screenHeight,
-                              isTrue: percent >= 0.25,
+                            Column(
+                              children: [
+                                Container(
+                                  width: screenWidth *
+                                      0.05, // Adjusted based on screen width
+                                  height: screenHeight *
+                                      0.003, // Adjusted based on screen height
+                                  color: Colors.green,
+                                ),
+                                SizedBox(
+                                  height: screenHeight *
+                                      0.02, // Adjusted based on screen height
+                                )
+                              ],
                             ),
-                            CircularIcon(
-                                screenWidth: screenWidth,
-                                screenHeight: screenHeight,
-                                icon: Icons.call,
-                                isTrue: percent >= 0.50,
-                                title: 'Contact\ninformation'),
-                            CustomDivider(
-                              screenWidth: screenWidth,
-                              screenHeight: screenHeight,
-                              isTrue: percent >= 0.75,
+                            Column(
+                              children: [
+                                Container(
+                                  width: screenWidth *
+                                      0.05, // Adjusted based on screen width
+                                  height: screenHeight *
+                                      0.003, // Adjusted based on screen height
+                                  color: widget.percent>=0.50? Colors.green:Colors.white,
+                                ),
+                                SizedBox(
+                                  height: screenHeight *
+                                      0.02, // Adjusted based on screen height
+                                )
+                              ],
                             ),
-                            CircularIcon(
-                                screenWidth: screenWidth,
-                                screenHeight: screenHeight,
-                                icon: Icons.school,
-                                isTrue: percent >= 0.75,
-                                title: 'Education\nInformation'),
-                            CustomDivider(
-                              screenWidth: screenWidth,
-                              screenHeight: screenHeight,
-                              isTrue: percent == 1,
+                            Column(
+                              children: [
+                                Container(
+                                  width: screenWidth *
+                                      0.07, // Adjusted based on screen width
+                                  height: screenWidth *
+                                      0.07, // Adjusted based on screen width
+                                  decoration: BoxDecoration(
+                                    color: widget.percent>=0.50? Colors.green:Colors.white,
+                                    borderRadius: BorderRadius.circular(
+                                        screenWidth *
+                                            0.035), // Adjusted based on screen width
+                                  ),
+                                  child: InkWell(
+                                    onTap: (){
+
+                                    },
+                                    child: Icon(
+                                      Icons.call,
+                                      color: widget.percent>=0.50? Colors.white: const Color(0xFFC1272D),
+                                      size: screenWidth *
+                                          0.03, // Adjusted based on screen width
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: screenHeight *
+                                      0.005, // Adjusted based on screen height
+                                ),
+                                Text(
+                                  'Contact\ninformation',
+                                  style: TextStyle(
+                                    fontSize: screenWidth *
+                                        0.01, // Adjusted based on screen width
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
-                            CircularIcon(
-                                screenWidth: screenWidth,
-                                screenHeight: screenHeight,
-                                icon: Icons.account_balance,
-                                isTrue: percent == 1,
-                                title: 'Verification\nPayment'),
+                            Column(
+                              children: [
+                                Container(
+                                  width: screenWidth *
+                                      0.05, // Adjusted based on screen width
+                                  height: screenHeight *
+                                      0.003, // Adjusted based on screen height
+                                  color: widget.percent>=0.50? Colors.green:Colors.white,
+                                ),
+                                SizedBox(
+                                  height: screenHeight *
+                                      0.02, // Adjusted based on screen height
+                                )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Container(
+                                  width: screenWidth *
+                                      0.05, // Adjusted based on screen width
+                                  height: screenHeight *
+                                      0.003, // Adjusted based on screen height
+                                  color:widget.percent>=0.75? Colors.green:Colors.white,
+                                ),
+                                SizedBox(
+                                  height: screenHeight *
+                                      0.02, // Adjusted based on screen height
+                                )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Container(
+                                  width: screenWidth *
+                                      0.07, // Adjusted based on screen width
+                                  height: screenWidth *
+                                      0.07, // Adjusted based on screen width
+                                  decoration: BoxDecoration(
+                                    color: widget.percent>=0.75? Colors.green:Colors.white,
+                                    borderRadius: BorderRadius.circular(
+                                        screenWidth *
+                                            0.035), // Adjusted based on screen width
+                                  ),
+                                  child: Icon(
+                                    Icons.school,
+                                    color: widget.percent>=0.75? Colors.white: const Color(0xFFC1272D),
+                                    size: screenWidth *
+                                        0.03, // Adjusted based on screen width
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: screenHeight *
+                                      0.005, // Adjusted based on screen height
+                                ),
+                                Text(
+                                  'Education\nInformation',
+                                  style: TextStyle(
+                                    fontSize: screenWidth *
+                                        0.01, // Adjusted based on screen width
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Container(
+                                  width: screenWidth *
+                                      0.05, // Adjusted based on screen width
+                                  height: screenHeight *
+                                      0.003, // Adjusted based on screen height
+                                  color: widget.percent>=0.75? Colors.green:Colors.white,
+                                ),
+                                SizedBox(
+                                  height: screenHeight *
+                                      0.02, // Adjusted based on screen height
+                                )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Container(
+                                  width: screenWidth *
+                                      0.05, // Adjusted based on screen width
+                                  height: screenHeight *
+                                      0.003, // Adjusted based on screen height
+                                  color:widget.percent>=1? Colors.green:Colors.white,
+                                ),
+                                SizedBox(
+                                  height: screenHeight *
+                                      0.02, // Adjusted based on screen height
+                                )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Container(
+                                  width: screenWidth *
+                                      0.07, // Adjusted based on screen width
+                                  height: screenWidth *
+                                      0.07, // Adjusted based on screen width
+                                  decoration: BoxDecoration(
+                                    color: widget.percent>=1? Colors.green:Colors.white,
+                                    borderRadius: BorderRadius.circular(
+                                        screenWidth *
+                                            0.035), // Adjusted based on screen width
+                                  ),
+                                  child: Icon(
+                                    Icons.account_balance,
+                                    color: widget.percent>=1? Colors.white: const Color(0xFFC1272D),
+                                    size: screenWidth *
+                                        0.03, // Adjusted based on screen width
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: screenHeight *
+                                      0.005, // Adjusted based on screen height
+                                ),
+                                Text(
+                                  'Verification\nPayment',
+                                  style: TextStyle(
+                                    fontSize: screenWidth *
+                                        0.01, // Adjusted based on screen width
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
                           ],
                         )
                       ],
@@ -159,7 +411,7 @@ class VerificationStatus extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'Harsh Pawar',
+                          FullName,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: screenWidth *
@@ -286,82 +538,3 @@ class VerificationStatus extends StatelessWidget {
     );
   }
 }
-
-class CustomDivider extends StatelessWidget {
-  const CustomDivider({Key? key, 
-    required this.screenWidth,
-    required this.screenHeight,
-    required this.isTrue,
-  }) : super(key: key);
-
-  final double screenWidth;
-  final double screenHeight;
-  final bool isTrue;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: screenWidth * 0.08, // Adjusted based on screen width
-          height: screenHeight * 0.003, // Adjusted based on screen height
-          color: isTrue ? Colors.green : Colors.white,
-        ),
-        SizedBox(
-          height: screenHeight * 0.02, // Adjusted based on screen height
-        )
-      ],
-    );
-  }
-}
-
-class CircularIcon extends StatelessWidget {
-  const CircularIcon({Key? key, 
-    required this.screenWidth,
-    required this.screenHeight,
-    required this.icon,
-    required this.isTrue,
-    required this.title,
-  }) : super(key: key);
-
-  final double screenWidth;
-  final double screenHeight;
-  final IconData icon;
-  final bool isTrue;
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: screenWidth * 0.07, // Adjusted based on screen width
-          height: screenWidth * 0.07, // Adjusted based on screen width
-          decoration: BoxDecoration(
-            color: isTrue ? Colors.green : Colors.white,
-            borderRadius: BorderRadius.circular(
-                screenWidth * 0.035), // Adjusted based on screen width
-          ),
-          child: Icon(
-            icon,
-            color: isTrue ? Colors.white : AppColors.primary,
-            size: screenWidth * 0.03, // Adjusted based on screen width
-          ),
-        ),
-        SizedBox(
-          height: screenHeight * 0.005, // Adjusted based on screen height
-        ),
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: screenWidth * 0.01, // Adjusted based on screen width
-            color: Colors.white,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-}
-

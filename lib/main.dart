@@ -7,6 +7,8 @@ import 'package:hiremi_version_two/HomePage.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/ultimate_nav_bar.dart';
 import 'SplashScreen.dart';
+import 'package:hiremi_version_two/verification_screens/verification_screen3.dart';
+import 'package:hiremi_version_two/verified_page.dart';
 
 
 void main() {

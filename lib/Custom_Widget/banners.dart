@@ -25,7 +25,8 @@ class AdBanner extends ConsumerWidget {
           end: Alignment.centerRight,
         ),
       ),
-      width: screenWidth * 0.9,
+      width: screenWidth * 0.95,
+      height: screenHeight * 0.181,
       
       child: Padding(
         padding: EdgeInsets.all(screenWidth * 0.04),

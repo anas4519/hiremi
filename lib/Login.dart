@@ -22,6 +22,49 @@ class _LogInState extends State<LogIn> {
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
+  String? _savedEmail;
+  bool isV = false;
+
+
+  Future<String?> _printSavedEmail() async {
+    // final prefs = await SharedPreferences.getInstance();
+    // final email = prefs.getString('email') ?? 'No email saved';
+    // print("email saved is $email");
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _savedEmail = prefs.getString('email') ?? 'No email saved';
+    });
+
+    print("Saved email is $_savedEmail");
+    isV = await _isEmailVerified();
+
+
+  }
+  Future<bool> _isEmailVerified() async {
+    const String apiUrl = "http://13.127.81.177:8000/api/registers/";
+    final response = await http.get(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> users = jsonDecode(response.body);
+      for (var user in users) {
+        if (user['email'] == _savedEmail && user['verified'] == true) {
+          print("Verified is true");
+          Navigator.push(
+            context,
+            SlidePageRoute(page: NewNavbar()),
+          );
+          return true;
+        }
+      }
+    }
+    Navigator.push(
+      context,
+      SlidePageRoute(page: NewNavbar()),
+    );
+    return false;
+  }
+
+
 
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) {
@@ -29,7 +72,7 @@ class _LogInState extends State<LogIn> {
       return;
     }
 
-    final String apiUrl = "http://13.127.81.177:8000/login/";
+    const String apiUrl = "http://13.127.81.177:8000/login/";
     final response = await http.post(
       Uri.parse(apiUrl),
       headers: {"Content-Type": "application/json"},
@@ -42,27 +85,29 @@ class _LogInState extends State<LogIn> {
     if (response.statusCode == 200) {
       // Login successful
       print("Login successful");
+      _printSavedEmail();
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('email', _emailController.text);
 
-      await prefs.setString('isLogin', 'true');
-      Navigator.push(
-        context,
-          SlidePageRoute(page:  NewNavbar()),
-      );
+
 
     } else {
       // Login failed
       print("Login failed");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Your credentials may be wrong. Please try again.'),
+          content: const Text('Your credentials may be wrong. Please try again.'),
           backgroundColor: Colors.red,
         ),
       );
     }
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+   // _isEmailVerified();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -406,85 +451,7 @@ class _LogInState extends State<LogIn> {
     );
   }
 
-  // Widget buildLabeledTextField(
-  //     BuildContext context,
-  //     String label,
-  //     String hintText, {
-  //       bool showPositionedBox = false,
-  //       IconData? prefixIcon,
-  //       bool obscureText = false,
-  //       List<String>? dropdownItems,
-  //       TextEditingController? controller,
-  //       String? Function(String?)? validator,
-  //       VoidCallback? onTap,
-  //       TextInputType? keyboardType,
-  //     }) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Padding(
-  //         padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
-  //         child: RichText(
-  //           text: TextSpan(
-  //             children: [
-  //               TextSpan(
-  //                 text: label,
-  //                 style: TextStyle(color: Colors.black),
-  //               ),
-  //               TextSpan(
-  //                 text: " *",
-  //                 style: TextStyle(color: Colors.red),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-  //       Padding(
-  //         padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
-  //         child: dropdownItems != null
-  //             ? DropdownButtonFormField<String>(
-  //           decoration: InputDecoration(
-  //             hintText: hintText,
-  //             prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-  //             border: OutlineInputBorder(
-  //               borderRadius: BorderRadius.circular(10),
-  //             ),
-  //           ),
-  //           value: controller?.text.isNotEmpty == true ? controller?.text : null,
-  //           hint: Text(hintText),
-  //           onChanged: (String? newValue) {
-  //             setState(() {
-  //               controller?.text = newValue!;
-  //             });
-  //           },
-  //           items: dropdownItems.map((String item) {
-  //             return DropdownMenuItem<String>(
-  //               value: item,
-  //               child: Text(item),
-  //             );
-  //           }).toList(),
-  //           validator: validator,
-  //         )
-  //             : TextFormField(
-  //           controller: controller,
-  //           decoration: InputDecoration(
-  //             hintText: hintText,
-  //             prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-  //             border: OutlineInputBorder(
-  //               borderRadius: BorderRadius.circular(10),
-  //             ),
-  //           ),
-  //           obscureText: obscureText,
-  //           validator: validator,
-  //           onTap: onTap,
-  //           keyboardType: keyboardType,
-  //         ),
-  //       ),
-  //       SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-  //     ],
-  //   );
-  // }
+
   Widget buildLabeledTextField(
       BuildContext context,
       String label,

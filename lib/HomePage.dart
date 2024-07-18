@@ -1,12 +1,20 @@
-import 'package:carousel_slider/carousel_slider.dart';
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/API_Integration/Internship/Apiservices.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:hiremi_version_two/Custom_Widget/Circle_row.dart';
+import 'dart:ui'; // For BackdropFilter
+import 'package:hiremi_version_two/Custom_Widget/Container_with_curved_Edges.dart';
 import 'package:hiremi_version_two/Custom_Widget/OppurtunityCard.dart';
+import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
 import 'package:hiremi_version_two/Custom_Widget/Verifiedtrue.dart';
 import 'package:hiremi_version_two/Custom_Widget/banners.dart';
 import 'package:hiremi_version_two/Custom_Widget/drawer_child.dart';
 import 'package:hiremi_version_two/Custom_Widget/verification_status.dart';
+import 'package:hiremi_version_two/Fresher_Jobs.dart';
 import 'package:hiremi_version_two/InternshipScreen.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
@@ -14,30 +22,39 @@ import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/experienced_jobs.dart';
 import 'package:hiremi_version_two/fresherJobs.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+import 'package:http/http.dart' as http;
+
 
 class HomePage extends ConsumerStatefulWidget {
-  const HomePage({super.key});
+  
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
+  int _current = 0;
+  final CarouselController _controller = CarouselController();
   int _selectedIndex = 0;
-
-  double heightFactor = 0.5; // 50% of screen height
-  double percentage = 15.0; // Example percentage value
-
-  final ScrollController _scrollController = ScrollController();
   double _blurAmount = 10.0;
   List<dynamic> _jobs = [];
   bool _isLoading = true;
+  String FullName = "";
+  String storedEmail='';
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
     _fetchJobs();
+    fetchAndSaveFullName();
+
   }
 
   @override
@@ -50,93 +67,123 @@ class _HomePageState extends ConsumerState<HomePage> {
   void _onScroll() {
     double offset = _scrollController.offset;
     setState(() {
-      _blurAmount = (10 - (offset / 10))
-          .clamp(0, 10); // Adjust blur amount based on scroll
-    });
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
+      _blurAmount = (10 - (offset / 10)).clamp(0, 10);
     });
   }
 
   Future<void> _fetchJobs() async {
     try {
-      final apiService =
-          ApiService('http://13.127.81.177:8000/api/internship/');
+      final apiService = ApiService('http://13.127.81.177:8000/api/internship/');
       final data = await apiService.fetchData();
       setState(() {
         _jobs = data;
         _isLoading = false;
       });
     } catch (e) {
-      // Handle error
       setState(() {
         _isLoading = false;
       });
     }
   }
 
-  int _current = 0;
-  final CarouselController _controller = CarouselController();
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+
+
+
+  Future<void> fetchAndSaveFullName() async {
+    const String apiUrl = "http://13.127.81.177:8000/api/registers/";
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final prefs = await SharedPreferences.getInstance();
+        storedEmail = prefs.getString('email') ?? 'No email saved';
+
+        for (var user in data) {
+          if (user['email'] == storedEmail) {
+            setState(() {
+              FullName = user['full_name'] ?? 'No name saved';
+            });
+            await prefs.setString('full_name', FullName);
+            print('Full name saved: $FullName');
+            break;
+          }
+        }
+
+        if (FullName.isEmpty) {
+          print('No matching email found');
+        }
+      } else {
+        print('Failed to fetch full name');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+  Future<void> _chechVerified() async {
+    const String apiUrl = "http://13.127.81.177:8000/api/registers/";
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final prefs = await SharedPreferences.getInstance();
+        storedEmail = prefs.getString('email') ?? 'No email saved';
+
+        for (var user in data) {
+          if (user['email'] == storedEmail) {
+            setState(() {
+              FullName = user['full_name'] ?? 'No name saved';
+            });
+            await prefs.setString('full_name', FullName);
+            print('Full name saved: $FullName');
+            break;
+          }
+        }
+
+        if (FullName.isEmpty) {
+          print('No matching email found');
+        }
+      } else {
+        print('Failed to fetch full name');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+  Future<void> _printSavedEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString('email') ?? 'No email saved';
+    storedEmail=email;
+    print(email);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final isVerified = ref.watch(verificationProvider);
-    const percent = 0.25;
+    var isVerified = ref.watch(verificationProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      key: scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: Padding(
-          padding: EdgeInsets.only(left: Sizes.responsiveDefaultSpace(context),
-              top: Sizes.responsiveSm(context),
-              bottom: Sizes.responsiveSm(context)),
-          child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: AppColors.bgBlue,
-              ),
-              child: Center(
-                child: IconButton(
-                    onPressed: () =>
-                      scaffoldKey.currentState?.openDrawer(),
-                    icon: const Icon(Icons.notes_outlined,
-                      size: 22,)
-                ),
-              )),
-        ),
         title: const Text(
           "Hiremi's Home",
-          style: TextStyle(
-              fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
-          Padding(
-            padding:
-                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
-            child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.bgBlue,
-                ),
-                child: Center(
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => const NotificationScreen(),
-                      ));
-                    },
-                    icon: const Icon(Icons.notifications_outlined),
-                  ),
-                )),
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (ctx) => const NotificationScreen(),
+              ));
+            },
+            icon: const Icon(Icons.notifications),
           ),
         ],
       ),
@@ -150,13 +197,8 @@ class _HomePageState extends ConsumerState<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (!isVerified)
-                const VerificationStatus(
-                  percent: 0.25,
-                ),
-              if (isVerified)
-                const VerifiedProfileWidget(
-                    name: 'Harsh Pawar', appId: '00011102'),
+              if (!isVerified) VerificationStatus(percent: 0.5),
+              if (isVerified) VerifiedProfileWidget(name: FullName, appId: '00011102'),
               SizedBox(height: screenHeight * 0.02),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,6 +208,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   SizedBox(height: screenHeight * 0.02),
+
                   Column(
                     children: [
                       CarouselSlider(
@@ -200,11 +243,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: (Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? Colors.white
-                                        : AppColors.primary)
+                                    Brightness.dark
+                                    ? Colors.white
+                                    : AppColors.primary)
                                     .withOpacity(
-                                        _current == entry.key ? 0.9 : 0.4),
+                                    _current == entry.key ? 0.9 : 0.4),
                               ),
                             ),
                           );
@@ -213,7 +256,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ],
                   ),
                   SizedBox(height: screenHeight * 0.02),
-                  //circle row
+                  // const CircleRow(),
                 ],
               ),
               SizedBox(height: screenHeight * 0.02),
@@ -236,8 +279,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     child: TextButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) =>
-                              InternshipsScreen(isVerified: isVerified),
+                          builder: (ctx) => InternshipsScreen(isVerified: isVerified),
                         ));
                       },
                       child: Row(
@@ -252,7 +294,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                             child: Icon(
                               Icons.spa,
                               size: screenWidth * 0.02,
-                              color: Colors.orange,
                             ),
                           ),
                           SizedBox(width: screenWidth * 0.015),
@@ -279,10 +320,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => FresherJobs(
-                                  isVerified: isVerified,
-                                )));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => FresherJobs(isVerified: isVerified)));
                       },
                       child: Row(
                         children: [
@@ -296,7 +334,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                             child: Icon(
                               Icons.work,
                               size: screenWidth * 0.02,
-                              color: const Color(0xFFFF3E41),
                             ),
                           ),
                           SizedBox(width: screenWidth * 0.015),
@@ -323,8 +360,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => const Experienced_Jobs()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const Experienced_Jobs()));
                       },
                       child: Row(
                         children: [
@@ -338,7 +374,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                             child: Icon(
                               Icons.work,
                               size: screenWidth * 0.02,
-                              color: Colors.purple,
                             ),
                           ),
                           SizedBox(width: screenWidth * 0.015),
@@ -360,72 +395,31 @@ class _HomePageState extends ConsumerState<HomePage> {
                 'Latest Opportunities',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
-              // SizedBox(height: screenHeight * 0.02),
-              // OpportunityCard(
-              //   dp: Image.asset('images/Rectangle 57.png'),
-              //   role: 'Human Resource Intern',
-              //   company: 'Hiremi',
-              //   location: 'Bhopal, Madhya Pradesh, India',
-              //   stipend: '2,000-15,000',
-              //   mode: 'Remote',
-              //   type: 'Internship',
-              //   exp: 1,
-              //   daysPosted: 6,
-              //   isVerified: widget.isVerified,
-              // ),
-              // SizedBox(height: screenHeight * 0.01),
-              // OpportunityCard(
-              //   dp: Image.asset('images/crtd1 1.png'),
-              //   role: 'Social Media Intern',
-              //   company: 'CRTD Technologies',
-              //   location: 'Bhopal, Madhya Pradesh, India',
-              //   stipend: '2,000-15,000',
-              //   mode: 'Remote',
-              //   type: 'Internship',
-              //   exp: 1,
-              //   daysPosted: 6,
-              //   isVerified: widget.isVerified,
-              // ),
               SizedBox(height: screenHeight * 0.01),
-              // OpportunityCard(
-              //   dp: Image.asset('images/Rectangle 57.png'),
-              //   role: 'Data Science Intern',
-              //   company: 'Hiremi',
-              //   location: 'Bhopal, Madhya Pradesh, India',
-              //   stipend: '2,000-15,000',
-              //   mode: 'Remote',
-              //   type: 'Internship',
-              //   exp: 1,
-              //   daysPosted: 6,
-              //   isVerified: widget.isVerified,
-              // ),
-              // const SizedBox(height: 64,),
-              ..._jobs
-                  .map((job) => Column(
-                    children: [
-                      OpportunityCard(
-                            dp: Image.asset('images/icons/logo1.png'),
-                            profile: job['profile'] ?? 'N/A',
-                            companyName: job['company_name'] ?? 'N/A',
-                            location: job['location'] ?? 'N/A',
-                            stipend: job['Stipend']?.toString() ?? 'N/A',
-                            mode: 'Remote',
-                            type: 'Job',
-                            exp: 1,
-                            daysPosted: 0,
-                            ctc: job['CTC']?.toString() ?? '0',
-                            description:
-                                job['description'] ?? 'No description available',
-                            education: job['education'],
-                            skillsRequired: job['skills_required'],
-                            whoCanApply: job['who_can_apply'],
-                          ),
-                          SizedBox(height: screenHeight * 0.01)
-                    ],
-                  ))
-    
-                  .toList(),
-
+              Column(
+                children: _jobs.map((job) {
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: screenHeight * 0.03),
+                    child: OpportunityCard(
+                      dp: Image.asset('images/icons/logo1.png'), // Placeholder image
+                      profile: job['profile'] ?? 'N/A',
+                      companyName: job['company_name'] ?? 'N/A',
+                      location: job['location'] ?? 'N/A',
+                      stipend: job['Stipend']?.toString() ?? 'N/A',
+                      mode: 'Remote', // Replace with actual data if available
+                      type: 'Job', // Replace with actual data if available
+                      exp: 1, // Replace with actual data if available
+                      daysPosted: 0, // Replace with actual data if available
+                      ctc: job['Stipend']?.toString() ?? '0', // Example, replace with actual field
+                      description: job['description'] ?? 'No description available',
+                      education: job['education'],
+                      skillsRequired: job['skills_required'],
+                      whoCanApply: job['who_can_apply'],
+                    ),
+                  );
+                }).toList(),
+              ),
+              
             ],
           ),
         ),

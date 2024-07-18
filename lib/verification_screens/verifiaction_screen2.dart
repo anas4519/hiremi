@@ -23,6 +23,7 @@ final _formKey = GlobalKey<FormState>();
   String? _selectedState;
   DateTime? _selectedDate;
 String _userId="";
+String _fullName="";
 
   // List<String> _states = ['State 1', 'State 2', 'State 3', 'State 4'];
 
@@ -109,6 +110,9 @@ String _userId="";
 void initState() {
   super.initState();
   _fetchUserData();
+  if (_fullName.isEmpty) {
+    _fetchFullName();
+  }
 }
 // Future<void> _fetchUserData() async {
 //   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -157,6 +161,13 @@ void initState() {
 //     print('No email stored');
 //   }
 // }
+  Future<void> _fetchFullName() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? fullName = prefs.getString('full_name') ?? 'No name saved';
+    setState(() {
+      _fullName = fullName;
+    });
+  }
   Future<void> _fetchUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? storedEmail = prefs.getString('email');
@@ -290,8 +301,8 @@ void initState() {
                     backgroundColor: Colors.grey.shade300,
                   ),
                   SizedBox(height: screenHeight * 0.0075),
-                  const Text(
-                    'Harsh Pawar',
+                   Text(
+                    _fullName,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: screenHeight * 0.0075),
@@ -429,8 +440,6 @@ void initState() {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                    // Navigator.of(context).push(MaterialPageRoute(
-                                    //     builder: (ctx) => const VerificationScreen3()));
                                   if (_isAllFieldsValid()) {
                                     // Navigator.of(context).push(MaterialPageRoute(
                                     //     builder: (ctx) => const VerificationScreen3()));
@@ -560,6 +569,61 @@ void initState() {
             onTap: onTap,
             keyboardType: keyboardType,
             readOnly: readOnly, // Added line
+          ),
+        ),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+      ],
+    );
+  }
+
+
+
+  Widget buildGenderField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.04),
+          child: RichText(
+            text: const TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Gender',
+                  style: TextStyle(color: Colors.black),
+                ),
+                TextSpan(
+                  text: " *",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding:
+              EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04),
+          child: Row(
+            children: [
+              Radio(
+                value: Gender.Male,
+                groupValue: _selectedGender,
+                onChanged: _handleGenderChange,
+              ),
+              const Text('Male'),
+              Radio(
+                value: Gender.Female,
+                groupValue: _selectedGender,
+                onChanged: _handleGenderChange,
+              ),
+              const Text('Female'),
+              Radio(
+                value: Gender.Other,
+                groupValue: _selectedGender,
+                onChanged: _handleGenderChange,
+              ),
+              const Text('Other'),
+            ],
           ),
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.0185),

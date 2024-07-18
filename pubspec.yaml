@@ -26,6 +26,9 @@ dependencies:
   fan_carousel_image_slider: ^1.0.1
   carousel_slider: ^4.2.1
   get: ^4.6.6
+  paytm_allinonesdk: ^1.2.6
+  paytm_routersdk: ^1.0.2
+  uuid: ^4.4.2
 
 dev_dependencies:
   flutter_test:
