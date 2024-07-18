@@ -57,7 +57,7 @@ class _LogInState extends State<LogIn> {
         }
       }
     }
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       SlidePageRoute(page: NewNavbar()),
     );
