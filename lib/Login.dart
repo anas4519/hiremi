@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/Curved_Container.dart';
 import 'package:hiremi_version_two/Custom_Widget/Elevated_Button.dart';
 import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
+import 'package:hiremi_version_two/Verify_ur_Email.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/Forget_Your_Password.dart';
 import 'package:hiremi_version_two/Register.dart';
@@ -11,7 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LogIn extends StatefulWidget {
-  const LogIn({super.key});
+  const LogIn({Key? key}) : super(key: key);
 
   @override
   State<LogIn> createState() => _LogInState();
@@ -48,18 +49,20 @@ class _LogInState extends State<LogIn> {
       final List<dynamic> users = jsonDecode(response.body);
       for (var user in users) {
         if (user['email'] == _savedEmail && user['verified'] == true) {
-          debugPrint("Verified is true");
-          Navigator.pushReplacement(
+          print("Verified is true");
+          Navigator.pushAndRemoveUntil(
             context,
             SlidePageRoute(page: NewNavbar()),
+                (Route<dynamic> route) => false,
           );
           return true;
         }
       }
     }
-    Navigator.pushReplacement(
+    Navigator.pushAndRemoveUntil(
       context,
       SlidePageRoute(page: NewNavbar()),
+          (Route<dynamic> route) => false,
     );
     return false;
   }
