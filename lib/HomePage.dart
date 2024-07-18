@@ -401,28 +401,31 @@ class _HomePageState extends ConsumerState<HomePage> {
               // ),
               // const SizedBox(height: 64,),
               ..._jobs
-                  .map((job) => OpportunityCard(
-                        dp: Image.asset('images/icons/logo1.png'),
-                        profile: job['profile'] ?? 'N/A',
-                        companyName: job['company_name'] ?? 'N/A',
-                        location: job['location'] ?? 'N/A',
-                        stipend: job['Stipend']?.toString() ?? 'N/A',
-                        mode: 'Remote',
-                        type: 'Job',
-                        exp: 1,
-                        daysPosted: 0,
-                        ctc: job['CTC']?.toString() ?? '0',
-                        description:
-                            job['description'] ?? 'No description available',
-                        education: job['education'],
-                        skillsRequired: job['skills_required'],
-                        whoCanApply: job['who_can_apply'],
-                      ))
+                  .map((job) => Column(
+                    children: [
+                      OpportunityCard(
+                            dp: Image.asset('images/icons/logo1.png'),
+                            profile: job['profile'] ?? 'N/A',
+                            companyName: job['company_name'] ?? 'N/A',
+                            location: job['location'] ?? 'N/A',
+                            stipend: job['Stipend']?.toString() ?? 'N/A',
+                            mode: 'Remote',
+                            type: 'Job',
+                            exp: 1,
+                            daysPosted: 0,
+                            ctc: job['CTC']?.toString() ?? '0',
+                            description:
+                                job['description'] ?? 'No description available',
+                            education: job['education'],
+                            skillsRequired: job['skills_required'],
+                            whoCanApply: job['who_can_apply'],
+                          ),
+                          SizedBox(height: screenHeight * 0.01)
+                    ],
+                  ))
+    
                   .toList(),
 
-              const SizedBox(
-                height: 64,
-              ),
             ],
           ),
         ),
