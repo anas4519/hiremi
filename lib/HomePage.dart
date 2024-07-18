@@ -11,11 +11,9 @@ import 'package:hiremi_version_two/Custom_Widget/verification_status.dart';
 import 'package:hiremi_version_two/InternshipScreen.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
-import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/experienced_jobs.dart';
 import 'package:hiremi_version_two/fresherJobs.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
-import 'package:hiremi_version_two/ultimate_nav_bar.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({Key? key, }) : super(key: key);

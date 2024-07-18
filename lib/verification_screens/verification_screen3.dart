@@ -452,7 +452,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                     Padding(
                       padding: EdgeInsets.all(screenWidth * 0.04),
                       child: const Text(
-                        'Contact Information',
+                        'Last Step Verification',
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.start,
                       ),
@@ -463,6 +463,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                       "Enrollment Number / Roll Number / College ID / UAN Number etc.",
                       "0105IT171125",
                       controller: _EnrollementNumberController,
+                      keyboardType: TextInputType.text,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your enrollment number';
@@ -497,8 +498,6 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                           ),
                           child: TextButton(
                             onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => const VerifiedPage()));
                               if (_isAllFieldsValid()) {
                                 _saveFormDetails();
                                 Navigator.of(context).push(MaterialPageRoute(
