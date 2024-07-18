@@ -32,6 +32,7 @@ class SAppbar extends StatelessWidget implements PreferredSizeWidget {
             top: Sizes.responsiveSm(context),
             bottom: Sizes.responsiveSm(context)),
         child: Container(
+    padding: EdgeInsets.all(Sizes.responsiveMdSm(context)),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
               color: AppColors.bgBlue,
@@ -41,7 +42,7 @@ class SAppbar extends StatelessWidget implements PreferredSizeWidget {
                   onPressed: () => {
                   scaffoldKey.currentState?.openDrawer(),
               },
-                  icon: const Icon(Icons.menu,
+                  icon: const Icon(Icons.notes_outlined,
                     size: 22,)
               ),
             )),

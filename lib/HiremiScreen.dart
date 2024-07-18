@@ -24,7 +24,7 @@ class HiremiScreen extends StatelessWidget {
                 return const LogIn();
               }
               else if (prefs.getString('isLogin') == 'true') {
-                return  NewNavbar();
+                return NewNavbar();
               }
             }
             return const FirstLandingPage();

@@ -32,11 +32,8 @@ class MyApp extends StatelessWidget {
           ),
           scaffoldBackgroundColor: Colors.white,
           fontFamily: GoogleFonts.poppins().fontFamily,
-          
         ),
-      
-        home: HomePage()
-        
+        home: SplashScreen()
       );
     
   }

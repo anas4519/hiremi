@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:hiremi_version_two/Custom_Widget/drawer_child.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/Utils/AppSizes.dart';
+import 'package:hiremi_version_two/Utils/colors.dart';
 
 class QueriesScreen extends StatefulWidget {
-  
   const QueriesScreen({Key? key}) : super(key: key);
 
   @override
@@ -36,6 +37,7 @@ class _QueriesScreenState extends State<QueriesScreen> {
       },
     );
   }
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,23 +45,56 @@ class _QueriesScreenState extends State<QueriesScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      key: scaffoldKey,
       drawer: const Drawer(
         child: DrawerChild(),
       ),
       appBar: AppBar(
         backgroundColor: Colors.white,
+        leading: Padding(
+          padding: EdgeInsets.only(
+              left: Sizes.responsiveDefaultSpace(context),
+              top: Sizes.responsiveSm(context),
+              bottom: Sizes.responsiveSm(context)),
+          child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: AppColors.bgBlue,
+              ),
+              child: Center(
+                child: IconButton(
+                    onPressed: () => scaffoldKey.currentState?.openDrawer(),
+                    icon: const Icon(
+                      Icons.notes_outlined,
+                      size: 22,
+                    )),
+              )),
+        ),
         title: const Text(
           "Queries",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
         ),
-        
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const NotificationScreen()));
-            },
-            icon: const Icon(Icons.notifications),
+          Padding(
+            padding:
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+            child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const NotificationScreen(),
+                      ));
+                    },
+                    icon: const Icon(Icons.notifications_outlined),
+                  ),
+                )),
           ),
         ],
       ),

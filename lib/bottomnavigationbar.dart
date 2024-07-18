@@ -7,6 +7,7 @@ import 'package:hiremi_version_two/applies_screen.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
 import 'package:hiremi_version_two/queries_screen.dart';
 import 'package:hiremi_version_two/verified_popup.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Utils/AppSizes.dart';
@@ -15,7 +16,7 @@ import 'Utils/colors.dart';
 class NewNavbar extends ConsumerStatefulWidget {
    NewNavbar({this.initTabIndex = 0, super.key});
 
-  late  int initTabIndex;
+  late int initTabIndex;
 
   @override
   ConsumerState<NewNavbar> createState() => _NewNavbarState();
@@ -97,6 +98,7 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
         .of(context)
         .size
         .width;
+    double spacing = (screenWidth - (4 * 50)) / 5;
     return Scaffold(
       backgroundColor: Colors.white,
       body: IndexedStack(
@@ -117,22 +119,22 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
             boxShadow: const [
               BoxShadow(color: Colors.black38,
                   blurRadius: 10,
-                  offset: Offset(4, 4)
+                  offset: Offset(4,4)
               )
             ]
         ),
-        child: BottomAppBar(
+        child:  BottomAppBar(
           color: Colors.white,
           shape: const CircularNotchedRectangle(),
           notchMargin: 8,
           child: Padding(
-            padding: EdgeInsets.all(Sizes.responsiveXxs(context)),
-            child: Row(
+            padding:  EdgeInsets.all(Sizes.responsiveXxs(context)),
+            child:  Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildNavItem(Icons.home_filled, 'HOME', 0),
-                _buildNavItem(Icons.event_note_sharp, 'APPLIES', 1),
+                _buildNavItem(Icons.list_alt_rounded, 'APPLIES', 1),
                 SizedBox(width: Sizes.responsiveXxl(context)),
                 _buildNavItem(Icons.local_activity_outlined, 'QUERIES', 2),
                 _buildNavItem(Icons.person_outline, 'PROFILE', 3),
@@ -144,9 +146,6 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            if(isVerified){
-              _showPopUp();
-            }
           },
           elevation: 0,
           backgroundColor: Colors.white,
@@ -181,17 +180,10 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          icon is IconData
-              ? Icon(
+        Icon(
             icon,
             size: 20,
             color: widget.initTabIndex == index
-                ? const Color(0xFFC1272D)
-                : Colors.black,
-          )
-              : Image.asset(
-            icon,
-            color:  widget.initTabIndex == index
                 ? const Color(0xFFC1272D)
                 : Colors.black,
           ),
