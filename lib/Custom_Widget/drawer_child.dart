@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:hiremi_version_two/Forget_Your_Password.dart';
 import 'package:hiremi_version_two/Help_Support.dart';
+import 'package:hiremi_version_two/Screens/Drawer_Child_Screens/Forget_Password/ForgetPassword.dart';
 import 'package:hiremi_version_two/Screens/Profile_Screen/Edit_Profile_Section/BasicDetails/AddBasicDetails.dart';
 import 'package:hiremi_version_two/Screens/Profile_Screen/Profile_Screen.dart';
 import 'package:hiremi_version_two/Settings.dart';
@@ -144,7 +145,7 @@ class DrawerChild extends ConsumerWidget {
                         if (!isVerified) {
                           showPopUp();
                         } else {
-                          
+                          Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>ProfileScreen()));
                         }
                       },
                       style: ButtonStyle(
@@ -230,7 +231,7 @@ class DrawerChild extends ConsumerWidget {
                               WidgetStatePropertyAll(Color(0xFFECF5FF))),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => const Forget_Your_Password()));
+                            builder: (ctx) => const ForgetPassword()));
                       },
                       icon: const Icon(Icons.navigate_next))),
               SizedBox(height: screenHeight * 0.005),

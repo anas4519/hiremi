@@ -48,7 +48,7 @@ class _LogInState extends State<LogIn> {
       await prefs.setString('isLogin', 'true');
       Navigator.push(
         context,
-          SlidePageRoute(page: const NewNavbar()),
+          SlidePageRoute(page:  NewNavbar()),
       );
 
     } else {

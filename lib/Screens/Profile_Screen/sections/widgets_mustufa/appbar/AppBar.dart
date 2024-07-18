@@ -6,19 +6,21 @@ import '../../../../../Utils/colors.dart';
 
 
 class SAppbar extends StatelessWidget implements PreferredSizeWidget {
-  SAppbar({super.key,
+  const SAppbar({super.key,
     this.title,
     this.showBackArrow = false,
     this.leadingIcon,
     this.actions,
-    this.leadingOnPressed});
+    this.leadingOnPressed,
+    required this.scaffoldKey,
+  });
 
   final String? title;
   final bool showBackArrow;
   final IconData? leadingIcon;
   final List<Widget>? actions;
   final VoidCallback? leadingOnPressed;
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class SAppbar extends StatelessWidget implements PreferredSizeWidget {
             top: Sizes.responsiveSm(context),
             bottom: Sizes.responsiveSm(context)),
         child: Container(
+    padding: EdgeInsets.all(Sizes.responsiveMdSm(context)),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
               color: AppColors.bgBlue,
@@ -39,7 +42,7 @@ class SAppbar extends StatelessWidget implements PreferredSizeWidget {
                   onPressed: () => {
                   scaffoldKey.currentState?.openDrawer(),
               },
-                  icon: const Icon(Icons.menu,
+                  icon: const Icon(Icons.notes_outlined,
                     size: 22,)
               ),
             )),

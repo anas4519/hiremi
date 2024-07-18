@@ -123,7 +123,7 @@ class VerifiedPage extends ConsumerWidget {
                     ref.read(verificationProvider.notifier).verify();
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => const NewNavbar()),
+                      MaterialPageRoute(builder: (context) =>  NewNavbar()),
                       (Route<dynamic> route) => false,
                     );
                   },

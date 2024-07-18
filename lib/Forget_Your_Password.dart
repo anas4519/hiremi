@@ -69,161 +69,159 @@ class _Forget_Your_PasswordState extends State<Forget_Your_Password> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PopScope(
-        child: SingleChildScrollView(
-          child: SafeArea(
-            child: Column(
-              children: [
-                Center(
-                  child: Image.asset(
-                    'images/Hiremi_new_Icon.png',
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    height: MediaQuery.of(context).size.height * 0.25,
-                  ),
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            children: [
+              Center(
+                child: Image.asset(
+                  'images/Hiremi_new_Icon.png',
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  height: MediaQuery.of(context).size.height * 0.25,
                 ),
-                const Text(
-                  "Forget Your Password",
-                  style: TextStyle(
-                    fontSize: 21.0,
-                    fontWeight: FontWeight.w600,
-                  ),
+              ),
+              const Text(
+                "Forget Your Password",
+                style: TextStyle(
+                  fontSize: 21.0,
+                  fontWeight: FontWeight.w600,
                 ),
-                const Text(
-                  "No worries, it happens!",
-                  style: TextStyle(
-                    fontSize: 21.0,
-                    fontWeight: FontWeight.w400,
-                  ),
+              ),
+              const Text(
+                "No worries, it happens!",
+                style: TextStyle(
+                  fontSize: 21.0,
+                  fontWeight: FontWeight.w400,
                 ),
-                Center(
-                  child: Image.asset(
-                    'images/Forget_your_Password.png',
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    height: MediaQuery.of(context).size.height * 0.32,
-                  ),
+              ),
+              Center(
+                child: Image.asset(
+                  'images/Forget_your_Password.png',
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  height: MediaQuery.of(context).size.height * 0.32,
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.0),
-                CurvedContainer(
-                  backgroundColor: Colors.white,
-                  borderColor: Colors.black,
-                  borderWidth: 0.53,
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.0215,
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.0),
+              CurvedContainer(
+                backgroundColor: Colors.white,
+                borderColor: Colors.black,
+                borderWidth: 0.53,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.0215,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: MediaQuery.of(context).size.width * 0.09,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            right: MediaQuery.of(context).size.width * 0.09,
-                          ),
-                          child: RichText(
-                            text: const TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "Enter Email Address",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                TextSpan(
-                                  text: " *",
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ), // Red asterisk
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.0115,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: MediaQuery.of(context).size.width * 0.1,
-                          ),
-                          child: CurvedTextField(
-                            controller: emailController,
-                            hintText: "youremail@gmail.com",
-                            prefixIcon: Icons.account_circle,
-                            obscureText: false,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                //   return 'Please enter your email id';
-
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.0185,
-                        ),
-                        Container(
-
-                        ),
-                        RichText(
-                          textAlign: TextAlign.center,
+                        child: RichText(
                           text: const TextSpan(
                             children: [
                               TextSpan(
-                                text:
-                                "Enter your email address to receive a ",
+                                text: "Enter Email Address",
                                 style: TextStyle(color: Colors.black),
                               ),
                               TextSpan(
-                                text: "verification",
-                                style: TextStyle(color: Colors.blue),
-                              ), // Change text color to blue
-                              TextSpan(
-                                text: " code in\nyour mail box.",
-                                style: TextStyle(color: Colors.black),
+                                text: " *",
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ), // Red asterisk
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.0285,
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.0115,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width * 0.1,
                         ),
-                        Center(
-                          child: isLoading
-                              ? CustomElevatedButton(
-                            width: MediaQuery.of(context).size.width * 0.775,
-                            height: MediaQuery.of(context).size.height * 0.0625,
-                            text: 'Sending OTP...',
-                            onPressed: () {},
-                          )
-                              : CustomElevatedButton(
-                            width: MediaQuery.of(context).size.width * 0.775,
-                            height: MediaQuery.of(context).size.height * 0.0625,
-                            text: 'Send OTP',
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                Map<String, dynamic> body = {"email": emailController.text.trim()};
+                        child: CurvedTextField(
+                          controller: emailController,
+                          hintText: "youremail@gmail.com",
+                          prefixIcon: Icons.account_circle,
+                          obscureText: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              //   return 'Please enter your email id';
 
-                                final response = await _userService.createPostApi(body, ApiUrls.forgetPaassword);
-                                if (response.statusCode == 200) {
-                                  String csrfToken = response.headers['set-cookie'] ?? '';
-                                  await storeCSRFToken(csrfToken);
-                                  Navigator.pushReplacement(
-                                    context,
-                                    SlidePageRoute(page: const VerifyUrEmail()),
-                                  );
-                                }
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.0185,
+                      ),
+                      Container(
+
+                      ),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: const TextSpan(
+                          children: [
+                            TextSpan(
+                              text:
+                              "Enter your email address to receive a ",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            TextSpan(
+                              text: "verification",
+                              style: TextStyle(color: Colors.blue),
+                            ), // Change text color to blue
+                            TextSpan(
+                              text: " code in\nyour mail box.",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.0285,
+                      ),
+                      Center(
+                        child: isLoading
+                            ? CustomElevatedButton(
+                          width: MediaQuery.of(context).size.width * 0.775,
+                          height: MediaQuery.of(context).size.height * 0.0625,
+                          text: 'Sending OTP...',
+                          onPressed: () {},
+                        )
+                            : CustomElevatedButton(
+                          width: MediaQuery.of(context).size.width * 0.775,
+                          height: MediaQuery.of(context).size.height * 0.0625,
+                          text: 'Send OTP',
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              Map<String, dynamic> body = {"email": emailController.text.trim()};
+
+                              final response = await _userService.createPostApi(body, ApiUrls.forgetPaassword);
+                              if (response.statusCode == 200) {
+                                String csrfToken = response.headers['set-cookie'] ?? '';
+                                await storeCSRFToken(csrfToken);
+                                Navigator.pushReplacement(
+                                  context,
+                                  SlidePageRoute(page: const VerifyUrEmail()),
+                                );
                               }
-                            },
-                          ),
+                            }
+                          },
                         ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.0747,
-                        ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.0747,
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 70,)
-              ],
-            ),
+              ),
+              const SizedBox(height: 70,)
+            ],
           ),
         ),
       ),

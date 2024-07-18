@@ -32,26 +32,61 @@ class ProfileScreen extends StatelessWidget {
   });
 
   final controller = Get.put(ProfileController());
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: AppColors.white,
-      appBar: AppBar(
+      appBar:  AppBar(
+        backgroundColor: Colors.white,
+        leading: Padding(
+          padding: EdgeInsets.only(
+              left: Sizes.responsiveDefaultSpace(context),
+              top: Sizes.responsiveSm(context),
+              bottom: Sizes.responsiveSm(context)),
+          child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: AppColors.bgBlue,
+              ),
+              child: Center(
+                child: IconButton(
+                    onPressed: () => scaffoldKey.currentState?.openDrawer(),
+                    icon: const Icon(
+                      Icons.notes_outlined,
+                      size: 22,
+                    )),
+              )),
+        ),
         title: const Text(
-          'Profile',
+          "Queries",
           style: TextStyle(
-              fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.black),
+              fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => const NotificationScreen()));
-              },
-              icon: const Icon(Icons.notifications))
+          Padding(
+            padding:
+            EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+            child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const NotificationScreen(),
+                      ));
+                    },
+                    icon: const Icon(Icons.notifications_outlined),
+                  ),
+                )),
+          ),
         ],
       ),
       drawer: const Drawer(
