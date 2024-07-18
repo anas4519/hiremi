@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
@@ -107,7 +109,7 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
       ),
       bottomNavigationBar:
       Container(
-        height: 64,
+        height: MediaQuery.sizeOf(context).height * 0.08,
         decoration: BoxDecoration(
             color: AppColors.primary,
             borderRadius: const BorderRadius.only(
@@ -126,7 +128,7 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
         child:  BottomAppBar(
           color: Colors.white,
           shape: const CircularNotchedRectangle(),
-          notchMargin: 8,
+          notchMargin: 15,
           child: Padding(
             padding:  EdgeInsets.all(Sizes.responsiveXxs(context)),
             child:  Row(
@@ -144,32 +146,38 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-          },
-          elevation: 0,
-          backgroundColor: Colors.white,
-          shape: const CircleBorder(),
-          child: const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.all_inclusive,
-                  color: Color(0xFFC1272D),
-                  size: 20,
-                ),
-                Text(
-                  'HIREMI',
-                  style: TextStyle(fontSize: 7, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  '360',
-                  style: TextStyle(fontSize: 6, color: Color(0xFFC1272D)),
-                ),
-              ],
-            ),
-          )),
+      floatingActionButton: Transform.scale(
+        scale: pi * 0.4,
+        child: FloatingActionButton(
+            onPressed: () {
+              if(!isVerified){
+                _showPopUp();
+              }
+            },
+            elevation: 4,
+            backgroundColor: Colors.white,
+            shape: const CircleBorder(),
+            child: const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.all_inclusive,
+                    color: Color(0xFFC1272D),
+                    size: 20,
+                  ),
+                  Text(
+                    'HIREMI',
+                    style: TextStyle(fontSize: 7, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    '360',
+                    style: TextStyle(fontSize: 6, color: Color(0xFFC1272D)),
+                  ),
+                ],
+              ),
+            )),
+      ),
     );
   }
 

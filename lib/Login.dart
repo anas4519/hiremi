@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LogIn extends StatefulWidget {
-  const LogIn({Key? key}) : super(key: key);
+  const LogIn({super.key});
 
   @override
   State<LogIn> createState() => _LogInState();
@@ -48,8 +48,8 @@ class _LogInState extends State<LogIn> {
       final List<dynamic> users = jsonDecode(response.body);
       for (var user in users) {
         if (user['email'] == _savedEmail && user['verified'] == true) {
-          print("Verified is true");
-          Navigator.push(
+          debugPrint("Verified is true");
+          Navigator.pushReplacement(
             context,
             SlidePageRoute(page: NewNavbar()),
           );
