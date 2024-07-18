@@ -411,6 +411,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         whoCanApply: job['who_can_apply'],
                       ))
                   .toList(),
+
               const SizedBox(
                 height: 64,
               ),
