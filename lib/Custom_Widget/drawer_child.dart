@@ -22,7 +22,7 @@ class DrawerChild extends ConsumerWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final isVerified = ref.watch(verificationProvider);
 
-    void _showPopUp() {
+    void showPopUp() {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -140,7 +140,7 @@ class DrawerChild extends ConsumerWidget {
                     TextButton(
                       onPressed: () {
                         if (!isVerified) {
-                          _showPopUp();
+                          showPopUp();
                         } else {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (ctx) => const AddBasicDetails()));
@@ -173,7 +173,8 @@ class DrawerChild extends ConsumerWidget {
                 color: Colors.grey,
               ),
               SizedBox(height: screenHeight * 0.04),
-              ListTile(
+              ListTile(  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (ctx) =>  const SettingsScreen())),
                   leading: Container(
                     height: screenHeight * 0.04,
                     width: screenHeight * 0.04,
@@ -196,15 +197,16 @@ class DrawerChild extends ConsumerWidget {
                               WidgetStatePropertyAll(Color(0xFFECF5FF))),
                       onPressed: () {
                         if (!isVerified) {
-                          _showPopUp();
+                          showPopUp();
                         } else {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => SettingsScreen()));
+                              builder: (ctx) => const SettingsScreen()));
                         }
                       },
                       icon: const Icon(Icons.navigate_next))),
               SizedBox(height: screenHeight * 0.005),
-              ListTile(
+              ListTile(  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (ctx) =>  const Forget_Your_Password())),
                   leading: Container(
                     height: screenHeight * 0.04,
                     width: screenHeight * 0.04,
@@ -227,11 +229,12 @@ class DrawerChild extends ConsumerWidget {
                               WidgetStatePropertyAll(Color(0xFFECF5FF))),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => Forget_Your_Password()));
+                            builder: (ctx) => const Forget_Your_Password()));
                       },
                       icon: const Icon(Icons.navigate_next))),
               SizedBox(height: screenHeight * 0.005),
-              ListTile(
+              ListTile(  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (ctx) =>  const About_Us())),
                   leading: Container(
                     height: screenHeight * 0.04,
                     width: screenHeight * 0.04,
@@ -261,6 +264,8 @@ class DrawerChild extends ConsumerWidget {
                 height: screenHeight * 0.25,
               ),
               ListTile(
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) =>  const HelpSupport())),
                   leading: Container(
                     height: screenHeight * 0.04,
                     width: screenHeight * 0.04,

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:hiremi_version_two/Custom_Widget/roundedContainer.dart';
-import 'package:hiremi_version_two/Utils/AppSizes.dart';
-import 'package:hiremi_version_two/Utils/colors.dart';
 
+import '../../../../Custom_Widget/RoundedContainer/roundedContainer.dart';
+import '../../../../Utils/AppSizes.dart';
+import '../../../../Utils/colors.dart';
 
 
 
 class SkillRequired extends StatelessWidget {
-  const SkillRequired({super.key});
+  const SkillRequired({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

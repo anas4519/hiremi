@@ -59,6 +59,7 @@ class Sizes {
     return MediaQuery.of(context).size.width * 0.08 ;
   }
 
+
   /// Bigger Space 40,
   static double responsiveXxl(BuildContext context) {
     return MediaQuery.of(context).size.width * 0.103;

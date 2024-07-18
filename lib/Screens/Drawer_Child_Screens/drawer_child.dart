@@ -106,7 +106,7 @@ class DrawerChild extends StatelessWidget {
             SizedBox(height: screenHeight * 0.04),
             ListTile(
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) =>  SettingsScreen())),
+                    builder: (ctx) =>  const SettingsScreen())),
                 leading: Container(
                   height: screenHeight * 0.04,
                   width: screenHeight * 0.04,

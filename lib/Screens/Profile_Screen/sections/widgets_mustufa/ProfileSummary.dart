@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 
-import '../../../../Custom_Widget/CustomContainer/OutlinedButton.dart';
+import '../../widgets/CustomContainer/OutlinedButton.dart';
+
 
 
 class ProfileSummary extends StatelessWidget {

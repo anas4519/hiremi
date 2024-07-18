@@ -63,11 +63,8 @@ class _CustomAlert2State extends State<CustomAlert2> {
             SizedBox(height: screenHeight * 0.01),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const NewNavbar()),
-                      (Route<dynamic> route) => false,
-                );
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => const NewNavbar()));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFC1272D), // Background color

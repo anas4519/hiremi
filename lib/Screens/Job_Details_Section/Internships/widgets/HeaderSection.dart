@@ -1,21 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:hiremi_version_two/Custom_Widget/RoundedImage.dart';
-import 'package:hiremi_version_two/Utils/AppSizes.dart';
-import 'package:hiremi_version_two/Utils/colors.dart';
-import '../Custom_Widget/roundedContainer.dart';
 
-class HeaderSectionFresher extends StatelessWidget {
-  final String profile;
-  final String companyName;
-  final String location;
-  final double ctc;
+import '../../../../Custom_Widget/RoundedContainer/RoundedImage.dart';
+import '../../../../Custom_Widget/RoundedContainer/roundedContainer.dart';
+import '../../../../Utils/AppSizes.dart';
+import '../../../../Utils/colors.dart';
 
-  const HeaderSectionFresher({
+class HeaderSection extends StatelessWidget {
+  const HeaderSection({
     super.key,
-    required this.profile,
-    required this.companyName,
-    required this.location,
-    required this.ctc,
   });
 
   @override
@@ -26,7 +18,7 @@ class HeaderSectionFresher extends StatelessWidget {
         Row(
           children: [
             RoundedImage(
-                image: 'images/icons/logo1.png',
+                image: 'assets/icons/logo.png',
                 border: Border.all(width: 5.0, color: AppColors.lightGrey)),
             SizedBox(
               width: Sizes.responsiveXs(context),
@@ -36,12 +28,12 @@ class HeaderSectionFresher extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  profile,
+                  'Human Resource Intern',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-                Text(
-                  companyName,
-                  style: const TextStyle(
+                const Text(
+                  'CRTD Technologies',
+                  style: TextStyle(
                       fontSize: 8.0,
                       fontWeight: FontWeight.w400,
                       color: AppColors.black),
@@ -85,9 +77,9 @@ class HeaderSectionFresher extends StatelessWidget {
             SizedBox(
               width: Sizes.responsiveXxs(context),
             ),
-            Text(
-              location,
-              style: const TextStyle(
+            const Text(
+              'Bhopal, Madhya Pradesh, India',
+              style: TextStyle(
                 fontSize: 8.0,
                 fontWeight: FontWeight.w400,
               ),
@@ -105,9 +97,9 @@ class HeaderSectionFresher extends StatelessWidget {
             SizedBox(
               width: Sizes.responsiveXxs(context),
             ),
-            Text(
-              '₹$ctc',
-              style: const TextStyle(
+            const Text(
+              '₹2,000 - ₹15,000 (Paid)',
+              style: TextStyle(
                 fontSize: 8.0,
                 fontWeight: FontWeight.w400,
               ),
@@ -206,14 +198,49 @@ class HeaderSectionFresher extends StatelessWidget {
                 )),
             const Spacer(),
             SizedBox(
-              width: Sizes.responsiveSm(context),
-            ),
-            Icon(
-              Icons.bookmark_border_rounded,
-              size: 12,
-              color: AppColors.secondaryText,
-            ),
+              width: Sizes.responsiveXxl(context) * 2.02,
+              height: Sizes.responsiveLg(context) * 1.06,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(Sizes.radiusXs)),
+                    padding: EdgeInsets.symmetric(
+                        vertical: Sizes.responsiveHorizontalSpace(context),
+                        horizontal: Sizes.responsiveMdSm(context)),
+                  ),
+                  onPressed: () {},
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Apply Now',
+                        style: TextStyle(
+                          fontSize: 8.5,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        width: Sizes.responsiveXs(context),
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_ios_sharp,
+                        size: 8,
+                        color: AppColors.white,
+                      )
+                    ],
+                  )),
+            )
           ],
+        ),
+        SizedBox(
+          height: Sizes.responsiveSm(context),
+        ),
+        Divider(
+          color: AppColors.secondaryText,
+          thickness: 0.25,
+          height: 0.25,
         )
       ],
     );

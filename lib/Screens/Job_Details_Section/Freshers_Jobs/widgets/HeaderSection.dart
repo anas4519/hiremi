@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:hiremi_version_two/Custom_Widget/RoundedImage.dart';
-import 'package:hiremi_version_two/Utils/AppSizes.dart';
-import 'package:hiremi_version_two/Utils/colors.dart';
-import '../Custom_Widget/roundedContainer.dart';
+
+import '../../../../Custom_Widget/RoundedContainer/RoundedImage.dart';
+import '../../../../Custom_Widget/RoundedContainer/roundedContainer.dart';
+import '../../../../Utils/AppSizes.dart';
+import '../../../../Utils/colors.dart';
 
 class HeaderSectionFresher extends StatelessWidget {
-  final String profile;
-  final String companyName;
-  final String location;
-  final double ctc;
-
   const HeaderSectionFresher({
     super.key,
     required this.profile,
     required this.companyName,
     required this.location,
-    required this.ctc,
+    required this.ctc, required this.onTap,
   });
-
+  final String profile;
+  final String companyName;
+  final String location;
+  final double ctc;
+  final void Function() onTap;
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Row(
+      Row(
           children: [
             RoundedImage(
                 image: 'images/icons/logo1.png',
@@ -39,7 +39,7 @@ class HeaderSectionFresher extends StatelessWidget {
                   profile,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-                Text(
+                 Text(
                   companyName,
                   style: const TextStyle(
                       fontSize: 8.0,
@@ -85,7 +85,7 @@ class HeaderSectionFresher extends StatelessWidget {
             SizedBox(
               width: Sizes.responsiveXxs(context),
             ),
-            Text(
+             Text(
               location,
               style: const TextStyle(
                 fontSize: 8.0,
@@ -105,7 +105,7 @@ class HeaderSectionFresher extends StatelessWidget {
             SizedBox(
               width: Sizes.responsiveXxs(context),
             ),
-            Text(
+             Text(
               '₹$ctc',
               style: const TextStyle(
                 fontSize: 8.0,
@@ -206,14 +206,49 @@ class HeaderSectionFresher extends StatelessWidget {
                 )),
             const Spacer(),
             SizedBox(
-              width: Sizes.responsiveSm(context),
-            ),
-            Icon(
-              Icons.bookmark_border_rounded,
-              size: 12,
-              color: AppColors.secondaryText,
-            ),
+              width: Sizes.responsiveXxl(context) * 2.02,
+              height: Sizes.responsiveLg(context) * 1.06,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(Sizes.radiusXs)),
+                    padding: EdgeInsets.symmetric(
+                        vertical: Sizes.responsiveHorizontalSpace(context),
+                        horizontal: Sizes.responsiveMdSm(context)),
+                  ),
+                  onPressed: onTap,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Apply Now',
+                        style: TextStyle(
+                          fontSize: 8.5,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        width: Sizes.responsiveXs(context),
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_ios_sharp,
+                        size: 8,
+                        color: AppColors.white,
+                      )
+                    ],
+                  )),
+            )
           ],
+        ),
+        SizedBox(
+          height: Sizes.responsiveSm(context),
+        ),
+        Divider(
+          color: AppColors.secondaryText,
+          thickness: 0.25,
+          height: 0.25,
         )
       ],
     );
