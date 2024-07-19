@@ -44,12 +44,13 @@ class _LogInState extends State<LogIn> {
   Future<bool> _isEmailVerified() async {
     const String apiUrl = "http://13.127.81.177:8000/api/registers/";
     final response = await http.get(Uri.parse(apiUrl));
-
     if (response.statusCode == 200) {
       final List<dynamic> users = jsonDecode(response.body);
       for (var user in users) {
         if (user['email'] == _savedEmail && user['verified'] == true) {
           print("Verified is true");
+          // final prefs = await SharedPreferences.getInstance();
+          // await prefs.setString('isLogin', 'true');
           Navigator.pushAndRemoveUntil(
             context,
             SlidePageRoute(page: NewNavbar()),
@@ -90,10 +91,8 @@ class _LogInState extends State<LogIn> {
       print("Login successful");
       _printSavedEmail();
       final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('isLogin', 'true');
       await prefs.setString('email', _emailController.text);
-
-
-
     } else {
       // Login failed
       print("Login failed");
