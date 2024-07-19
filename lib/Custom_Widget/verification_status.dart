@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:hiremi_version_two/verification_screens/verifiaction_screen2.dart';
+import 'package:hiremi_version_two/verification_screens/verification_screen1.dart';
+import 'package:hiremi_version_two/verification_screens/verification_screen3.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/verify.dart';
@@ -14,9 +17,8 @@ class VerificationStatus extends StatefulWidget {
 }
 
 class _VerificationStatusState extends State<VerificationStatus> {
-
-  String FullName="";
-  String storedEmail="";
+  String FullName = "";
+  String storedEmail = "";
   @override
   void initState() {
     super.initState();
@@ -25,12 +27,14 @@ class _VerificationStatusState extends State<VerificationStatus> {
     fetchAndSaveFullName();
     _printSavedEmail();
   }
+
   Future<void> _printSavedEmail() async {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('email') ?? 'No email saved';
     print(email);
-    storedEmail=email;
+    storedEmail = email;
   }
+
   Future<void> fetchAndSaveFullName() async {
     const String apiUrl = "http://13.127.81.177:8000/api/registers/";
 
@@ -63,9 +67,10 @@ class _VerificationStatusState extends State<VerificationStatus> {
       print('Error: $e');
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    double percentage = widget.percent*100;
+    double percentage = widget.percent * 100;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Container(
@@ -164,11 +169,19 @@ class _VerificationStatusState extends State<VerificationStatus> {
                                         screenWidth *
                                             0.035), // Adjusted based on screen width
                                   ),
-                                  child: Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                    size: screenWidth *
-                                        0.03, // Adjusted based on screen width
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (ctx) =>
+                                                  const VerificationScreen()));
+                                    },
+                                    child: Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: screenWidth *
+                                          0.03, // Adjusted based on screen width
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
@@ -208,7 +221,9 @@ class _VerificationStatusState extends State<VerificationStatus> {
                                       0.05, // Adjusted based on screen width
                                   height: screenHeight *
                                       0.003, // Adjusted based on screen height
-                                  color: widget.percent>=0.50? Colors.green:Colors.white,
+                                  color: widget.percent >= 0.50
+                                      ? Colors.green
+                                      : Colors.white,
                                 ),
                                 SizedBox(
                                   height: screenHeight *
@@ -224,18 +239,25 @@ class _VerificationStatusState extends State<VerificationStatus> {
                                   height: screenWidth *
                                       0.07, // Adjusted based on screen width
                                   decoration: BoxDecoration(
-                                    color: widget.percent>=0.50? Colors.green:Colors.white,
+                                    color: widget.percent >= 0.50
+                                        ? Colors.green
+                                        : Colors.white,
                                     borderRadius: BorderRadius.circular(
                                         screenWidth *
                                             0.035), // Adjusted based on screen width
                                   ),
                                   child: InkWell(
-                                    onTap: (){
-
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (ctx) =>
+                                                  const VerificationScreen1()));
                                     },
                                     child: Icon(
                                       Icons.call,
-                                      color: widget.percent>=0.50? Colors.white: const Color(0xFFC1272D),
+                                      color: widget.percent >= 0.50
+                                          ? Colors.white
+                                          : const Color(0xFFC1272D),
                                       size: screenWidth *
                                           0.03, // Adjusted based on screen width
                                     ),
@@ -263,7 +285,9 @@ class _VerificationStatusState extends State<VerificationStatus> {
                                       0.05, // Adjusted based on screen width
                                   height: screenHeight *
                                       0.003, // Adjusted based on screen height
-                                  color: widget.percent>=0.50? Colors.green:Colors.white,
+                                  color: widget.percent >= 0.50
+                                      ? Colors.green
+                                      : Colors.white,
                                 ),
                                 SizedBox(
                                   height: screenHeight *
@@ -278,7 +302,9 @@ class _VerificationStatusState extends State<VerificationStatus> {
                                       0.05, // Adjusted based on screen width
                                   height: screenHeight *
                                       0.003, // Adjusted based on screen height
-                                  color:widget.percent>=0.75? Colors.green:Colors.white,
+                                  color: widget.percent >= 0.75
+                                      ? Colors.green
+                                      : Colors.white,
                                 ),
                                 SizedBox(
                                   height: screenHeight *
@@ -294,16 +320,28 @@ class _VerificationStatusState extends State<VerificationStatus> {
                                   height: screenWidth *
                                       0.07, // Adjusted based on screen width
                                   decoration: BoxDecoration(
-                                    color: widget.percent>=0.75? Colors.green:Colors.white,
+                                    color: widget.percent >= 0.75
+                                        ? Colors.green
+                                        : Colors.white,
                                     borderRadius: BorderRadius.circular(
                                         screenWidth *
                                             0.035), // Adjusted based on screen width
                                   ),
-                                  child: Icon(
-                                    Icons.school,
-                                    color: widget.percent>=0.75? Colors.white: const Color(0xFFC1272D),
-                                    size: screenWidth *
-                                        0.03, // Adjusted based on screen width
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (ctx) =>
+                                                  const VerificationScreen2()));
+                                    },
+                                    child: Icon(
+                                      Icons.school,
+                                      color: widget.percent >= 0.75
+                                          ? Colors.white
+                                          : const Color(0xFFC1272D),
+                                      size: screenWidth *
+                                          0.03, // Adjusted based on screen width
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
@@ -328,7 +366,9 @@ class _VerificationStatusState extends State<VerificationStatus> {
                                       0.05, // Adjusted based on screen width
                                   height: screenHeight *
                                       0.003, // Adjusted based on screen height
-                                  color: widget.percent>=0.75? Colors.green:Colors.white,
+                                  color: widget.percent >= 0.75
+                                      ? Colors.green
+                                      : Colors.white,
                                 ),
                                 SizedBox(
                                   height: screenHeight *
@@ -343,7 +383,9 @@ class _VerificationStatusState extends State<VerificationStatus> {
                                       0.05, // Adjusted based on screen width
                                   height: screenHeight *
                                       0.003, // Adjusted based on screen height
-                                  color:widget.percent>=1? Colors.green:Colors.white,
+                                  color: widget.percent >= 1
+                                      ? Colors.green
+                                      : Colors.white,
                                 ),
                                 SizedBox(
                                   height: screenHeight *
@@ -359,16 +401,28 @@ class _VerificationStatusState extends State<VerificationStatus> {
                                   height: screenWidth *
                                       0.07, // Adjusted based on screen width
                                   decoration: BoxDecoration(
-                                    color: widget.percent>=1? Colors.green:Colors.white,
+                                    color: widget.percent >= 1
+                                        ? Colors.green
+                                        : Colors.white,
                                     borderRadius: BorderRadius.circular(
                                         screenWidth *
                                             0.035), // Adjusted based on screen width
                                   ),
-                                  child: Icon(
-                                    Icons.account_balance,
-                                    color: widget.percent>=1? Colors.white: const Color(0xFFC1272D),
-                                    size: screenWidth *
-                                        0.03, // Adjusted based on screen width
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (ctx) =>
+                                                  const VerificationScreen3()));
+                                    },
+                                    child: Icon(
+                                      Icons.account_balance,
+                                      color: widget.percent >= 1
+                                          ? Colors.white
+                                          : const Color(0xFFC1272D),
+                                      size: screenWidth *
+                                          0.03, // Adjusted based on screen width
+                                    ),
                                   ),
                                 ),
                                 SizedBox(

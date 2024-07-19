@@ -643,7 +643,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                     Padding(
                       padding: EdgeInsets.all(screenWidth * 0.04),
                       child: const Text(
-                        'Contact Information',
+                        'Last Step Verification',
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.start,
                       ),
@@ -651,14 +651,12 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                     SizedBox(height: screenHeight * 0.01),
                     buildLabeledTextField(
                       context,
+                      
                       "Enrollment Number / Roll Number / College ID / UAN Number etc.",
                       "0105IT171125",
                       controller: _EnrollementNumberController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your enrollment number';
-                        }
-                        if (value.length < 10) {
                           return 'Please enter a valid number';
                         }
                         return null;
@@ -691,6 +689,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                               if (_isAllFieldsValid()) {
                                 //_saveFormDetails();
                                 _makeTransactionRequest(amount);
+                                
 
 
                               } else {

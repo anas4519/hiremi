@@ -76,6 +76,7 @@ class VerifiedPopup extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              
               SizedBox(height: screenHeight * 0.02),
               Container(
                 

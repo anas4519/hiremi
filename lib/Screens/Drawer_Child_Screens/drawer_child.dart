@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hiremi_version_two/Forget_Your_Password.dart';
 import 'package:hiremi_version_two/Help_Support.dart';
 import 'package:hiremi_version_two/Settings.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
@@ -136,7 +137,7 @@ class DrawerChild extends StatelessWidget {
             SizedBox(height: screenHeight * 0.005),
             ListTile(
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => const ForgetPassword())),
+                    builder: (ctx) => const Forget_Your_Password())),
                 leading: Container(
                   height: screenHeight * 0.04,
                   width: screenHeight * 0.04,

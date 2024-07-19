@@ -231,7 +231,7 @@ class DrawerChild extends ConsumerWidget {
                               WidgetStatePropertyAll(Color(0xFFECF5FF))),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => const ForgetPassword()));
+                            builder: (ctx) => const Forget_Your_Password()));
                       },
                       icon: const Icon(Icons.navigate_next))),
               SizedBox(height: screenHeight * 0.005),
