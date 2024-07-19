@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/Curved_Container.dart';
@@ -26,7 +25,6 @@ class _LogInState extends State<LogIn> {
   String? _savedEmail;
   bool isV = false;
 
-
   Future<String?> _printSavedEmail() async {
     // final prefs = await SharedPreferences.getInstance();
     // final email = prefs.getString('email') ?? 'No email saved';
@@ -38,9 +36,8 @@ class _LogInState extends State<LogIn> {
 
     print("Saved email is $_savedEmail");
     isV = await _isEmailVerified();
-
-
   }
+
   Future<bool> _isEmailVerified() async {
     const String apiUrl = "http://13.127.81.177:8000/api/registers/";
     final response = await http.get(Uri.parse(apiUrl));
@@ -53,7 +50,7 @@ class _LogInState extends State<LogIn> {
           Navigator.pushAndRemoveUntil(
             context,
             SlidePageRoute(page: NewNavbar()),
-                (Route<dynamic> route) => false,
+            (Route<dynamic> route) => false,
           );
           return true;
         }
@@ -62,12 +59,10 @@ class _LogInState extends State<LogIn> {
     Navigator.pushAndRemoveUntil(
       context,
       SlidePageRoute(page: NewNavbar()),
-          (Route<dynamic> route) => false,
+      (Route<dynamic> route) => false,
     );
     return false;
   }
-
-
 
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) {
@@ -91,15 +86,18 @@ class _LogInState extends State<LogIn> {
       _printSavedEmail();
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('email', _emailController.text);
-
-
-
+      await prefs.setString('isLogin', 'true');
+      Navigator.push(
+        context,
+        SlidePageRoute(page: NewNavbar()),
+      );
     } else {
       // Login failed
       print("Login failed");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: const Text('Your credentials may be wrong. Please try again.'),
+          content:
+              const Text('Your credentials may be wrong. Please try again.'),
           backgroundColor: Colors.red,
         ),
       );
@@ -109,7 +107,7 @@ class _LogInState extends State<LogIn> {
   @override
   void initState() {
     // TODO: implement initState
-   // _isEmailVerified();
+    // _isEmailVerified();
   }
 
   @override
@@ -183,7 +181,8 @@ class _LogInState extends State<LogIn> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0185),
                       // Padding(
                       //   padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
                       //   child: RichText(
@@ -240,8 +239,6 @@ class _LogInState extends State<LogIn> {
                           return null;
                         },
                       ),
-
-
 
                       // SizedBox(height: MediaQuery.of(context).size.height * 0.0075),
                       // Padding(
@@ -343,38 +340,45 @@ class _LogInState extends State<LogIn> {
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
-                              _isObscure = !_isObscure; // Toggle password visibility
+                              _isObscure =
+                                  !_isObscure; // Toggle password visibility
                             });
                           },
-                          child: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                          child: Icon(_isObscure
+                              ? Icons.visibility_off
+                              : Icons.visibility),
                         ),
                         // Set to true to show the box with the prefix icon
                       ),
 
-
-
-
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.00085),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.00085),
                       Padding(
-                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.56),
+                        padding: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * 0.56),
                         child: TextButton(
                           style: TextButton.styleFrom(
-                            foregroundColor: Colors.blue, // Change this to the color you want
+                            foregroundColor: Colors
+                                .blue, // Change this to the color you want
                           ),
                           onPressed: () {
                             Navigator.push(
                               context,
-                              SlidePageRoute(page: const Forget_Your_Password()),
+                              SlidePageRoute(
+                                  page: const Forget_Your_Password()),
                             );
                           },
                           child: const Text(
                             'Forget Password?',
-                            style: TextStyle(color: Colors.blueAccent), // Adjust text color as needed
+                            style: TextStyle(
+                                color: Colors
+                                    .blueAccent), // Adjust text color as needed
                           ),
                         ),
                       ),
 
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0027),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0027),
                       Center(
                         child: CustomElevatedButton(
                           width: MediaQuery.of(context).size.width * 0.775,
@@ -383,7 +387,8 @@ class _LogInState extends State<LogIn> {
                           onPressed: _login,
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.009),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.009),
                       const Center(
                         child: Text(
                           "By clicking Login, you agree to Hiremi’s Terms & Conditions.",
@@ -393,9 +398,12 @@ class _LogInState extends State<LogIn> {
                           ),
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0205),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0205),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.1),
                         child: Row(
                           children: [
                             const Expanded(
@@ -405,7 +413,9 @@ class _LogInState extends State<LogIn> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.01),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      MediaQuery.of(context).size.width * 0.01),
                               child: const Text(
                                 "or",
                                 style: TextStyle(
@@ -423,7 +433,8 @@ class _LogInState extends State<LogIn> {
                           ],
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.018),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.018),
                       Center(
                         child: CustomElevatedButton(
                           color: const Color(0xFFF5F4F4),
@@ -442,7 +453,8 @@ class _LogInState extends State<LogIn> {
                           },
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.018),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.018),
                     ],
                   ),
                 ),
@@ -454,23 +466,22 @@ class _LogInState extends State<LogIn> {
     );
   }
 
-
   Widget buildLabeledTextField(
-      BuildContext context,
-      String label,
-      String hintText, {
-        bool showPositionedBox = false,
-        IconData? positionedIcon,
-        IconData? prefixIcon,
-        bool obscureText = false,
-        List<String>? dropdownItems,
-        TextEditingController? controller,
-        String? Function(String?)? validator,
-        VoidCallback? onTap,
-        TextInputType? keyboardType,
-        Widget? suffixIcon,
-        bool showContainer = false,
-      }) {
+    BuildContext context,
+    String label,
+    String hintText, {
+    bool showPositionedBox = false,
+    IconData? positionedIcon,
+    IconData? prefixIcon,
+    bool obscureText = false,
+    List<String>? dropdownItems,
+    TextEditingController? controller,
+    String? Function(String?)? validator,
+    VoidCallback? onTap,
+    TextInputType? keyboardType,
+    Widget? suffixIcon,
+    bool showContainer = false,
+  }) {
     double calculatedBorderRadius = MediaQuery.of(context).size.width * 0.02;
     double calculatedSemiCircleWidth = MediaQuery.of(context).size.width * 0.08;
     double calculatedPaddingStart = MediaQuery.of(context).size.width * 0.1;
@@ -479,7 +490,8 @@ class _LogInState extends State<LogIn> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.1),
           child: RichText(
             text: TextSpan(
               children: [
@@ -497,132 +509,143 @@ class _LogInState extends State<LogIn> {
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.1),
           child: showContainer
               ? Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.redAccent),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              children: [
-                if (showPositionedBox)
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: Container(
-                      width: calculatedSemiCircleWidth,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(calculatedBorderRadius),
-                          bottomLeft: Radius.circular(calculatedBorderRadius),
-                        ),
-                        border: const Border(
-                          right: BorderSide(
-                            color: Color(0xFF808080),
-                            width: 1.0,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.redAccent),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    children: [
+                      if (showPositionedBox)
+                        Positioned(
+                          left: 0,
+                          top: 0,
+                          bottom: 0,
+                          child: Container(
+                            width: calculatedSemiCircleWidth,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft:
+                                    Radius.circular(calculatedBorderRadius),
+                                bottomLeft:
+                                    Radius.circular(calculatedBorderRadius),
+                              ),
+                              border: const Border(
+                                right: BorderSide(
+                                  color: Color(0xFF808080),
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            child: Center(
+                              child: positionedIcon != null
+                                  ? Icon(
+                                      positionedIcon,
+                                      color: Colors.grey[400],
+                                    )
+                                  : null,
+                            ),
                           ),
                         ),
+                      Expanded(
+                        child: dropdownItems != null
+                            ? DropdownButtonFormField<String>(
+                                decoration: InputDecoration(
+                                  hintText: hintText,
+                                  border: InputBorder.none,
+                                  prefixIcon: prefixIcon != null
+                                      ? Icon(prefixIcon)
+                                      : null,
+                                ),
+                                value: controller?.text.isNotEmpty == true
+                                    ? controller?.text
+                                    : null,
+                                hint: Text(hintText),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    controller?.text = newValue!;
+                                  });
+                                },
+                                items: dropdownItems.map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(item),
+                                  );
+                                }).toList(),
+                                validator: validator,
+                              )
+                            : TextFormField(
+                                controller: controller,
+                                decoration: InputDecoration(
+                                  hintText: hintText,
+                                  border: InputBorder.none,
+                                  prefixIcon: prefixIcon != null
+                                      ? Icon(prefixIcon)
+                                      : null,
+                                  suffixIcon: suffixIcon,
+                                ),
+                                obscureText: obscureText,
+                                validator: validator,
+                                onTap: onTap,
+                                keyboardType: keyboardType,
+                              ),
                       ),
-                      child: Center(
-                        child: positionedIcon != null
-                            ? Icon(
-                          positionedIcon,
-                          color: Colors.grey[400],
-                        )
-                            : null,
-                      ),
-                    ),
+                      if (suffixIcon != null) suffixIcon,
+                    ],
                   ),
-                Expanded(
-                  child: dropdownItems != null
-                      ? DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      hintText: hintText,
-                      border: InputBorder.none,
-                      prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-                    ),
-                    value: controller?.text.isNotEmpty == true ? controller?.text : null,
-                    hint: Text(hintText),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        controller?.text = newValue!;
-                      });
-                    },
-                    items: dropdownItems.map((String item) {
-                      return DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(item),
-                      );
-                    }).toList(),
-                    validator: validator,
-                  )
-                      : TextFormField(
-                    controller: controller,
-                    decoration: InputDecoration(
-                      hintText: hintText,
-                      border: InputBorder.none,
-                      prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-                      suffixIcon: suffixIcon,
-                    ),
-                    obscureText: obscureText,
-                    validator: validator,
-                    onTap: onTap,
-                    keyboardType: keyboardType,
-                  ),
-                ),
-                if (suffixIcon != null) suffixIcon,
-              ],
-            ),
-          )
+                )
               : dropdownItems != null
-              ? DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              hintText: hintText,
-              prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            value: controller?.text.isNotEmpty == true ? controller?.text : null,
-            hint: Text(hintText),
-            onChanged: (String? newValue) {
-              setState(() {
-                controller?.text = newValue!;
-              });
-            },
-            items: dropdownItems.map((String item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                child: Text(item),
-              );
-            }).toList(),
-            validator: validator,
-          )
-              : TextFormField(
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: hintText,
-              prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              suffixIcon: suffixIcon,
-            ),
-            obscureText: obscureText,
-            validator: validator,
-            onTap: onTap,
-            keyboardType: keyboardType,
-          ),
+                  ? DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        hintText: hintText,
+                        prefixIcon:
+                            prefixIcon != null ? Icon(prefixIcon) : null,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      value: controller?.text.isNotEmpty == true
+                          ? controller?.text
+                          : null,
+                      hint: Text(hintText),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          controller?.text = newValue!;
+                        });
+                      },
+                      items: dropdownItems.map((String item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
+                      validator: validator,
+                    )
+                  : TextFormField(
+                      controller: controller,
+                      decoration: InputDecoration(
+                        hintText: hintText,
+                        prefixIcon:
+                            prefixIcon != null ? Icon(prefixIcon) : null,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        suffixIcon: suffixIcon,
+                      ),
+                      obscureText: obscureText,
+                      validator: validator,
+                      onTap: onTap,
+                      keyboardType: keyboardType,
+                    ),
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
       ],
     );
   }
-
-
 }

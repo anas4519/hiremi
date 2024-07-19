@@ -513,9 +513,11 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
             };
 
            print('Transaction successful! Transaction ID: ${transactionResponse['TXNID']}');
+           
 
             // Post transaction response to callback URL
             await _postTransactionResponse(callbackUrll, txnDetails);
+            Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const VerifiedPage()));
           } else {
            print('Error: Transaction failed or missing transaction ID in response');
           }
