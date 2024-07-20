@@ -3,13 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hiremi_version_two/BottomNavbar.dart';
-import 'package:hiremi_version_two/HomePage.dart';
-import 'package:hiremi_version_two/bottomnavigationbar.dart';
-import 'package:hiremi_version_two/ultimate_nav_bar.dart';
 import 'SplashScreen.dart';
-import 'package:hiremi_version_two/verification_screens/verification_screen3.dart';
-import 'package:hiremi_version_two/verified_page.dart';
+
 
 
 void main() {
