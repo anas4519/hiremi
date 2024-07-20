@@ -9,7 +9,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VerificationStatus extends StatefulWidget {
-  const VerificationStatus({Key? key, required this.percent}) : super(key: key);
+  const VerificationStatus({super.key, required this.percent});
   final double percent;
 
   @override

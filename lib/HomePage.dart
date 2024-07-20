@@ -34,7 +34,6 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
-  int _selectedIndex = 0;
   double _blurAmount = 10.0;
   List<dynamic> _jobs = [];
   bool _isLoading = true;
@@ -192,7 +191,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (!isVerified) VerificationStatus(percent: 0.5),
+              if (!isVerified) const VerificationStatus(percent: 0.25),
               if (isVerified) VerifiedProfileWidget(name: FullName, appId: '00011102'),
               SizedBox(height: screenHeight * 0.02),
               Column(

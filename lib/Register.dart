@@ -275,7 +275,7 @@ final List<String> _states = [
                         if (value == null || value.isEmpty) {
                           return 'Please enter your phone number';
                         }
-                        if (value.length < 10) {
+                        if (value.length != 10) {
                           return 'Please enter a valid phone number';
                         }
                         if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
@@ -311,7 +311,7 @@ final List<String> _states = [
                         if (value == null || value.isEmpty) {
                           return 'Please enter your WhatsApp number';
                         }
-                        if (value.length < 10) {
+                        if (value.length != 10) {
                           return 'Please enter a valid WhatsApp number';
                         }
                         if (!RegExp(r'^[0-9]+$').hasMatch(value)) {

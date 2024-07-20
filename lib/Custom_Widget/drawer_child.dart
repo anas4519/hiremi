@@ -1,30 +1,87 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:hiremi_version_two/Forget_Your_Password.dart';
 import 'package:hiremi_version_two/Help_Support.dart';
-import 'package:hiremi_version_two/Screens/Drawer_Child_Screens/Forget_Password/ForgetPassword.dart';
-import 'package:hiremi_version_two/Screens/Profile_Screen/Edit_Profile_Section/BasicDetails/AddBasicDetails.dart';
 import 'package:hiremi_version_two/Screens/Profile_Screen/Profile_Screen.dart';
 import 'package:hiremi_version_two/Settings.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/about_us.dart';
-import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Utils/colors.dart';
 
-class DrawerChild extends ConsumerWidget {
-  const DrawerChild({Key? key}) : super(key: key);
+class DrawerChild extends ConsumerStatefulWidget {
+  const DrawerChild({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DrawerChild> createState() => _DrawerChildState();
+}
+
+class _DrawerChildState extends ConsumerState<DrawerChild> {
+  
+String FullName = "";
+  String storedEmail = "";
+  @override
+  void initState() {
+    super.initState();
+    // _scrollController.addListener(_onScroll);
+
+    fetchAndSaveFullName();
+    _printSavedEmail();
+  }
+
+  Future<void> _printSavedEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString('email') ?? 'No email saved';
+    print(email);
+    storedEmail = email;
+  }
+
+  Future<void> fetchAndSaveFullName() async {
+    const String apiUrl = "http://13.127.81.177:8000/api/registers/";
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final prefs = await SharedPreferences.getInstance();
+        storedEmail = prefs.getString('email') ?? 'No email saved';
+
+        for (var user in data) {
+          if (user['email'] == storedEmail) {
+            setState(() {
+              FullName = user['full_name'] ?? 'No name saved';
+            });
+            await prefs.setString('full_name', FullName);
+            print('Full name saved: $FullName');
+            break;
+          }
+        }
+
+        if (FullName.isEmpty) {
+          print('No matching email found');
+        }
+      } else {
+        print('Failed to fetch full name');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final isVerified = ref.watch(verificationProvider);
-
     void showPopUp() {
       showDialog(
         context: context,
@@ -59,13 +116,13 @@ class DrawerChild extends ConsumerWidget {
                       lineWidth: 4,
                       percent: isVerified ? 1 : 0.25,
                       center:
-                          isVerified ? const Text('100%') : const Text('25%'),
+                          isVerified ? const Text('100%') : Text('25%'),
                       progressColor: Colors.green,
                       backgroundColor: Colors.transparent,
                     ),
                     SizedBox(height: screenHeight * 0.01),
                     Text(
-                      'Harsh Pawar',
+                      FullName,
                       style: TextStyle(
                           fontSize: screenWidth * 0.04,
                           fontWeight: FontWeight.bold),
