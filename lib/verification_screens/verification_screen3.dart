@@ -353,7 +353,7 @@ class VerificationScreen3 extends StatefulWidget {
 class _VerificationScreen3State extends State<VerificationScreen3> {
   final _formKey = GlobalKey<FormState>();
   String _fullName="";
-  double amount=1;
+  double amount= 1;
   String Email="";
 
   final TextEditingController _IntrestedDomainController = TextEditingController();
@@ -439,6 +439,8 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
         print("Order is complete");
         print(response.statusCode);
         print(response.body);
+        // Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (ctx) => const VerifiedPage()));
       } else {
         print("Order is not complete");
         print(response.statusCode);
@@ -448,7 +450,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
       print("Error: $e");
     }
   }
-  Future<void> _makeTransactionRequest(double amount) async {
+  Future<void> _makeTransactionRequest(BuildContext context, amount) async {
 
     try {
       print("Helllo");
@@ -517,7 +519,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
 
             // Post transaction response to callback URL
             await _postTransactionResponse(callbackUrll, txnDetails);
-            Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const VerifiedPage()));
+            // Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const VerifiedPage()));
           } else {
            print('Error: Transaction failed or missing transaction ID in response');
           }
@@ -550,6 +552,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
         print('Transaction response posted successfully');
         print(callbackResponse.statusCode);
         print(callbackResponse.body);
+        
         // console.log(callbackResponse.body);
 
         // Redirect to CallbackScreen
@@ -690,9 +693,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                             onPressed: () {
                               if (_isAllFieldsValid()) {
                                 //_saveFormDetails();
-                                _makeTransactionRequest(amount);
-                                
-
+                                _makeTransactionRequest(context, amount);
 
                               } else {
                                 setState(() {});

@@ -62,7 +62,7 @@ class ProfileScreen extends StatelessWidget {
               )),
         ),
         title: const Text(
-          "Queries",
+          "Profile",
           style: TextStyle(
               fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
         ),
