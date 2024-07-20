@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -22,14 +21,11 @@ import 'package:hiremi_version_two/repository/User.dart';
 import 'package:hiremi_version_two/ultimate_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 import 'package:http/http.dart' as http;
 
 import 'Models/register_model.dart';
 
-
 class HomePage extends ConsumerStatefulWidget {
-
   const HomePage({Key? key}) : super(key: key);
 
   @override
@@ -43,7 +39,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   List<dynamic> _jobs = [];
   bool _isLoading = true;
   String FullName = "";
-  String storedEmail='';
+  String storedEmail = '';
   User? matchingUser;
 
   final ScrollController _scrollController = ScrollController();
@@ -54,7 +50,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     _scrollController.addListener(_onScroll);
     _fetchJobs();
     fetchAndSaveFullName();
-
   }
 
   @override
@@ -73,7 +68,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Future<void> _fetchJobs() async {
     try {
-      final apiService = ApiService('http://13.127.81.177:8000/api/internship/');
+      final apiService =
+          ApiService('http://13.127.81.177:8000/api/internship/');
       final data = await apiService.fetchData();
       setState(() {
         _jobs = data;
@@ -85,9 +81,6 @@ class _HomePageState extends ConsumerState<HomePage> {
       });
     }
   }
-
-
-
 
   Future<void> fetchAndSaveFullName() async {
     const String apiUrl = "http://13.127.81.177:8000/api/registers/";
@@ -136,6 +129,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       print('Error: $e');
     }
   }
+
   Gender _getGenderFromString(String genderString) {
     switch (genderString.toLowerCase()) {
       case 'male':
@@ -146,6 +140,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         return Gender.Other;
     }
   }
+
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -155,9 +150,28 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-
+      key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        leading: Padding(
+          padding: EdgeInsets.only(
+              left: Sizes.responsiveDefaultSpace(context),
+              top: Sizes.responsiveSm(context),
+              bottom: Sizes.responsiveSm(context)),
+          child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: AppColors.bgBlue,
+              ),
+              child: Center(
+                child: IconButton(
+                    onPressed: () => scaffoldKey.currentState?.openDrawer(),
+                    icon: const Icon(
+                      Icons.notes_outlined,
+                      size: 22,
+                    )),
+              )),
+        ),
         title: const Text(
           "Hiremi's Home",
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -172,8 +186,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             },
             icon: const Icon(Icons.notifications_outlined),
             style: ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)
-            ),
+                backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)),
           ),
         ],
       ),
@@ -181,16 +194,20 @@ class _HomePageState extends ConsumerState<HomePage> {
         backgroundColor: Colors.white,
         child: DrawerChild(),
       ),
-      
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(screenWidth * 0.04),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              if (!isVerified) VerificationStatus(fullName: userRepository.currentUser?.fullName,percent: 0.25),
-              if (isVerified) VerifiedProfileWidget(name: userRepository.currentUser?.fullName, appId: '00011102'),
+              if (!isVerified)
+                VerificationStatus(
+                    fullName: userRepository.currentUser?.fullName,
+                    percent: 0.25),
+              if (isVerified)
+                VerifiedProfileWidget(
+                    name: userRepository.currentUser?.fullName,
+                    appId: '00011102'),
               SizedBox(height: screenHeight * 0.02),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,11 +252,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: (Theme.of(context).brightness ==
-                                    Brightness.dark
-                                    ? Colors.white
-                                    : AppColors.primary)
+                                            Brightness.dark
+                                        ? Colors.white
+                                        : AppColors.primary)
                                     .withOpacity(
-                                    _current == entry.key ? 0.9 : 0.4),
+                                        _current == entry.key ? 0.9 : 0.4),
                               ),
                             ),
                           );
@@ -271,7 +288,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     child: TextButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => InternshipsScreen(isVerified: isVerified),
+                          builder: (ctx) =>
+                              InternshipsScreen(isVerified: isVerified),
                         ));
                       },
                       child: Row(
@@ -313,7 +331,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => FresherJobs(isVerified: isVerified)));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) =>
+                                FresherJobs(isVerified: isVerified)));
                       },
                       child: Row(
                         children: [
@@ -354,7 +374,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const Experienced_Jobs()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => const Experienced_Jobs()));
                       },
                       child: Row(
                         children: [
@@ -396,7 +417,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                   return Padding(
                     padding: EdgeInsets.only(bottom: screenHeight * 0.02),
                     child: OpportunityCard(
-                      dp: Image.asset('images/icons/logo1.png'), // Placeholder image
+                      dp: Image.asset(
+                          'images/icons/logo1.png'), // Placeholder image
                       profile: job['profile'] ?? 'N/A',
                       companyName: job['company_name'] ?? 'N/A',
                       location: job['location'] ?? 'N/A',
@@ -405,8 +427,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                       type: 'Job', // Replace with actual data if available
                       exp: 1, // Replace with actual data if available
                       daysPosted: 0, // Replace with actual data if available
-                      ctc: job['Stipend']?.toString() ?? '0', // Example, replace with actual field
-                      description: job['description'] ?? 'No description available',
+                      ctc: job['Stipend']?.toString() ??
+                          '0', // Example, replace with actual field
+                      description:
+                          job['description'] ?? 'No description available',
                       education: job['education'],
                       skillsRequired: job['skills_required'],
                       whoCanApply: job['who_can_apply'],
@@ -414,7 +438,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                   );
                 }).toList(),
               ),
-              
             ],
           ),
         ),

@@ -4,6 +4,7 @@ import 'package:hiremi_version_two/Custom_Widget/drawer_child.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
+import 'package:intl/intl.dart';
 
 class QueriesScreen extends StatefulWidget {
   const QueriesScreen({Key? key}) : super(key: key);
@@ -13,15 +14,28 @@ class QueriesScreen extends StatefulWidget {
 }
 
 class _QueriesScreenState extends State<QueriesScreen> {
+  final TextEditingController _dateController = TextEditingController();
+
   @override
-  // void initState() {
-  //   super.initState();
-  //   if (!widget.isVerified) {
-  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-  //       _showVerificationDialog();
-  //     });
-  //   }
-  // }
+  void dispose() {
+    _dateController.dispose();
+    super.dispose();
+  }
+
+  void _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedDate != null && pickedDate != DateTime.now()) {
+      setState(() {
+        _dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+      });
+    }
+  }
 
   void _showVerificationDialog() {
     showDialog(
@@ -37,6 +51,7 @@ class _QueriesScreenState extends State<QueriesScreen> {
       },
     );
   }
+
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -219,8 +234,10 @@ class _QueriesScreenState extends State<QueriesScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 0),
                     child: TextFormField(
-                      style:
-                          const TextStyle(fontSize: 12.0), // Adjusted font size
+                      controller: _dateController,
+                      readOnly: true,
+                      onTap: () => _selectDate(context),
+                      style: const TextStyle(fontSize: 12.0), // Adjusted font size
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.calendar_today,
@@ -311,20 +328,7 @@ class _QueriesScreenState extends State<QueriesScreen> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        // if (!widget.isVerified) {
-                        //   showDialog(
-                        //     context: context,
-                        //     builder: (BuildContext context) {
-                        //       return AlertDialog(
-                        //           contentPadding: EdgeInsets.zero,
-                        //           backgroundColor: Colors.white,
-                        //           shape: RoundedRectangleBorder(
-                        //             borderRadius: BorderRadius.circular(20),
-                        //           ),
-                        //           content: const CustomAlertbox());
-                        //     },
-                        //   );
-                        // }
+                        
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFC1272D),
@@ -338,8 +342,7 @@ class _QueriesScreenState extends State<QueriesScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                      height: screenHeight * 0.02), // Adjusted bottom space
+                  // Adjusted bottom space
                 ],
               ),
             ],
