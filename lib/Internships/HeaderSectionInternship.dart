@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/RoundedImage.dart';
 import 'package:hiremi_version_two/Custom_Widget/roundedContainer.dart';
+import 'package:hiremi_version_two/SuccesfullyAppliedalert.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 
@@ -208,11 +209,52 @@ class HeaderSectionInternship extends StatelessWidget {
             SizedBox(
               width: Sizes.responsiveSm(context),
             ),
-            Icon(
-              Icons.bookmark_border_rounded,
-              size: 12,
-              color: AppColors.secondaryText,
-            ),
+            SizedBox(
+              width: Sizes.responsiveXxl(context) * 2.02,
+              height: Sizes.responsiveLg(context) * 1.06,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(Sizes.radiusXs)),
+                    padding: EdgeInsets.symmetric(
+                        vertical: Sizes.responsiveHorizontalSpace(context),
+                        horizontal: Sizes.responsiveMdSm(context)),
+                  ),
+                  onPressed: ()=>showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                        contentPadding: EdgeInsets.zero,
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        content: const SuccessfullyAppliedAlert());
+                  },
+                ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Apply Now',
+                        style: TextStyle(
+                          fontSize: 8.5,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        width: Sizes.responsiveXs(context),
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_ios_sharp,
+                        size: 8,
+                        color: AppColors.white,
+                      )
+                    ],
+                  )),
+            )
           ],
         )
       ],

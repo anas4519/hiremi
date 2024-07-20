@@ -13,11 +13,13 @@ import 'package:hiremi_version_two/Custom_Widget/drawer_child.dart';
 import 'package:hiremi_version_two/Custom_Widget/verification_status.dart';
 import 'package:hiremi_version_two/InternshipScreen.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/experienced_jobs.dart';
 import 'package:hiremi_version_two/fresherJobs.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
 import 'package:hiremi_version_two/repository/User.dart';
+import 'package:hiremi_version_two/ultimate_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -144,7 +146,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         return Gender.Other;
     }
   }
-
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     var isVerified = ref.watch(verificationProvider);
@@ -153,6 +155,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
@@ -167,7 +170,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                 builder: (ctx) => const NotificationScreen(),
               ));
             },
-            icon: const Icon(Icons.notifications),
+            icon: const Icon(Icons.notifications_outlined),
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)
+            ),
           ),
         ],
       ),
@@ -175,6 +181,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         backgroundColor: Colors.white,
         child: DrawerChild(),
       ),
+      
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(screenWidth * 0.04),
@@ -182,7 +189,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              if (!isVerified) VerificationStatus(fullName: userRepository.currentUser?.fullName,percent: 0.5),
+              if (!isVerified) VerificationStatus(fullName: userRepository.currentUser?.fullName,percent: 0.25),
               if (isVerified) VerifiedProfileWidget(name: userRepository.currentUser?.fullName, appId: '00011102'),
               SizedBox(height: screenHeight * 0.02),
               Column(
@@ -279,6 +286,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             child: Icon(
                               Icons.spa,
                               size: screenWidth * 0.02,
+                              color: Colors.orange,
                             ),
                           ),
                           SizedBox(width: screenWidth * 0.015),
@@ -319,6 +327,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             child: Icon(
                               Icons.work,
                               size: screenWidth * 0.02,
+                              color: Colors.deepOrange,
                             ),
                           ),
                           SizedBox(width: screenWidth * 0.015),
@@ -359,6 +368,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             child: Icon(
                               Icons.work,
                               size: screenWidth * 0.02,
+                              color: Colors.purpleAccent,
                             ),
                           ),
                           SizedBox(width: screenWidth * 0.015),
@@ -384,7 +394,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               Column(
                 children: _jobs.map((job) {
                   return Padding(
-                    padding: EdgeInsets.only(bottom: screenHeight * 0.03),
+                    padding: EdgeInsets.only(bottom: screenHeight * 0.02),
                     child: OpportunityCard(
                       dp: Image.asset('images/icons/logo1.png'), // Placeholder image
                       profile: job['profile'] ?? 'N/A',

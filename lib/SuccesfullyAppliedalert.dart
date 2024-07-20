@@ -114,7 +114,7 @@ class SuccessfullyAppliedAlert extends StatelessWidget {
             height: Sizes.responsiveMd(context),
           ),
           Text(
-            'Applied Date${DateFormat('dd/MM/yyyy').format(date)}',
+            'Applied Date :  ${DateFormat('dd/MM/yyyy').format(date)}',
             textAlign: TextAlign.center,
             style: const TextStyle(
                 fontWeight: FontWeight.w400,

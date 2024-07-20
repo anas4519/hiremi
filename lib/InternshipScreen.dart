@@ -3,6 +3,7 @@ import 'package:hiremi_version_two/API_Integration/Internship/Apiservices.dart';
 import 'package:hiremi_version_two/Custom_Widget/OppurtunityCard.dart';
 
 import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/Utils/colors.dart';
 
 class InternshipsScreen extends StatefulWidget {
   //const InternshipsScreen({super.key, required this.isVerified});
@@ -33,17 +34,20 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Internship Jobs',
+          'Internships',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => const NotificationScreen()));
-              },
-              icon: const Icon(Icons.notifications))
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (ctx) => const NotificationScreen()));
+            },
+            icon: const Icon(Icons.notifications_outlined),
+            style: ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)),
+          )
         ],
       ),
       body: Column(
@@ -165,7 +169,7 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
                         children: jobs.map((job) {
                           return Padding(
                             padding:
-                                EdgeInsets.only(bottom: screenHeight * 0.03),
+                                EdgeInsets.only(bottom: screenHeight * 0.02),
                             child: OpportunityCard(
                               dp: Image.asset(
                                   'images/icons/logo1.png'), // Placeholder image
@@ -176,7 +180,7 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
                               mode:
                                   'Remote', // Replace with actual data if available
                               type:
-                                  'Job', // Replace with actual data if available
+                                  'Internship', // Replace with actual data if available
                               exp: 1, // Replace with actual data if available
                               daysPosted:
                                   0, // Replace with actual data if available

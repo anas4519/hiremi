@@ -22,9 +22,10 @@ class NotificationScreen extends StatelessWidget {
               Navigator.of(context).pop();
             },
             icon: const Icon(Icons.notifications),
-            color: AppColors.primary
-            
-          ),
+            color: AppColors.primary,
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)
+          ),)
         ],
       ),
       body: Center(

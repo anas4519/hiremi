@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/API_Integration/Internship/Apiservices.dart';
 import 'package:hiremi_version_two/Custom_Widget/OppurtunityCard.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/Utils/colors.dart';
 
 class FresherJobs extends StatefulWidget {
   const FresherJobs({Key? key, required this.isVerified}) : super(key: key);
@@ -39,7 +40,9 @@ class _FresherJobsState extends State<FresherJobs> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (ctx) => const NotificationScreen()));
               },
-              icon: const Icon(Icons.notifications))
+              icon: const Icon(Icons.notifications_outlined),
+              style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)))
         ],
       ),
       body: Column(

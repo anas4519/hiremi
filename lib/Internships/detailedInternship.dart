@@ -50,14 +50,15 @@ class _DetailedInternshipState extends State<DetailedInternship> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
-
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (ctx) => const NotificationScreen()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (ctx) => const NotificationScreen()));
             },
-            icon: const Icon(Icons.notifications),
+            icon: const Icon(Icons.notifications_outlined),
+            style: ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)),
           ),
         ],
       ),

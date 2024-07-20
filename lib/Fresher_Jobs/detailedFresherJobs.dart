@@ -121,6 +121,7 @@ import 'package:hiremi_version_two/Fresher_Jobs/skillsRequired.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/SuccesfullyAppliedalert.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
+import 'package:hiremi_version_two/Utils/colors.dart';
 
 
 
@@ -175,7 +176,10 @@ class _DetailedFresherJobsState extends State<DetailedFresherJobs> {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (ctx) => const NotificationScreen()));
             },
-            icon: const Icon(Icons.notifications),
+            icon: const Icon(Icons.notifications_outlined),
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)
+            ),
           ),
         ],
       ),
