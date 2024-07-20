@@ -463,9 +463,7 @@ final List<String> _states = [
                             branch: _branchController.text,
                             degree: _degreeController.text,
                             passingYear: _passingYearController.text,
-                            password: _passwordController.text,
                           );
-
                           bool registrationSuccess = await _registrationController.registerUser(newUser);
 
                           print(registrationSuccess);

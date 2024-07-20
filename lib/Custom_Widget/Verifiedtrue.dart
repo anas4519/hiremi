@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class VerifiedProfileWidget extends StatelessWidget {
-  final String name;
+  final String? name;
   final String appId;
 
   const VerifiedProfileWidget({

@@ -9,64 +9,16 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VerificationStatus extends StatefulWidget {
-  const VerificationStatus({Key? key, required this.percent}) : super(key: key);
+  const VerificationStatus({super.key,required this.fullName, required this.percent});
   final double percent;
+  final String? fullName;
 
   @override
   State<VerificationStatus> createState() => _VerificationStatusState();
 }
 
 class _VerificationStatusState extends State<VerificationStatus> {
-  String FullName = "";
-  String storedEmail = "";
-  @override
-  void initState() {
-    super.initState();
-    // _scrollController.addListener(_onScroll);
 
-    fetchAndSaveFullName();
-    _printSavedEmail();
-  }
-
-  Future<void> _printSavedEmail() async {
-    final prefs = await SharedPreferences.getInstance();
-    final email = prefs.getString('email') ?? 'No email saved';
-    print(email);
-    storedEmail = email;
-  }
-
-  Future<void> fetchAndSaveFullName() async {
-    const String apiUrl = "http://13.127.81.177:8000/api/registers/";
-
-    try {
-      final response = await http.get(Uri.parse(apiUrl));
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final prefs = await SharedPreferences.getInstance();
-        storedEmail = prefs.getString('email') ?? 'No email saved';
-
-        for (var user in data) {
-          if (user['email'] == storedEmail) {
-            setState(() {
-              FullName = user['full_name'] ?? 'No name saved';
-            });
-            await prefs.setString('full_name', FullName);
-            print('Full name saved: $FullName');
-            break;
-          }
-        }
-
-        if (FullName.isEmpty) {
-          print('No matching email found');
-        }
-      } else {
-        print('Failed to fetch full name');
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -465,7 +417,7 @@ class _VerificationStatusState extends State<VerificationStatus> {
                     Row(
                       children: [
                         Text(
-                          FullName,
+                          widget.fullName ?? '',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: screenWidth *

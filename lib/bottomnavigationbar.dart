@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:hiremi_version_two/HomePage.dart';
@@ -57,7 +59,6 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
     } else {
       setState(() {
         widget.initTabIndex = index;
-        debugPrint(widget.initTabIndex.toString());
       });
     }
   }
@@ -92,38 +93,12 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
     );
   }
 
-  Future<bool> _onWillPop() async {
-    if (widget.initTabIndex == 0) {
-      return true; // Exit the app
-    } else {
-      setState(() {
-        widget.initTabIndex = 0;
-      });
-      return false; // Prevent default back button behavior
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final isVerified = ref.read(verificationProvider);
-    double screenWidth = MediaQuery.of(context).size.width;
-    double spacing = (screenWidth - (4 * 50)) / 5;
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (bool didPop) async {
-        if (didPop) {
-          Navigator.pop(context);
-        }
-        final bool shouldPop = await _onWillPop();
-        if (context.mounted && shouldPop) {
-        }
-      },
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
-        body: IndexedStack(
-          index: widget.initTabIndex,
-          children: _pages,
-        ),
+        body: _pages[widget.initTabIndex],
         bottomNavigationBar: Container(
           height: MediaQuery.sizeOf(context).height * 0.08,
           decoration: BoxDecoration(
@@ -192,7 +167,6 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
                 ),
               )),
         ),
-      ),
     );
   }
 

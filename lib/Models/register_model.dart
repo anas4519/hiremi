@@ -1,4 +1,4 @@
-// user_model.dart
+
 
 class User {
   String fullName;
@@ -14,7 +14,6 @@ class User {
   String branch;
   String degree;
   String passingYear;
-  String password;
 
   User({
     required this.fullName,
@@ -30,8 +29,26 @@ class User {
     required this.branch,
     required this.degree,
     required this.passingYear,
-    required this.password,
   });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      fullName: json['full_name'] ?? '',
+      fatherName: json['father_name'] ?? '',
+      gender: Gender.values.firstWhere((e) => e.toString() == 'Gender.${json['gender']}', orElse: () => Gender.Other),
+      email: json['email'] ?? '',
+      dob: json['date_of_birth'] ?? '',
+      birthPlace: json['birthPlace'] ?? '',
+      phone: json['phone_number'] ?? '',
+      whatsapp: json['whatsapp_number'] ?? '',
+      collegeName: json['college_name'] ?? '',
+      collegeState: json['college_state'] ?? '',
+      branch: json['branch_name'] ?? '',
+      degree: json['degree'] ?? '',
+      passingYear: json['passing_year'] ?? '',
+    );
+  }
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -48,7 +65,6 @@ class User {
       'branch_name': branch,
       'degree': degree,
       'passing_year': passingYear,
-      'password': password,
     };
   }
 }
