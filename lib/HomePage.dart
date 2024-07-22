@@ -38,7 +38,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   bool _isLoading = true;
   String FullName = "";
   String storedEmail = '';
-  bool isVerified = false;
+  // bool isVerified = ref.watch(verificationProvider);
   User? matchingUser;
 
   final ScrollController _scrollController = ScrollController();
@@ -47,9 +47,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _checkVerified();
+    // _checkVerified();
     _fetchJobs();
-    fetchAndSaveFullName();
+    // fetchAndSaveFullName();
   }
 
   @override
@@ -82,91 +82,92 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
   }
 
-  Future<void> fetchAndSaveFullName() async {
-    const String apiUrl = "http://13.127.81.177:8000/api/registers/";
-    try {
-      final response = await http.get(Uri.parse(apiUrl));
+  // Future<void> fetchAndSaveFullName() async {
+  //   const String apiUrl = "http://13.127.81.177:8000/api/registers/";
+  //   try {
+  //     final response = await http.get(Uri.parse(apiUrl));
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        final prefs = await SharedPreferences.getInstance();
-        storedEmail = prefs.getString('email') ?? 'No email saved';
+  //     if (response.statusCode == 200) {
+  //       final List<dynamic> data = jsonDecode(response.body);
+  //       final prefs = await SharedPreferences.getInstance();
+  //       storedEmail = prefs.getString('email') ?? 'No email saved';
 
-        for (var user in data) {
-          if (user['email'] == storedEmail) {
-            User newUser = User(
-              fullName: user['full_name'] ?? '',
-              fatherName: user['father_name'] ?? '',
-              gender: _getGenderFromString(user['gender']),
-              email: user['email'] ?? '',
-              dob: user['date_of_birth'].toString() ?? '',
-              birthPlace: user['birth_place'] ?? '',
-              phone: user['phone_number'].toString() ?? '',
-              whatsapp: user['whatsapp_number'].toString() ?? '',
-              collegeName: user['college_name'] ?? '',
-              collegeState: user['college_state'] ?? '',
-              branch: user['branch_name'] ?? '',
-              degree: user['degree'] ?? '',
-              passingYear: user['passing_year'].toString() ?? '',
-            );
-            userRepository.setUser(newUser);
-            print('User details saved: ${newUser.fullName}');
-            break;
-          }
-        }
-      } else {
-        print('Failed to fetch user Data');
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
-  Future<void> _checkVerified() async {
-    const String apiUrl = "http://13.127.81.177:8000/api/registers/";
+  //       for (var user in data) {
+  //         if (user['email'] == storedEmail) {
+  //           User newUser = User(
+  //             fullName: user['full_name'] ?? '',
+  //             fatherName: user['father_name'] ?? '',
+  //             gender: _getGenderFromString(user['gender']),
+  //             email: user['email'] ?? '',
+  //             dob: user['date_of_birth'].toString() ?? '',
+  //             birthPlace: user['birth_place'] ?? '',
+  //             phone: user['phone_number'].toString() ?? '',
+  //             whatsapp: user['whatsapp_number'].toString() ?? '',
+  //             collegeName: user['college_name'] ?? '',
+  //             collegeState: user['college_state'] ?? '',
+  //             branch: user['branch_name'] ?? '',
+  //             degree: user['degree'] ?? '',
+  //             passingYear: user['passing_year'].toString() ?? '',
+  //           );
+  //           userRepository.setUser(newUser);
+  //           print('User details saved: ${newUser.fullName}');
+  //           break;
+  //         }
+  //       }
+  //     } else {
+  //       print('Failed to fetch user Data');
+  //     }
+  //   } catch (e) {
+  //     print('Error: $e');
+  //   }
+  // }
+  // Future<void> _checkVerified() async {
+  //   const String apiUrl = "http://13.127.81.177:8000/api/registers/";
 
-    try {
-      final response = await http.get(Uri.parse(apiUrl));
+  //   try {
+  //     final response = await http.get(Uri.parse(apiUrl));
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final prefs = await SharedPreferences.getInstance();
-        storedEmail = prefs.getString('email') ?? 'No email saved';
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+  //       final prefs = await SharedPreferences.getInstance();
+  //       storedEmail = prefs.getString('email') ?? 'No email saved';
 
-        for (var user in data) {
-          if (user['email'] == storedEmail) {
-            setState(() {
-              isVerified = user['verified'] ;
-              prefs.setBool('verified', isVerified);
-            });
-            break;
-          }
-        }
+  //       for (var user in data) {
+  //         if (user['email'] == storedEmail) {
+  //           setState(() {
+  //             isVerified = user['verified'] ;
+  //             prefs.setBool('verified', isVerified);
+  //           });
+  //           break;
+  //         }
+  //       }
 
-        if (FullName.isEmpty) {
-          print('No matching email found');
-        }
-      } else {
-        print('Failed to fetch full name');
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
+  //       if (FullName.isEmpty) {
+  //         print('No matching email found');
+  //       }
+  //     } else {
+  //       print('Failed to fetch full name');
+  //     }
+  //   } catch (e) {
+  //     print('Error: $e');
+  //   }
+  // }
 
-  Gender _getGenderFromString(String genderString) {
-    switch (genderString.toLowerCase()) {
-      case 'Male':
-        return Gender.Male;
-      case 'Female':
-        return Gender.Female;
-      default:
-        return Gender.Other;
-    }
-  }
+  // Gender _getGenderFromString(String genderString) {
+  //   switch (genderString.toLowerCase()) {
+  //     case 'Male':
+  //       return Gender.Male;
+  //     case 'Female':
+  //       return Gender.Female;
+  //     default:
+  //       return Gender.Other;
+  //   }
+  // }
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    bool isVerified = ref.watch(verificationProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(

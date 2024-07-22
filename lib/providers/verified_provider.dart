@@ -1,13 +1,14 @@
 import 'dart:convert';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VerificationNotifier extends StateNotifier<bool> {
-  VerificationNotifier() : super(false);
+  VerificationNotifier() : super(false) {
+    _initializeVerificationStatus();
+  }
 
-  Future<void> checkVerified() async {
+  Future<void> _initializeVerificationStatus() async {
     const String apiUrl = "http://13.127.81.177:8000/api/registers/";
 
     try {
@@ -16,19 +17,18 @@ class VerificationNotifier extends StateNotifier<bool> {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final prefs = await SharedPreferences.getInstance();
-        String storedEmail = prefs.getString('email') ?? 'No email saved';
+        String storedEmail = prefs.getString('email') ?? '';
 
+        bool isVerified = false;
         for (var user in data) {
           if (user['email'] == storedEmail) {
-            print(user['verified']);
-            String verified = user['verified'];
-            state = verified == 'true';
+            String verified = user['verified'] ?? 'false';
+            isVerified = verified == 'true';
             break;
           }
         }
-        if (!state) {
-          print('No matching email found or not verified');
-        }
+
+        state = isVerified;
       } else {
         print('Failed to fetch verification status');
       }

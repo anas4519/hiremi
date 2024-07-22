@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/Screens/Profile_Screen/sections/widgets_mustufa/ProfileStatusSection.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/Edit_Profile_Section/Education/AddEducation.dart';
@@ -15,7 +18,6 @@ import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustu
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/Languages.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/PersonalInfo.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/PersonalLinks.dart';
-import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/ProfileStatusSection.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/ProfileSummary.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/Projects.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/ResumeSection.dart';
@@ -102,10 +104,7 @@ class ProfileScreen extends StatelessWidget {
             () => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ProfileStatusSection(
-                  fullName: controller.fullName.value,
-                  isVerified: controller.isVerified.value,
-                ),
+                ProfileStatusSection(isVerified: controller.isVerified.value, fullName: controller.fullName.value,),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
                 ),

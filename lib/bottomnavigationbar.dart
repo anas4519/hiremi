@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-
+import 'package:hiremi_version_two/repository/User.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:hiremi_version_two/HomePage.dart';
+import 'package:hiremi_version_two/Models/register_model.dart';
 import 'package:hiremi_version_two/Screens/Profile_Screen/Profile_Screen.dart';
 import 'package:hiremi_version_two/applies_screen.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
@@ -36,15 +39,20 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
   @override
   void initState() {
     super.initState();
+    
     _checkFirstVerification();
+    
   }
+
+  
+  
 
   Future<void> _checkFirstVerification() async {
     final prefs = await SharedPreferences.getInstance();
-    final bool isVerified = ref.read(verificationProvider);
+    // final bool isVerified = ref.read(verificationProvider);
     final bool isFirstVerification =
         prefs.getBool('isFirstVerification') ?? true;
-
+        final isVerified = ref.watch(verificationProvider);
     if (isVerified && isFirstVerification) {
       _showVerificationPopup();
       await prefs.setBool('isFirstVerification', false);
@@ -52,8 +60,8 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
   }
 
   void _onItemTapped(int index) {
-    final isVerified = ref.read(verificationProvider);
-
+    // final isVerified = ref.watch(verificationProvider);
+    final isVerified = ref.watch(verificationProvider);
     if (!isVerified && (index == 2 || index == 3)) {
       _showPopUp();
     } else {
@@ -95,7 +103,7 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
 
   @override
   Widget build(BuildContext context) {
-    final isVerified = ref.read(verificationProvider);
+    final isVerified = ref.watch(verificationProvider);
     return Scaffold(
         backgroundColor: Colors.white,
         body: _pages[widget.initTabIndex],
