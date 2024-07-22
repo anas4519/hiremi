@@ -4,10 +4,10 @@ import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
 import 'package:hiremi_version_two/screens/Drawer_Child_Screens/drawer_child.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/Profile_Screen.dart';
+import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../Notofication_screen.dart';
-import '../../controller/ProfileController.dart';
 import '../Projects/AddProjects.dart';
 import '../widgets/TextFieldWithTitle.dart';
 

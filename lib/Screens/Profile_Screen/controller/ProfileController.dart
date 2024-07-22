@@ -9,12 +9,10 @@ class ProfileController extends GetxController {
   void onReady() {
     super.onReady();
     fetchuserDetails();
-    toggleVerification();
   }
 
   /// Variables
   final user = userRepository.currentUser;
-  var isVerified = false.obs;
   final resumeLink = TextEditingController().obs;
 
   void fetchuserDetails() {
@@ -124,11 +122,4 @@ class ProfileController extends GetxController {
   }
 
   // Method to toggle verification status
-  void toggleVerification() {
-    if (skills.isNotEmpty &&
-        educationDetails.isNotEmpty &&
-        languages.isNotEmpty) {
-      isVerified.value = true;
-    }
-  }
 }
