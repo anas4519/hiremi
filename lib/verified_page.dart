@@ -206,7 +206,6 @@ class _VerifiedPageState extends ConsumerState<VerifiedPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    ref.read(verificationProvider.notifier).verify();
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
