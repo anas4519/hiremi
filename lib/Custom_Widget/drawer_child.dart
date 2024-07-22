@@ -116,7 +116,7 @@ String FullName = "";
                       lineWidth: 4,
                       percent: isVerified ? 1 : 0.25,
                       center:
-                          isVerified ? const Text('100%') : Text('25%'),
+                          isVerified ? const Text('100%') : const Text('25%'),
                       progressColor: Colors.green,
                       backgroundColor: Colors.transparent,
                     ),
