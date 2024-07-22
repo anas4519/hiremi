@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/API_Integration/Internship/Apiservices.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'dart:ui'; // For BackdropFilter
 import 'package:hiremi_version_two/Custom_Widget/OppurtunityCard.dart';
 import 'package:hiremi_version_two/Custom_Widget/Verifiedtrue.dart';
 import 'package:hiremi_version_two/Custom_Widget/banners.dart';
@@ -18,7 +17,6 @@ import 'package:hiremi_version_two/experienced_jobs.dart';
 import 'package:hiremi_version_two/fresherJobs.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
 import 'package:hiremi_version_two/repository/User.dart';
-import 'package:hiremi_version_two/ultimate_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
@@ -40,7 +38,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   bool _isLoading = true;
   String FullName = "";
   String storedEmail = '';
-  String verified = '';
+  bool isVerified = false;
   User? matchingUser;
 
   final ScrollController _scrollController = ScrollController();
@@ -49,7 +47,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _chechVerified();
+    _checkVerified();
     _fetchJobs();
     fetchAndSaveFullName();
   }
@@ -111,27 +109,19 @@ class _HomePageState extends ConsumerState<HomePage> {
               degree: user['degree'] ?? '',
               passingYear: user['passing_year'].toString() ?? '',
             );
-
             userRepository.setUser(newUser);
-            setState(() {
-              FullName = newUser.fullName;
-            });
             print('User details saved: ${newUser.fullName}');
             break;
           }
         }
-
-        if (FullName.isEmpty) {
-          print('No matching email found');
-        }
       } else {
-        print('Failed to fetch full name');
+        print('Failed to fetch user Data');
       }
     } catch (e) {
       print('Error: $e');
     }
   }
-  Future<void> _chechVerified() async {
+  Future<void> _checkVerified() async {
     const String apiUrl = "http://13.127.81.177:8000/api/registers/";
 
     try {
@@ -145,10 +135,9 @@ class _HomePageState extends ConsumerState<HomePage> {
         for (var user in data) {
           if (user['email'] == storedEmail) {
             setState(() {
-              verified = user['verified'] ?? 'No name saved';
+              isVerified = user['verified'] ;
+              prefs.setBool('verified', isVerified);
             });
-            await prefs.setString('full_name', FullName);
-            print('Full name saved: $FullName');
             break;
           }
         }
@@ -178,10 +167,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    var isVerified = ref.watch(verificationProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       backgroundColor: Colors.white,
       key: scaffoldKey,
