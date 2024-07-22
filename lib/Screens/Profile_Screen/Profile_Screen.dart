@@ -26,12 +26,18 @@ import 'Edit_Profile_Section/Experience/AddExperience.dart';
 import 'Edit_Profile_Section/Key Skills/AddKeySkills.dart';
 import 'Edit_Profile_Section/ProfileSummary/ProfileSummary.dart';
 
-class ProfileScreen extends StatelessWidget {
-  ProfileScreen({
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({
     super.key,
   });
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   final controller = Get.put(ProfileController());
+
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -104,7 +110,7 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 ProfileStatusSection(
                   fullName: controller.fullName.value,
-                  isVerified: controller.isVerified.value,
+                  isVerified: false,
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),

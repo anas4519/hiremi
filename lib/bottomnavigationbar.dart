@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:hiremi_version_two/HomePage.dart';
@@ -30,7 +28,7 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
     const HomePage(),
     const AppliesScreen(),
     const QueriesScreen(),
-    ProfileScreen(),
+    const ProfileScreen(),
   ];
 
   @override
@@ -54,7 +52,8 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
   void _onItemTapped(int index) {
     final isVerified = ref.read(verificationProvider);
 
-    if (!isVerified && (index == 2 || index == 3)) {
+    /// Make isVerified to !isVerified before building APK
+    if (isVerified && (index == 2 || index == 3)) {
       _showPopUp();
     } else {
       setState(() {
