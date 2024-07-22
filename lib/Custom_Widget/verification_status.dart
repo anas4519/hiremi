@@ -37,7 +37,6 @@ class _VerificationStatusState extends State<VerificationStatus> {
         children: [
           Center(
             child: Container(
-              width: screenWidth * 0.95,
               height:
                   screenHeight * 0.14, // Updated height based on screen height
               decoration: BoxDecoration(

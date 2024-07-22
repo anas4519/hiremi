@@ -34,13 +34,12 @@ class ProfileScreen extends StatelessWidget {
   final controller = Get.put(ProfileController());
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: AppColors.white,
-      appBar:  AppBar(
+      appBar: AppBar(
         backgroundColor: Colors.white,
         leading: Padding(
           padding: EdgeInsets.only(
@@ -70,7 +69,7 @@ class ProfileScreen extends StatelessWidget {
         actions: [
           Padding(
             padding:
-            EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
             child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -104,6 +103,7 @@ class ProfileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ProfileStatusSection(
+                  fullName: controller.fullName.value,
                   isVerified: controller.isVerified.value,
                 ),
                 SizedBox(
@@ -191,13 +191,13 @@ class ProfileScreen extends StatelessWidget {
                 SizedBox(
                   height: Sizes.responsiveMd(context),
                 ),
-                 PersonalLinks(),
+                PersonalLinks(),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
                 ),
                 Languages(
-                  onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const AddLanguages())),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const AddLanguages())),
                   languages: controller.languages,
                 ),
               ],
