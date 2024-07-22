@@ -3,11 +3,15 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 
-
 class ProfileStatusSection extends StatelessWidget {
-  const ProfileStatusSection({super.key, required this.isVerified, });
+  const ProfileStatusSection({
+    super.key,
+    required this.isVerified, required this.fullName,
+  });
 
   final bool isVerified;
+  final String fullName;
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -27,7 +31,8 @@ class ProfileStatusSection extends StatelessWidget {
           SizedBox(
             height: Sizes.responsiveMd(context),
           ),
-          Text('Harsh Pawar', style: Theme.of(context).textTheme.headlineSmall),
+          Text(fullName,
+              style: Theme.of(context).textTheme.headlineSmall),
           SizedBox(
             height: Sizes.responsiveSm(context),
           ),
@@ -46,9 +51,7 @@ class ProfileStatusSection extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(
-                  
                   'images/icons/verified.png',
-                  
                   height: MediaQuery.of(context).size.width * 0.025,
                   width: MediaQuery.of(context).size.width * 0.025,
                 ),

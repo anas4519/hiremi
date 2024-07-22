@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:hiremi_version_two/repository/User.dart';
 
 class ProfileController extends GetxController {
   static ProfileController get instance => Get.find();
@@ -7,12 +8,23 @@ class ProfileController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    fetchuserDetails();
     toggleVerification();
   }
 
   /// Variables
+  final user = userRepository.currentUser;
   var isVerified = false.obs;
   final resumeLink = TextEditingController().obs;
+
+  void fetchuserDetails() {
+    fullName.value = user!.fullName;
+    email.value = user!.email;
+    dob.value = user!.dob;
+    selectedGender.value = user!.gender.toString();
+    phoneNumber.value = user!.phone;
+    whatsappNumber.value = user!.whatsapp;
+  }
 
   /// Basic Info
   var lookingFor = ''.obs;
@@ -24,6 +36,7 @@ class ProfileController extends GetxController {
   var summary = ''.obs;
 
   /// Personal Info
+  var fullName = ''.obs;
   var selectedGender = ''.obs;
   var selectedMaritalStatus = ''.obs;
   var differentlyAbled = ''.obs;
@@ -75,12 +88,12 @@ class ProfileController extends GetxController {
   void addEducationDetail(Map<String, String> educationDetail) {
     educationDetails.add(educationDetail);
   }
+
 // Method to add an personal  links
-  void addPersonalLinks(String titleLink,String link){
-    personalLinks.add({
-      'title': titleLink,'link': link
-    });
+  void addPersonalLinks(String titleLink, String link) {
+    personalLinks.add({'title': titleLink, 'link': link});
   }
+
 // Method to add an experience detail
   void addExperienceDetail(Map<String, String> experienceDetail) {
     experience.add(experienceDetail);
@@ -90,10 +103,8 @@ class ProfileController extends GetxController {
     projects.add(projectsDetail);
   }
 
-
-
-  void addPersonalDetails(
-      String home, String pin, String lAddress, String pAddress, String dobirth, String cat) {
+  void addPersonalDetails(String home, String pin, String lAddress,
+      String pAddress, String dobirth, String cat) {
     homeTown.value = home;
     pinCode.value = pin;
     permanentAddress.value = pAddress;

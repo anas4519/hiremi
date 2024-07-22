@@ -1,7 +1,9 @@
 // registration_controller.dart
 
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
+
 import '../Models/register_model.dart';
 
 class RegistrationController {
@@ -15,12 +17,11 @@ class RegistrationController {
         body: jsonEncode(user.toJson()),
         headers: {'Content-Type': 'application/json'},
       );
-
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         return true; // Registration successful
       } else {
         // Handle errors based on response.statusCode
-        print( "${response.body}");
+        print("${response.body}");
 
         print('Error hai bro ${response.statusCode}: ${response.body}');
         return false; // Registration failed

@@ -40,6 +40,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   bool _isLoading = true;
   String FullName = "";
   String storedEmail = '';
+  String verified = '';
   User? matchingUser;
 
   final ScrollController _scrollController = ScrollController();
@@ -48,6 +49,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    _chechVerified();
     _fetchJobs();
     fetchAndSaveFullName();
   }
@@ -129,12 +131,44 @@ class _HomePageState extends ConsumerState<HomePage> {
       print('Error: $e');
     }
   }
+  Future<void> _chechVerified() async {
+    const String apiUrl = "http://13.127.81.177:8000/api/registers/";
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final prefs = await SharedPreferences.getInstance();
+        storedEmail = prefs.getString('email') ?? 'No email saved';
+
+        for (var user in data) {
+          if (user['email'] == storedEmail) {
+            setState(() {
+              verified = user['verified'] ?? 'No name saved';
+            });
+            await prefs.setString('full_name', FullName);
+            print('Full name saved: $FullName');
+            break;
+          }
+        }
+
+        if (FullName.isEmpty) {
+          print('No matching email found');
+        }
+      } else {
+        print('Failed to fetch full name');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 
   Gender _getGenderFromString(String genderString) {
     switch (genderString.toLowerCase()) {
-      case 'male':
+      case 'Male':
         return Gender.Male;
-      case 'female':
+      case 'Female':
         return Gender.Female;
       default:
         return Gender.Other;
