@@ -210,70 +210,64 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
               SizedBox(
                 height: Sizes.responsiveMd(context),
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFieldWithTitle(
-                      controller: cityController,
-                      title: 'City',
-                      hintText: 'eg: Bhopal',
-                      validator: (value) =>
-                          SValidator.validateEmptyText('City', value),
-                    ),
-                  ),
-                  SizedBox(
-                    width: Sizes.responsiveMd(context),
-                  ),
-
-                  // Expanded(
-                  //   child: TextFieldWithTitle(
-                  //     controller: stateController,
-                  //     title: 'State',
-                  //     hintText: 'eg: Madhya Pradesh',
-                  //     validator: (value) =>
-                  //         SValidator.validateEmptyText('State', value),
-                  //   ),
-                  // )
-                ],
+              TextFieldWithTitle(
+                controller: cityController,
+                title: 'City',
+                hintText: 'eg: Bhopal',
+                validator: (value) =>
+                    SValidator.validateEmptyText('City', value),
               ),
               SizedBox(
                 height: Sizes.responsiveMd(context),
               ),
+              buildLabeledTextField(
+                              context,
+                              'State',
+                              selectedState,
+                              controller: stateController,
+                              dropdownItems: states,
+                              onChanged: (value) => setState(() {
+              stateController.text = value!;
+                              }),
+                            ),
               SizedBox(
-                height: 50,
-                child: DropdownButtonFormField<String>(
-                  value: selectedState,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedState = value!;
-                    });
-                  },
-                  items: states.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value, style: const TextStyle(fontSize: 12),),
-                    );
-                  }).toList(),
-                  decoration: InputDecoration(
-                    labelText: 'State',
-                    hintText: 'Select State',
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    border: const OutlineInputBorder(),
-                    filled: false,
-                    fillColor: Colors.grey,
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: Sizes.responsiveMd(context),
-                      horizontal: Sizes.responsiveMd(context),
-                    ),
-                  ),
-                  isExpanded: true,
-                ),
+                height: Sizes.responsiveMd(context),
               ),
+              // SizedBox(
+              //   height: 50,
+              //   child: DropdownButtonFormField<String>(
+              //     value: selectedState,
+              //     onChanged: (value) {
+              //       setState(() {
+              //         selectedState = value!;
+              //       });
+              //     },
+              //     items: states.map<DropdownMenuItem<String>>((String value) {
+              //       return DropdownMenuItem<String>(
+              //         value: value,
+              //         child: Text(value, style: const TextStyle(fontSize: 12),),
+              //       );
+              //     }).toList(),
+              //     decoration: InputDecoration(
+              //       labelText: 'State',
+              //       hintText: 'Select State',
+              //       enabledBorder: const OutlineInputBorder(
+              //         borderSide: BorderSide(color: Colors.grey, width: 1),
+              //       ),
+              //       focusedBorder: const OutlineInputBorder(
+              //         borderSide: BorderSide(color: Colors.grey, width: 1),
+              //       ),
+              //       border: const OutlineInputBorder(),
+              //       filled: false,
+              //       fillColor: Colors.grey,
+              //       contentPadding: EdgeInsets.symmetric(
+              //         vertical: Sizes.responsiveMd(context),
+              //         horizontal: Sizes.responsiveMd(context),
+              //       ),
+              //     ),
+              //     isExpanded: true,
+              //   ),
+              // ),
               SizedBox(
                 height: Sizes.responsiveMd(context),
               ),
@@ -396,5 +390,94 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
         ),
       )),
     );
+  }
+
+  Widget buildLabeledTextField(
+    BuildContext context,
+    String label,
+    String hintText, {
+    bool showPositionedBox = false,
+    IconData? prefixIcon,
+    bool obscureText = false,
+    List<String>? dropdownItems,
+    TextEditingController? controller,
+    String? Function(String?)? validator,
+    VoidCallback? onTap,
+    void Function(String?)? onChanged,
+    TextInputType? keyboardType,
+  }) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: label,
+              style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.black),
+            ),
+            TextSpan(
+              text: " *",
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.primary),
+            ),
+          ],
+        ),
+      ),
+      SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+      DropdownButtonFormField<String>(
+        dropdownColor: Colors.white,
+        style: const TextStyle(
+            fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.black),
+        decoration: InputDecoration(
+          hintText: hintText,
+          prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(3),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(3),
+            borderSide: const BorderSide(
+              color: AppColors.black,
+              width: 0.37,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(3),
+            borderSide: const BorderSide(
+              color: AppColors.black,
+              width: 0.37,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(3),
+            borderSide: const BorderSide(
+              color: AppColors.black,
+              width: 0.37,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(3),
+            borderSide: const BorderSide(
+              color: AppColors.black,
+              width: 0.37,
+            ),
+          ),
+        ),
+        value: controller?.text.isNotEmpty == true ? controller?.text : null,
+        hint: Text(hintText),
+        onChanged: onChanged,
+        items: dropdownItems!.map((String item) {
+          return DropdownMenuItem<String>(
+            value: item,
+            child: Text(item),
+          );
+        }).toList(),
+        validator: validator,
+      ),
+    ]);
   }
 }
