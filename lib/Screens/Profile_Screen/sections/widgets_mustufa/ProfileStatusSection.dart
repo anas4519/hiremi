@@ -45,7 +45,7 @@ class ProfileStatusSection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50),
                 border: Border.all(
                   width: 0.7,
-                  color: AppColors.green,
+                  color: isVerified ? AppColors.green: AppColors.primary,
                 )),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -61,7 +61,7 @@ class ProfileStatusSection extends StatelessWidget {
                 Text(
                   isVerified?'Verified' : 'Not Verified',
                   style: TextStyle(
-                    color: AppColors.green,
+                    color: isVerified ? AppColors.green: AppColors.primary,
                     fontWeight: FontWeight.bold,
                     fontSize: 10,
                   ),
