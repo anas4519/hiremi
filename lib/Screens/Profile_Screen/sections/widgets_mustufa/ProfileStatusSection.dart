@@ -45,13 +45,13 @@ class ProfileStatusSection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50),
                 border: Border.all(
                   width: 0.7,
-                  color: isVerified ? AppColors.green: AppColors.primary,
+                  color:AppColors.green,
                 )),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(
-                  isVerified ?'images/icons/verified.png':'images/icons/notVerifiedIcon.png' ,
+                  'images/icons/verified.png' ,
                   height: MediaQuery.of(context).size.width * 0.025,
                   width: MediaQuery.of(context).size.width * 0.025,
                 ),
@@ -59,9 +59,9 @@ class ProfileStatusSection extends StatelessWidget {
                   width: Sizes.responsiveXs(context),
                 ),
                 Text(
-                  isVerified?'Verified' : 'Not Verified',
+                  'Verified',
                   style: TextStyle(
-                    color: isVerified ? AppColors.green: AppColors.primary,
+                    color:AppColors.green,
                     fontWeight: FontWeight.bold,
                     fontSize: 10,
                   ),
