@@ -22,47 +22,7 @@ class _VerificationScreen1State extends State<VerificationScreen1> {
   String? _selectedState;
   DateTime? _selectedDate;
   String _userId = "";
-
-  // List<String> _states = ['State 1', 'State 2', 'State 3', 'State 4'];
-
-  final List<String> _states = [
-    'Andhra Pradesh',
-    'Arunachal Pradesh',
-    'Assam',
-    'Bihar',
-    'Chhattisgarh',
-    'Goa',
-    'Gujarat',
-    'Haryana',
-    'Himachal Pradesh',
-    'Jharkhand',
-    'Karnataka',
-    'Kerala',
-    'Madhya Pradesh',
-    'Maharashtra',
-    'Manipur',
-    'Meghalaya',
-    'Mizoram',
-    'Nagaland',
-    'Odisha',
-    'Punjab',
-    'Rajasthan',
-    'Sikkim',
-    'Tamil Nadu',
-    'Telangana',
-    'Tripura',
-    'Uttar Pradesh',
-    'Uttarakhand',
-    'West Bengal',
-    'Andaman and Nicobar Islands',
-    'Chandigarh',
-    'Dadra and Nagar Haveli and Daman and Diu',
-    'Delhi',
-    'Jammu and Kashmir',
-    'Ladakh',
-    'Lakshadweep',
-    'Puducherry',
-  ];
+  String _fullName="";
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _fatherNameController = TextEditingController();
@@ -104,6 +64,16 @@ class _VerificationScreen1State extends State<VerificationScreen1> {
   void initState() {
     super.initState();
     _fetchUserData();
+    if (_fullName.isEmpty) {
+    _fetchFullName();
+  }
+  }
+  Future<void> _fetchFullName() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? fullName = prefs.getString('full_name') ?? 'No name saved';
+    setState(() {
+      _fullName = fullName;
+    });
   }
 
   Future<void> _fetchUserData() async {
@@ -223,10 +193,10 @@ class _VerificationScreen1State extends State<VerificationScreen1> {
                       backgroundColor: Colors.grey.shade300,
                     ),
                     SizedBox(height: screenHeight * 0.0075),
-                    const Text(
-                      'Harsh Pawar',
+                    Text(
+                      _fullName,
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: screenHeight * 0.0075),
                     Container(
