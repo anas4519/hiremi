@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:hiremi_version_two/Forget_Your_Password.dart';
 import 'package:hiremi_version_two/Help_Support.dart';
+import 'package:hiremi_version_two/Login.dart';
 import 'package:hiremi_version_two/Screens/Profile_Screen/Profile_Screen.dart';
 import 'package:hiremi_version_two/Settings.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
@@ -25,8 +26,7 @@ class DrawerChild extends ConsumerStatefulWidget {
 }
 
 class _DrawerChildState extends ConsumerState<DrawerChild> {
-  
-String FullName = "";
+  String FullName = "";
   String storedEmail = "";
   @override
   void initState() {
@@ -82,6 +82,7 @@ String FullName = "";
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final isVerified = ref.watch(verificationProvider);
+
     void showPopUp() {
       showDialog(
         context: context,
@@ -202,7 +203,8 @@ String FullName = "";
                         if (!isVerified) {
                           showPopUp();
                         } else {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>ProfileScreen()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const ProfileScreen()));
                         }
                       },
                       style: ButtonStyle(
@@ -232,8 +234,9 @@ String FullName = "";
                 color: Colors.grey,
               ),
               SizedBox(height: screenHeight * 0.04),
-              ListTile(  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) =>  const SettingsScreen())),
+              ListTile(
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) => const SettingsScreen())),
                   leading: Container(
                     height: screenHeight * 0.04,
                     width: screenHeight * 0.04,
@@ -264,8 +267,9 @@ String FullName = "";
                       },
                       icon: const Icon(Icons.navigate_next))),
               SizedBox(height: screenHeight * 0.005),
-              ListTile(  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) =>  const Forget_Your_Password())),
+              ListTile(
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) => const Forget_Your_Password())),
                   leading: Container(
                     height: screenHeight * 0.04,
                     width: screenHeight * 0.04,
@@ -292,8 +296,9 @@ String FullName = "";
                       },
                       icon: const Icon(Icons.navigate_next))),
               SizedBox(height: screenHeight * 0.005),
-              ListTile(  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) =>  const About_Us())),
+              ListTile(
+                  onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (ctx) => const About_Us())),
                   leading: Container(
                     height: screenHeight * 0.04,
                     width: screenHeight * 0.04,
@@ -319,12 +324,9 @@ String FullName = "";
                             builder: (ctx) => const About_Us()));
                       },
                       icon: const Icon(Icons.navigate_next))),
-              SizedBox(
-                height: screenHeight * 0.25,
-              ),
               ListTile(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (ctx) =>  const HelpSupport())),
+                  onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (ctx) => const HelpSupport())),
                   leading: Container(
                     height: screenHeight * 0.04,
                     width: screenHeight * 0.04,
@@ -348,6 +350,43 @@ String FullName = "";
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (ctx) => const HelpSupport()));
+                      },
+                      icon: const Icon(Icons.navigate_next))),
+              SizedBox(
+                height: screenHeight * 0.2,
+              ),
+              ListTile(
+                  onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (ctx) => const HelpSupport())),
+                  leading: Container(
+                    height: screenHeight * 0.04,
+                    width: screenHeight * 0.04,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFBEEEE),
+                      borderRadius: BorderRadius.circular(screenHeight * 0.01),
+                    ),
+                    child: const Icon(
+                      Icons.logout_rounded,
+                      color: Color(0xFFC1272D),
+                    ),
+                  ),
+                  title: Text(
+                    'Logout',
+                    style: TextStyle(fontSize: screenWidth * 0.034),
+                  ),
+                  trailing: IconButton(
+                      style: const ButtonStyle(
+                          backgroundColor:
+                              WidgetStatePropertyAll(Color(0xFFECF5FF))),
+                      onPressed: () async {
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        await prefs.setString('isLogin', 'false');
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LogIn()),
+                          (Route<dynamic> route) => false,
+                        );
                       },
                       icon: const Icon(Icons.navigate_next))),
             ],

@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hiremi_version_two/Custom_Widget/drawer_child.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 import 'package:hiremi_version_two/Screens/Profile_Screen/sections/widgets_mustufa/ProfileStatusSection.dart';
@@ -21,8 +22,6 @@ import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustu
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/ProfileSummary.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/Projects.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/ResumeSection.dart';
-
-import '../Drawer_Child_Screens/drawer_child.dart';
 import 'Edit_Profile_Section/BasicDetails/AddBasicDetails.dart';
 import 'Edit_Profile_Section/Experience/AddExperience.dart';
 import 'Edit_Profile_Section/Key Skills/AddKeySkills.dart';
