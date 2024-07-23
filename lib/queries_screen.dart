@@ -454,14 +454,7 @@ class _QueriesScreenState extends State<QueriesScreen> {
                         ),
                         onPressed: (){
                           _submitQuery();
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return //CustomAlertBox();
-
-                              const CustomAlert2();
-                            },
-                          );
+                          
                         },
                         child: const Text(
                           'Generate Query',
