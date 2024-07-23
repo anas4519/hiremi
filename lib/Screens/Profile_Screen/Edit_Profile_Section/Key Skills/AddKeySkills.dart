@@ -4,7 +4,6 @@ import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
-import 'package:hiremi_version_two/screens/Profile_Screen/Profile_Screen.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 
 import '../../../../Notofication_screen.dart';
@@ -165,7 +164,7 @@ class _AddKeySkillsState extends State<AddKeySkills> {
                           controller.skills.isEmpty) {
                         return;
                       }
-                      Navigator.of(context).push(MaterialPageRoute(
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const AddEducation()));
                     },
                     child: Row(

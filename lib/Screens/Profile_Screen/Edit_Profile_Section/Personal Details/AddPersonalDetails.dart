@@ -8,7 +8,6 @@ import '../../../../Notofication_screen.dart';
 import '../../../../Utils/AppSizes.dart';
 import '../../../../Utils/colors.dart';
 import '../../../Drawer_Child_Screens/drawer_child.dart';
-import '../../Profile_Screen.dart';
 import '../../controller/ProfileController.dart';
 import '../Languages/AddLanguages.dart';
 import '../widgets/TextFieldWithTitle.dart';
@@ -485,7 +484,7 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                               localAddressController.text,
                               dobController.text,
                               categoryController.text);
-                          Navigator.of(context).push(MaterialPageRoute(
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(
                               builder: (ctx) => const AddLanguages()));
                         }
                       },

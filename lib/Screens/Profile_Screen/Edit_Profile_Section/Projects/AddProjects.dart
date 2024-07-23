@@ -7,7 +7,6 @@ import '../../../../Notofication_screen.dart';
 import '../../../../Utils/AppSizes.dart';
 import '../../../../Utils/colors.dart';
 import '../../../Drawer_Child_Screens/drawer_child.dart';
-import '../../Profile_Screen.dart';
 import '../../controller/ProfileController.dart';
 import '../Personal Details/AddPersonalDetails.dart';
 import '../widgets/TextFieldWithTitle.dart';
@@ -314,7 +313,7 @@ class _AddProjectsState extends State<AddProjects> {
                             'Description': descriptionController.text,
                             'ProjectStatus': projectStatus,
                           });
-                          Navigator.of(context).push(MaterialPageRoute(
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(
                               builder: (ctx) => const AddPersonalDetails()));
                         }
                       },

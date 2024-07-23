@@ -6,7 +6,6 @@ import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/screens/Drawer_Child_Screens/drawer_child.dart';
-import 'package:hiremi_version_two/screens/Profile_Screen/Profile_Screen.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 
 import '../ProfileSummary/ProfileSummary.dart';
@@ -362,7 +361,7 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
                               phoneController.text.trim(),
                               whatsappController.text.trim(),
                               opportunity);
-                          Navigator.of(context).push(MaterialPageRoute(
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(
                               builder: (ctx) => const AddProfileSummary()));
                         }
                       },

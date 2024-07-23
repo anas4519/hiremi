@@ -1,13 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
-import 'package:hiremi_version_two/repository/User.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:hiremi_version_two/HomePage.dart';
-import 'package:hiremi_version_two/Models/register_model.dart';
 import 'package:hiremi_version_two/Screens/Profile_Screen/Profile_Screen.dart';
 import 'package:hiremi_version_two/applies_screen.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
@@ -59,7 +54,6 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
   }
 
   void _onItemTapped(int index) {
-    // final isVerified = ref.watch(verificationProvider);
     final isVerified = ref.watch(verificationProvider);
     if (!isVerified && (index == 2 || index == 3)) {
       _showPopUp();
