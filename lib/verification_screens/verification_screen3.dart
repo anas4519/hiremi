@@ -103,8 +103,8 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
         print("Order is complete");
         print(response.statusCode);
         print(response.body);
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => const VerifiedPage()));
+        // Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (ctx) => const VerifiedPage()));
       } else {
         print("Order is not complete");
         print(response.statusCode);
@@ -220,6 +220,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
         // console.log(callbackResponse.body);
 
         // Redirect to CallbackScreen
+        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>VerifiedPage()));
 
       } else {
         print('Failed to post transaction response. Status code: ${callbackResponse.statusCode}');
@@ -333,7 +334,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                     ),
                     buildLabeledTextField(
                       context,
-                      "Interest Domain*",
+                      "Interest Domain",
                       "Domain",
                       keyboardType: TextInputType.text,
                       controller: _IntrestedDomainController,
