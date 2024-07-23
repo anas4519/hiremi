@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hiremi_version_two/Custom_Widget/custom_alert_2.dart';
+import 'package:hiremi_version_two/Custom_Widget/drawer_child.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
@@ -88,6 +90,7 @@ class _QueriesScreenState extends State<QueriesScreen> {
         );
 
         if (response.statusCode == 200) {
+          
         } else {
           print(response.statusCode);
           print(response.body);
@@ -185,6 +188,9 @@ class _QueriesScreenState extends State<QueriesScreen> {
                 )),
           ),
         ],
+      ),
+      drawer: const Drawer(
+        child: DrawerChild(),
       ),
       body: Padding(
         padding: EdgeInsets.all(screenWidth * 0.02),
