@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
+import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/Profile_Screen.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 
@@ -25,7 +26,6 @@ class _AddKeySkillsState extends State<AddKeySkills> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final controller = Get.put(ProfileController());
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class _AddKeySkillsState extends State<AddKeySkills> {
               title: 'Key Skills',
               hintText: 'Eg: Flutter Developer',
               suffix: GestureDetector(
-                onTap: (){
+                onTap: () {
                   if (formKey.currentState!.validate()) {
                     controller.addSkill(skillController.text);
                     skillController.clear();
@@ -91,7 +91,7 @@ class _AddKeySkillsState extends State<AddKeySkills> {
               height: Sizes.responsiveXs(context),
             ),
             Obx(
-              ()=> Wrap(
+              () => Wrap(
                 spacing: 8.0,
                 children: controller.skills.map((skill) {
                   return Chip(
@@ -134,8 +134,14 @@ class _AddKeySkillsState extends State<AddKeySkills> {
                           controller.skills.isEmpty) {
                         return;
                       }
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>  ProfileScreen()));
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NewNavbar(
+                                  initTabIndex: 3,
+                                )),
+                        (Route<dynamic> route) => false,
+                      );
                     },
                     child: const Text(
                       'Save',

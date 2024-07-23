@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
+import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/screens/Drawer_Child_Screens/drawer_child.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/Profile_Screen.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
@@ -362,8 +363,9 @@ class _AddExperienceState extends State<AddExperience> {
                         color: AppColors.secondaryText,
                       ),
                       readOnly: true,
-                      validator:(value)=>
-                      isCurrentCompany == 'No' ? SValidator.validateEmptyText('Leaving Date', value): null,
+                      validator: (value) => isCurrentCompany == 'No'
+                          ? SValidator.validateEmptyText('Leaving Date', value)
+                          : null,
                       textInputType: const TextInputType.numberWithOptions(),
                       onTap: () => _selectDate(context,
                           controller: leavingDateController),
@@ -395,9 +397,16 @@ class _AddExperienceState extends State<AddExperience> {
                                   'leavingDate': leavingDateController.text,
                                   'isCurrentCompany': isCurrentCompany,
                                 };
-                                controller.addExperienceDetail(experienceDetail);
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => ProfileScreen()));
+                                controller
+                                    .addExperienceDetail(experienceDetail);
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => NewNavbar(
+                                            initTabIndex: 3,
+                                          )),
+                                  (Route<dynamic> route) => false,
+                                );
                               }
                             },
                             child: const Text(
@@ -431,7 +440,8 @@ class _AddExperienceState extends State<AddExperience> {
                                   'leavingDate': leavingDateController.text,
                                   'isCurrentCompany': isCurrentCompany,
                                 };
-                                controller.addExperienceDetail(experienceDetail);
+                                controller
+                                    .addExperienceDetail(experienceDetail);
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (ctx) => const AddProjects()));
                               }

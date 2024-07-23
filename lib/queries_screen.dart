@@ -4,7 +4,6 @@ import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class QueriesScreen extends StatefulWidget {

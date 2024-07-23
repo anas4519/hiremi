@@ -4,6 +4,7 @@ import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
+import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/screens/Drawer_Child_Screens/drawer_child.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/Profile_Screen.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
@@ -221,15 +222,15 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
                 height: Sizes.responsiveMd(context),
               ),
               buildLabeledTextField(
-                              context,
-                              'State',
-                              selectedState,
-                              controller: stateController,
-                              dropdownItems: states,
-                              onChanged: (value) => setState(() {
-              stateController.text = value!;
-                              }),
-                            ),
+                context,
+                'State',
+                selectedState,
+                controller: stateController,
+                dropdownItems: states,
+                onChanged: (value) => setState(() {
+                  stateController.text = value!;
+                }),
+              ),
               SizedBox(
                 height: Sizes.responsiveMd(context),
               ),
@@ -323,8 +324,14 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
                               phoneController.text.trim(),
                               whatsappController.text.trim(),
                               controller.lookingFor.value);
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => ProfileScreen()));
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NewNavbar(
+                                      initTabIndex: 3,
+                                    )),
+                            (Route<dynamic> route) => false,
+                          );
                         }
                       },
                       child: const Text(

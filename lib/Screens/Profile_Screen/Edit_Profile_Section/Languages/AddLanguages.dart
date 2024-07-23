@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 
 import '../../../../Notofication_screen.dart';
@@ -137,11 +138,13 @@ class _AddLanguagesState extends State<AddLanguages> {
                                 controller.languages.isEmpty) {
                               return;
                             }
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (ctx) => ProfileScreen(),
-                              ),
-                            );
+                            Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>NewNavbar(initTabIndex: 3,)),
+                          (Route<dynamic> route) => false,
+                    );
+
                           },
                           child: const Text(
                             'Save',

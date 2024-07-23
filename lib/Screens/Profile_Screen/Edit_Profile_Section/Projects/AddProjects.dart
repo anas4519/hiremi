@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
+import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../Notofication_screen.dart';
@@ -227,8 +228,9 @@ class _AddProjectsState extends State<AddProjects> {
                 ),
                 readOnly: true,
                 textInputType: const TextInputType.numberWithOptions(),
-                validator: (value) =>
-                   projectStatus =='No'? SValidator.validateEmptyText('Leaving Date', value): null,
+                validator: (value) => projectStatus == 'No'
+                    ? SValidator.validateEmptyText('Leaving Date', value)
+                    : null,
                 onTap: () =>
                     _selectDate(context, controller: completionDateController),
               ),
@@ -267,13 +269,19 @@ class _AddProjectsState extends State<AddProjects> {
                             'ProjectTitle': titleController.text,
                             'Client': clientController.text,
                             'ProjectLink': projectLinkController.text,
-                              'StartingDate': startingDateController.text,
+                            'StartingDate': startingDateController.text,
                             'CompletedDate': completionDateController.text,
                             'Description': descriptionController.text,
-                              'ProjectStatus': projectStatus,
+                            'ProjectStatus': projectStatus,
                           });
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => ProfileScreen()));
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NewNavbar(
+                                      initTabIndex: 3,
+                                    )),
+                            (Route<dynamic> route) => false,
+                          );
                         }
                       },
                       child: const Text(
