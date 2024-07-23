@@ -17,6 +17,7 @@ import 'package:hiremi_version_two/experienced_jobs.dart';
 import 'package:hiremi_version_two/fresherJobs.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
 import 'package:hiremi_version_two/repository/User.dart';
+import 'package:hiremi_version_two/repository/model/userModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
@@ -94,10 +95,11 @@ class _HomePageState extends ConsumerState<HomePage> {
 
         for (var user in data) {
           if (user['email'] == storedEmail) {
-            User newUser = User(
+            UserModel newUser = UserModel(
+              userId: user['id'],
               fullName: user['full_name'] ?? '',
               fatherName: user['father_name'] ?? '',
-              gender: _getGenderFromString(user['gender']),
+              gender: user['gender'],
               email: user['email'] ?? '',
               dob: user['date_of_birth'].toString() ?? '',
               birthPlace: user['birth_place'] ?? '',
@@ -153,16 +155,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   //   }
   // }
 
-  Gender _getGenderFromString(String genderString) {
-    switch (genderString.toLowerCase()) {
-      case 'Male':
-        return Gender.Male;
-      case 'Female':
-        return Gender.Female;
-      default:
-        return Gender.Other;
-    }
-  }
+
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override

@@ -1,11 +1,11 @@
-import 'package:hiremi_version_two/Models/register_model.dart';
+import 'package:hiremi_version_two/repository/model/userModel.dart';
 
 class UserRepository {
-  User? _currentUser;
+  UserModel? _currentUser;
 
-  User? get currentUser => _currentUser;
+  UserModel? get currentUser => _currentUser;
 
-  void setUser(User user) {
+  void setUser(UserModel user) {
     _currentUser = user;
   }
 }

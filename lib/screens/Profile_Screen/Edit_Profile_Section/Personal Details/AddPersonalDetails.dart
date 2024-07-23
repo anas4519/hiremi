@@ -1,14 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
+import 'package:hiremi_version_two/repository/User.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 import '../../../../Notofication_screen.dart';
 import '../../../../Utils/AppSizes.dart';
 import '../../../../Utils/colors.dart';
 import '../../../Drawer_Child_Screens/drawer_child.dart';
-import '../../controller/ProfileController.dart';
+import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
+
 import '../Languages/AddLanguages.dart';
 import '../widgets/TextFieldWithTitle.dart';
 
@@ -20,9 +25,6 @@ class AddPersonalDetails extends StatefulWidget {
 }
 
 class _AddPersonalDetailsState extends State<AddPersonalDetails> {
-  String selectedGender = '';
-  String selectedMaritalStatus = '';
-  String differentlyAbled = '';
   final homeController = TextEditingController();
   final pinCodeController = TextEditingController();
   final localAddressController = TextEditingController();
@@ -33,6 +35,7 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final controller = ProfileController.instance;
+
   _selectDate(
     BuildContext context, {
     required TextEditingController controller,
@@ -68,25 +71,116 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
         controller.differentlyAbled.isNotEmpty;
   }
 
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  Future<void> _updateUserData(bool save) async {
+    if (!formKey.currentState!.validate() && !isValid()) return;
+    try {
+      final response = await http.patch(
+        Uri.parse(
+            'http://13.127.81.177:8000/api/registers/${userRepository.currentUser!.userId}/'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'date_of_birth': dobController.text,
+          'gender': controller.selectedGender.toString(),
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('User data updated successfully');
+        if(save) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NewNavbar(
+                  initTabIndex: 3,
+                )),
+                (Route<dynamic> route) => false,
+          );
+          controller.addPersonalDetails(
+              homeController.text,
+              pinCodeController.text,
+              permanentAddressController.text,
+              localAddressController.text,
+              dobController.text,
+              categoryController.text);
+        }
+        else{
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (ctx) => const AddLanguages()));
+          controller.addPersonalDetails(
+              homeController.text,
+              pinCodeController.text,
+              permanentAddressController.text,
+              localAddressController.text,
+              dobController.text,
+              categoryController.text);
+        }
+      } else {
+        print("${userRepository.currentUser!.userId}");
+        print('Failed to update user data: ${response.statusCode}');
+        print(response.body);
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
+      key: scaffoldKey,
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: Padding(
+          padding: EdgeInsets.only(
+              left: Sizes.responsiveDefaultSpace(context),
+              top: Sizes.responsiveSm(context),
+              bottom: Sizes.responsiveSm(context)),
+          child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: AppColors.bgBlue,
+              ),
+              child: Center(
+                child: IconButton(
+                    onPressed: () => scaffoldKey.currentState?.openDrawer(),
+                    icon: const Icon(
+                      Icons.notes_outlined,
+                      size: 22,
+                    )),
+              )),
+        ),
         title: const Text(
-          'Edit Profile',
+          "Edit Profile",
           style: TextStyle(
-              fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.black),
+              fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => const NotificationScreen()));
-              },
-              icon: const Icon(Icons.notifications))
+          Padding(
+            padding:
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+            child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const NotificationScreen(),
+                      ));
+                    },
+                    icon: const Icon(Icons.notifications_outlined),
+                  ),
+                )),
+          ),
         ],
       ),
       drawer: const Drawer(
@@ -407,9 +501,10 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 11,
-                                  color: differentlyAbled == 'No'
-                                      ? Colors.black
-                                      : AppColors.secondaryText),
+                                  color:
+                                      controller.differentlyAbled.value == 'No'
+                                          ? Colors.black
+                                          : AppColors.secondaryText),
                             )
                           ],
                         ),
@@ -439,23 +534,7 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
                       onPressed: () {
-                        if (formKey.currentState!.validate() && isValid()) {
-                          controller.addPersonalDetails(
-                              homeController.text,
-                              pinCodeController.text,
-                              permanentAddressController.text,
-                              localAddressController.text,
-                              dobController.text,
-                              categoryController.text);
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NewNavbar(
-                                      initTabIndex: 3,
-                                    )),
-                            (Route<dynamic> route) => false,
-                          );
-                        }
+                      _updateUserData(true);
                       },
                       child: const Text(
                         'Save',
@@ -476,17 +555,7 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
                       onPressed: () {
-                        if (formKey.currentState!.validate() && isValid()) {
-                          controller.addPersonalDetails(
-                              homeController.text,
-                              pinCodeController.text,
-                              permanentAddressController.text,
-                              localAddressController.text,
-                              dobController.text,
-                              categoryController.text);
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(
-                              builder: (ctx) => const AddLanguages()));
-                        }
+                        _updateUserData(false);
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,

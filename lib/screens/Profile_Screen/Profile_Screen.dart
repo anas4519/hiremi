@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 import 'package:hiremi_version_two/Screens/Profile_Screen/sections/widgets_mustufa/ProfileStatusSection.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
@@ -10,7 +11,6 @@ import 'package:hiremi_version_two/screens/Profile_Screen/Edit_Profile_Section/E
 import 'package:hiremi_version_two/screens/Profile_Screen/Edit_Profile_Section/Languages/AddLanguages.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/Edit_Profile_Section/Personal%20Details/AddPersonalDetails.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/Edit_Profile_Section/Projects/AddProjects.dart';
-import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/BasicDetails.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/Education.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/Experience.dart';

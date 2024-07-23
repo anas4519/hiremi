@@ -6,6 +6,7 @@ import 'package:hiremi_version_two/Utils/validators/validation.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 
+
 import '../../../../Notofication_screen.dart';
 import '../../../Drawer_Child_Screens/drawer_child.dart';
 import '../Education/AddEducation.dart';
@@ -23,6 +24,7 @@ class AddKeySkills extends StatefulWidget {
 class _AddKeySkillsState extends State<AddKeySkills> {
   final skillController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final controller = Get.put(ProfileController());
 
@@ -30,20 +32,55 @@ class _AddKeySkillsState extends State<AddKeySkills> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
+      key: scaffoldKey,
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: Padding(
+          padding: EdgeInsets.only(
+              left: Sizes.responsiveDefaultSpace(context),
+              top: Sizes.responsiveSm(context),
+              bottom: Sizes.responsiveSm(context)),
+          child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: AppColors.bgBlue,
+              ),
+              child: Center(
+                child: IconButton(
+                    onPressed: () => scaffoldKey.currentState?.openDrawer(),
+                    icon: const Icon(
+                      Icons.notes_outlined,
+                      size: 22,
+                    )),
+              )),
+        ),
         title: const Text(
-          'Edit Profile',
+          "Edit Profile",
           style: TextStyle(
-              fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.black),
+              fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => const NotificationScreen()));
-              },
-              icon: const Icon(Icons.notifications))
+          Padding(
+            padding:
+            EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+            child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const NotificationScreen(),
+                      ));
+                    },
+                    icon: const Icon(Icons.notifications_outlined),
+                  ),
+                )),
+          ),
         ],
       ),
       drawer: const Drawer(

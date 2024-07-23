@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
+
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/screens/Drawer_Child_Screens/drawer_child.dart';
-import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../Notofication_screen.dart';
@@ -54,28 +55,61 @@ class _AddExperienceState extends State<AddExperience> {
         jobType.isNotEmpty &&
         isCurrentCompany.isNotEmpty;
   }
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
+        key: scaffoldKey,
         appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: Padding(
+            padding: EdgeInsets.only(
+                left: Sizes.responsiveDefaultSpace(context),
+                top: Sizes.responsiveSm(context),
+                bottom: Sizes.responsiveSm(context)),
+            child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                      onPressed: () => scaffoldKey.currentState?.openDrawer(),
+                      icon: const Icon(
+                        Icons.notes_outlined,
+                        size: 22,
+                      )),
+                )),
+          ),
           title: const Text(
-            'Edit Profile',
+            "Edit Profile",
             style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
-                color: Colors.black),
+                fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
           ),
           centerTitle: true,
           actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (ctx) => const NotificationScreen()));
-                },
-                icon: const Icon(Icons.notifications))
+            Padding(
+              padding:
+              EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+              child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.bgBlue,
+                  ),
+                  child: Center(
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (ctx) => const NotificationScreen(),
+                        ));
+                      },
+                      icon: const Icon(Icons.notifications_outlined),
+                    ),
+                  )),
+            ),
           ],
         ),
         drawer: const Drawer(
@@ -430,7 +464,8 @@ class _AddExperienceState extends State<AddExperience> {
                             onPressed: () {
                               if (formKey.currentState!.validate() &&
                                   isValid()) {
-                                Map<String, String> experienceDetail = {
+                                controller
+                                    .addExperienceDetail ({
                                   'organization': organizationController.text,
                                   'jobTitle': jobTitleController.text,
                                   'jobType': jobType,
@@ -438,9 +473,7 @@ class _AddExperienceState extends State<AddExperience> {
                                   'joiningDate': joiningDateController.text,
                                   'leavingDate': leavingDateController.text,
                                   'isCurrentCompany': isCurrentCompany,
-                                };
-                                controller
-                                    .addExperienceDetail(experienceDetail);
+                                });
                                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                                     builder: (ctx) => const AddProjects()));
                               }
