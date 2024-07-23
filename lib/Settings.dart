@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/Verifiedtrue.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key, }) : super(key: key);
+  const SettingsScreen({
+    super.key,
+  });
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -19,16 +22,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text(
+          'Settings',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        ),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (ctx) => const NotificationScreen(),
-              ));
-            },
-            icon: const Icon(Icons.notifications_outlined),
+          Padding(
+            padding:
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+            child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const NotificationScreen(),
+                      ));
+                    },
+                    icon: const Icon(Icons.notifications_outlined),
+                  ),
+                )),
           ),
         ],
       ),
@@ -55,41 +72,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               Container(
                 width: screenWidth * 0.9,
-                padding:  EdgeInsets.all(screenWidth*0.02),
+                padding: EdgeInsets.all(screenWidth * 0.02),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(screenHeight*0.01),
+                  borderRadius: BorderRadius.circular(screenHeight * 0.01),
                 ),
                 child: RawMaterialButton(
-                        onPressed: () {},
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.person_outline,
-                              color: AppColors.primary,
-                              size: screenHeight * 0.03,
-                            ),
-                            SizedBox(
-                              width: screenWidth * 0.03,
-                            ),
-                            Text(
-                              'Personal Information',
-                              style: TextStyle(fontSize: screenHeight * 0.02),
-                            ),
-                            Spacer(),
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.arrow_forward_ios,
-                                size: screenHeight * 0.02,
-                              ),
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      WidgetStatePropertyAll(AppColors.bgBlue)),
-                            )
-                          ],
-                        ),
+                  onPressed: () {},
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.person_outline,
+                        color: AppColors.primary,
+                        size: screenHeight * 0.03,
                       ),
+                      SizedBox(
+                        width: screenWidth * 0.03,
+                      ),
+                      Text(
+                        'Personal Information',
+                        style: TextStyle(fontSize: screenHeight * 0.02),
+                      ),
+                      Spacer(),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.arrow_forward_ios,
+                          size: screenHeight * 0.02,
+                        ),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                WidgetStatePropertyAll(AppColors.bgBlue)),
+                      )
+                    ],
+                  ),
+                ),
               ),
               SizedBox(
                 height: screenHeight * 0.03,
@@ -108,7 +125,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 width: screenWidth * 0.9,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(screenHeight*0.01),
+                  borderRadius: BorderRadius.circular(screenHeight * 0.01),
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(screenWidth * 0.04),
@@ -253,72 +270,72 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 width: screenWidth * 0.9,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(screenHeight*0.01),
+                  borderRadius: BorderRadius.circular(screenHeight * 0.01),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(screenWidth*0.04),
+                  padding: EdgeInsets.all(screenWidth * 0.04),
                   child: Column(
                     children: [
                       RawMaterialButton(
-                          onPressed: () {},
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.info,
-                                color: AppColors.primary,
-                                size: screenHeight * 0.03,
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.info,
+                              color: AppColors.primary,
+                              size: screenHeight * 0.03,
+                            ),
+                            SizedBox(
+                              width: screenWidth * 0.03,
+                            ),
+                            Text(
+                              'About Us',
+                              style: TextStyle(fontSize: screenHeight * 0.02),
+                            ),
+                            Spacer(),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.arrow_forward_ios,
+                                size: screenHeight * 0.02,
                               ),
-                              SizedBox(
-                                width: screenWidth * 0.03,
-                              ),
-                              Text(
-                                'About Us',
-                                style: TextStyle(fontSize: screenHeight * 0.02),
-                              ),
-                              Spacer(),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: screenHeight * 0.02,
-                                ),
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                        WidgetStatePropertyAll(AppColors.bgBlue)),
-                              )
-                            ],
-                          ),
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStatePropertyAll(AppColors.bgBlue)),
+                            )
+                          ],
                         ),
+                      ),
                       RawMaterialButton(
-                          onPressed: () {},
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.call,
-                                color: AppColors.primary,
-                                size: screenHeight * 0.03,
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.call,
+                              color: AppColors.primary,
+                              size: screenHeight * 0.03,
+                            ),
+                            SizedBox(
+                              width: screenWidth * 0.03,
+                            ),
+                            Text(
+                              'Help & Support',
+                              style: TextStyle(fontSize: screenHeight * 0.02),
+                            ),
+                            Spacer(),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.arrow_forward_ios,
+                                size: screenHeight * 0.02,
                               ),
-                              SizedBox(
-                                width: screenWidth * 0.03,
-                              ),
-                              Text(
-                                'Help & Support',
-                                style: TextStyle(fontSize: screenHeight * 0.02),
-                              ),
-                              Spacer(),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: screenHeight * 0.02,
-                                ),
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                        WidgetStatePropertyAll(AppColors.bgBlue)),
-                              )
-                            ],
-                          ),
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStatePropertyAll(AppColors.bgBlue)),
+                            )
+                          ],
                         ),
+                      ),
                     ],
                   ),
                 ),

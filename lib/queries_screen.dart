@@ -452,7 +452,17 @@ class _QueriesScreenState extends State<QueriesScreen> {
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
-                        onPressed: _submitQuery,
+                        onPressed: (){
+                          _submitQuery();
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return //CustomAlertBox();
+
+                              const CustomAlert2();
+                            },
+                          );
+                        },
                         child: const Text(
                           'Generate Query',
                         ),

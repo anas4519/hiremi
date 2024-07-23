@@ -2,6 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/custom_alert_2.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/Utils/AppSizes.dart';
+import 'package:hiremi_version_two/Utils/colors.dart';
 
 
 
@@ -23,16 +25,29 @@ class _HelpSupportState extends State<HelpSupport> {
         backgroundColor: Colors.white,
         title: const Text(
           "Help & Support",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
         
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>const NotificationScreen()));
-            },
-            icon: const Icon(Icons.notifications),
+          Padding(
+            padding:
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+            child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const NotificationScreen(),
+                      ));
+                    },
+                    icon: const Icon(Icons.notifications_outlined),
+                  ),
+                )),
           ),
         ],
       ),

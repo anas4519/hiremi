@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/Utils/AppSizes.dart';
+import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 // ignore: camel_case_types
 class About_Us extends StatefulWidget {
-  const About_Us({Key? key, }) : super(key: key);
+  const About_Us({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<About_Us> createState() => _About_UsState();
@@ -13,8 +16,6 @@ class About_Us extends StatefulWidget {
 
 // ignore: camel_case_types
 class _About_UsState extends State<About_Us> {
-
-
   Future<void> _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
     if (!await launchUrl(uri)) {
@@ -30,35 +31,46 @@ class _About_UsState extends State<About_Us> {
         backgroundColor: Colors.white,
         title: const Text(
           "About Us",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
-        
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>const NotificationScreen()));
-            },
-            icon: const Icon(Icons.notifications),
+          Padding(
+            padding:
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+            child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const NotificationScreen(),
+                      ));
+                    },
+                    icon: const Icon(Icons.notifications_outlined),
+                  ),
+                )),
           ),
         ],
       ),
-
       body: SingleChildScrollView(
         child: Column(
           children: [
             Center(
               child: Image.asset(
                 'images/Subscriber-bro.png',
-                height: screenHeight*0.400,
+                height: screenHeight * 0.400,
               ),
             ),
             SizedBox(
-              height: screenHeight*0.01,
+              height: screenHeight * 0.01,
             ),
             const Image(image: AssetImage('images/main (1).png')),
             SizedBox(
-              height: screenHeight*0.02,
+              height: screenHeight * 0.02,
             ),
             Text(
               'Elevate Your Career, Empower',
@@ -77,7 +89,7 @@ class _About_UsState extends State<About_Us> {
               textAlign: TextAlign.center,
             ),
             SizedBox(
-              height: screenHeight*0.01,
+              height: screenHeight * 0.01,
             ),
             const Text(
               'Hiremi is a platform for career and business growth, offering',
@@ -104,7 +116,7 @@ class _About_UsState extends State<About_Us> {
               textAlign: TextAlign.center,
             ),
             SizedBox(
-              height: screenHeight*0.01,
+              height: screenHeight * 0.01,
             ),
             const Text(
               'With services in project management, recruitment outsourcing',
@@ -123,7 +135,7 @@ class _About_UsState extends State<About_Us> {
               textAlign: TextAlign.center,
             ),
             SizedBox(
-              height: screenHeight*0.01,
+              height: screenHeight * 0.01,
             ),
             InkWell(
               onTap: () {
@@ -141,12 +153,9 @@ class _About_UsState extends State<About_Us> {
                 textAlign: TextAlign.center,
               ),
             ),
-
           ],
         ),
       ),
-
-
     );
   }
 }
