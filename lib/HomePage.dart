@@ -200,15 +200,24 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (ctx) => const NotificationScreen(),
-              ));
-            },
-            icon: const Icon(Icons.notifications_outlined),
-            style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)),
+          Padding(
+            padding:
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+            child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const NotificationScreen(),
+                      ));
+                    },
+                    icon: const Icon(Icons.notifications_outlined),
+                  ),
+                )),
           ),
         ],
       ),
