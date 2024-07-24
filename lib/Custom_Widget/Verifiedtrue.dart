@@ -30,7 +30,7 @@ class VerifiedProfileWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Hi, $name',
+              '$name',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Row(

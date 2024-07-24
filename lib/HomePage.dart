@@ -230,7 +230,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     percent: 0.25),
               if (isVerified)
                 VerifiedProfileWidget(
-                    name: userRepository.currentUser?.fullName,
+                    name: 'Hi, ${userRepository.currentUser?.fullName}',
                     appId: '00011102'),
               SizedBox(height: screenHeight * 0.02),
               Column(

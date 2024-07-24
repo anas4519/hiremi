@@ -1,8 +1,14 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/Verifiedtrue.dart';
+import 'package:hiremi_version_two/Help_Support.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
+import 'package:hiremi_version_two/about_us.dart';
+import 'package:hiremi_version_two/bottomnavigationbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
@@ -14,6 +20,56 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  String FullName = "";
+  String storedEmail = "";
+  @override
+  void initState() {
+    super.initState();
+
+    fetchAndSaveFullName();
+    _printSavedEmail();
+  }
+
+  Future<void> _printSavedEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString('email') ?? 'No email saved';
+    print(email);
+    storedEmail = email;
+  }
+
+  Future<void> fetchAndSaveFullName() async {
+    const String apiUrl = "http://13.127.81.177:8000/api/registers/";
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final prefs = await SharedPreferences.getInstance();
+        storedEmail = prefs.getString('email') ?? 'No email saved';
+
+        for (var user in data) {
+          if (user['email'] == storedEmail) {
+            setState(() {
+              FullName = user['full_name'] ?? 'No name saved';
+            });
+            await prefs.setString('full_name', FullName);
+            print('Full name saved: $FullName');
+            break;
+          }
+        }
+
+        if (FullName.isEmpty) {
+          print('No matching email found');
+        }
+      } else {
+        print('Failed to fetch full name');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -56,8 +112,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // User info section
-              const VerifiedProfileWidget(
-                  name: 'Harsh Pawar', appId: 'HM 23458 73432'),
+              VerifiedProfileWidget(name: FullName, appId: 'HM 23458 73432'),
               SizedBox(height: screenHeight * 0.02),
               // Account section
               const Text(
@@ -78,7 +133,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   borderRadius: BorderRadius.circular(screenHeight * 0.01),
                 ),
                 child: RawMaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NewNavbar(
+                                initTabIndex: 3,
+                              )),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
                   child: Row(
                     children: [
                       Icon(
@@ -95,7 +159,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       Spacer(),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NewNavbar(
+                                      initTabIndex: 3,
+                                    )),
+                            (Route<dynamic> route) => false,
+                          );
+                        },
                         icon: Icon(
                           Icons.arrow_forward_ios,
                           size: screenHeight * 0.02,
@@ -277,7 +350,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Column(
                     children: [
                       RawMaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const About_Us()));
+                        },
                         child: Row(
                           children: [
                             Icon(
@@ -294,7 +370,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                             Spacer(),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (ctx) => const About_Us()));
+                              },
                               icon: Icon(
                                 Icons.arrow_forward_ios,
                                 size: screenHeight * 0.02,
@@ -307,7 +386,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
                       RawMaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const HelpSupport()));
+                        },
                         child: Row(
                           children: [
                             Icon(
@@ -324,7 +406,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                             Spacer(),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (ctx) => const HelpSupport()));
+                              },
                               icon: Icon(
                                 Icons.arrow_forward_ios,
                                 size: screenHeight * 0.02,
