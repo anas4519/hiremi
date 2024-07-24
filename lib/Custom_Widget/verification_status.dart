@@ -8,6 +8,8 @@ import 'package:hiremi_version_two/verify.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Utils/colors.dart';
+
 class VerificationStatus extends StatefulWidget {
   const VerificationStatus({super.key,required this.fullName, required this.percent});
   final double percent;
@@ -107,290 +109,46 @@ class _VerificationStatusState extends State<VerificationStatus> {
                         ),
                         Row(
                           children: [
-                            Column(
-                              children: [
-                                Container(
-                                  width: screenWidth *
-                                      0.07, // Adjusted based on screen width
-                                  height: screenWidth *
-                                      0.07, // Adjusted based on screen width
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth *
-                                            0.035), // Adjusted based on screen width
-                                  ),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (ctx) =>
-                                                  const VerificationScreen()));
-                                    },
-                                    child: Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                      size: screenWidth *
-                                          0.03, // Adjusted based on screen width
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: screenHeight *
-                                      0.005, // Adjusted based on screen height
-                                ),
-                                Text(
-                                  'Profile\nCreated',
-                                  style: TextStyle(
-                                    fontSize: screenWidth *
-                                        0.01, // Adjusted based on screen width
-                                    color: Colors.white,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
+                            CircularIcon(
+                              screenWidth: screenWidth,
+                              screenHeight: screenHeight,
+                              icon: Icons.check,
+                              isTrue: widget.percent >= 0.25,
+                              title: 'Profile\nCreated',
                             ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: screenWidth *
-                                      0.05, // Adjusted based on screen width
-                                  height: screenHeight *
-                                      0.003, // Adjusted based on screen height
-                                  color: Colors.green,
-                                ),
-                                SizedBox(
-                                  height: screenHeight *
-                                      0.02, // Adjusted based on screen height
-                                )
-                              ],
+                            CustomDivider(
+                              screenWidth: screenWidth,
+                              screenHeight: screenHeight,
+                              isTrue: widget.percent >= 0.25,
                             ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: screenWidth *
-                                      0.05, // Adjusted based on screen width
-                                  height: screenHeight *
-                                      0.003, // Adjusted based on screen height
-                                  color: widget.percent >= 0.50
-                                      ? Colors.green
-                                      : Colors.white,
-                                ),
-                                SizedBox(
-                                  height: screenHeight *
-                                      0.02, // Adjusted based on screen height
-                                )
-                              ],
+                            CircularIcon(
+                                screenWidth: screenWidth,
+                                screenHeight: screenHeight,
+                                icon: Icons.call,
+                                isTrue: widget.percent >= 0.50,
+                                title: 'Contact\ninformation'),
+                            CustomDivider(
+                              screenWidth: screenWidth,
+                              screenHeight: screenHeight,
+                              isTrue: widget.percent >= 0.75,
                             ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: screenWidth *
-                                      0.07, // Adjusted based on screen width
-                                  height: screenWidth *
-                                      0.07, // Adjusted based on screen width
-                                  decoration: BoxDecoration(
-                                    color: widget.percent >= 0.50
-                                        ? Colors.green
-                                        : Colors.white,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth *
-                                            0.035), // Adjusted based on screen width
-                                  ),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (ctx) =>
-                                                  const VerificationScreen1()));
-                                    },
-                                    child: Icon(
-                                      Icons.call,
-                                      color: widget.percent >= 0.50
-                                          ? Colors.white
-                                          : const Color(0xFFC1272D),
-                                      size: screenWidth *
-                                          0.03, // Adjusted based on screen width
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: screenHeight *
-                                      0.005, // Adjusted based on screen height
-                                ),
-                                Text(
-                                  'Contact\ninformation',
-                                  style: TextStyle(
-                                    fontSize: screenWidth *
-                                        0.01, // Adjusted based on screen width
-                                    color: Colors.white,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
+                            CircularIcon(
+                                screenWidth: screenWidth,
+                                screenHeight: screenHeight,
+                                icon: Icons.school,
+                                isTrue: widget.percent >= 0.75,
+                                title: 'Education\nInformation'),
+                            CustomDivider(
+                              screenWidth: screenWidth,
+                              screenHeight: screenHeight,
+                              isTrue: widget.percent == 1,
                             ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: screenWidth *
-                                      0.05, // Adjusted based on screen width
-                                  height: screenHeight *
-                                      0.003, // Adjusted based on screen height
-                                  color: widget.percent >= 0.50
-                                      ? Colors.green
-                                      : Colors.white,
-                                ),
-                                SizedBox(
-                                  height: screenHeight *
-                                      0.02, // Adjusted based on screen height
-                                )
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: screenWidth *
-                                      0.05, // Adjusted based on screen width
-                                  height: screenHeight *
-                                      0.003, // Adjusted based on screen height
-                                  color: widget.percent >= 0.75
-                                      ? Colors.green
-                                      : Colors.white,
-                                ),
-                                SizedBox(
-                                  height: screenHeight *
-                                      0.02, // Adjusted based on screen height
-                                )
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: screenWidth *
-                                      0.07, // Adjusted based on screen width
-                                  height: screenWidth *
-                                      0.07, // Adjusted based on screen width
-                                  decoration: BoxDecoration(
-                                    color: widget.percent >= 0.75
-                                        ? Colors.green
-                                        : Colors.white,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth *
-                                            0.035), // Adjusted based on screen width
-                                  ),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (ctx) =>
-                                                  const VerificationScreen2()));
-                                    },
-                                    child: Icon(
-                                      Icons.school,
-                                      color: widget.percent >= 0.75
-                                          ? Colors.white
-                                          : const Color(0xFFC1272D),
-                                      size: screenWidth *
-                                          0.03, // Adjusted based on screen width
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: screenHeight *
-                                      0.005, // Adjusted based on screen height
-                                ),
-                                Text(
-                                  'Education\nInformation',
-                                  style: TextStyle(
-                                    fontSize: screenWidth *
-                                        0.01, // Adjusted based on screen width
-                                    color: Colors.white,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: screenWidth *
-                                      0.05, // Adjusted based on screen width
-                                  height: screenHeight *
-                                      0.003, // Adjusted based on screen height
-                                  color: widget.percent >= 0.75
-                                      ? Colors.green
-                                      : Colors.white,
-                                ),
-                                SizedBox(
-                                  height: screenHeight *
-                                      0.02, // Adjusted based on screen height
-                                )
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: screenWidth *
-                                      0.05, // Adjusted based on screen width
-                                  height: screenHeight *
-                                      0.003, // Adjusted based on screen height
-                                  color: widget.percent >= 1
-                                      ? Colors.green
-                                      : Colors.white,
-                                ),
-                                SizedBox(
-                                  height: screenHeight *
-                                      0.02, // Adjusted based on screen height
-                                )
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: screenWidth *
-                                      0.07, // Adjusted based on screen width
-                                  height: screenWidth *
-                                      0.07, // Adjusted based on screen width
-                                  decoration: BoxDecoration(
-                                    color: widget.percent >= 1
-                                        ? Colors.green
-                                        : Colors.white,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth *
-                                            0.035), // Adjusted based on screen width
-                                  ),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (ctx) =>
-                                                  const VerificationScreen3()));
-                                    },
-                                    child: Icon(
-                                      Icons.account_balance,
-                                      color: widget.percent >= 1
-                                          ? Colors.white
-                                          : const Color(0xFFC1272D),
-                                      size: screenWidth *
-                                          0.03, // Adjusted based on screen width
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: screenHeight *
-                                      0.005, // Adjusted based on screen height
-                                ),
-                                Text(
-                                  'Verification\nPayment',
-                                  style: TextStyle(
-                                    fontSize: screenWidth *
-                                        0.01, // Adjusted based on screen width
-                                    color: Colors.white,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
+                            CircularIcon(
+                                screenWidth: screenWidth,
+                                screenHeight: screenHeight,
+                                icon: Icons.account_balance,
+                                isTrue: widget.percent == 1,
+                                title: 'Verification\nPayment'),
                           ],
                         )
                       ],
@@ -540,6 +298,86 @@ class _VerificationStatusState extends State<VerificationStatus> {
           )
         ],
       ),
+    );
+  }
+}
+
+class CustomDivider extends StatelessWidget {
+  const CustomDivider({
+    super.key,
+    required this.screenWidth,
+    required this.screenHeight,
+    required this.isTrue,
+  });
+
+  final double screenWidth;
+  final double screenHeight;
+  final bool isTrue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: screenWidth * 0.08, // Adjusted based on screen width
+          height: screenHeight * 0.003, // Adjusted based on screen height
+          color: isTrue ? Colors.green : Colors.white,
+        ),
+        SizedBox(
+          height: screenHeight * 0.02, // Adjusted based on screen height
+        )
+      ],
+    );
+  }
+}
+
+class CircularIcon extends StatelessWidget {
+  const CircularIcon({
+    super.key,
+    required this.screenWidth,
+    required this.screenHeight,
+    required this.icon,
+    required this.isTrue,
+    required this.title,
+  });
+
+  final double screenWidth;
+  final double screenHeight;
+  final IconData icon;
+  final bool isTrue;
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: screenWidth * 0.07, // Adjusted based on screen width
+          height: screenWidth * 0.07, // Adjusted based on screen width
+          decoration: BoxDecoration(
+            color: isTrue ? Colors.green : Colors.white,
+            borderRadius: BorderRadius.circular(
+                screenWidth * 0.035), // Adjusted based on screen width
+          ),
+          child: Icon(
+            icon,
+            color: isTrue ? Colors.white : AppColors.primary,
+            size: screenWidth * 0.03, // Adjusted based on screen width
+          ),
+        ),
+        SizedBox(
+          height: screenHeight * 0.005, // Adjusted based on screen height
+        ),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: screenWidth * 0.01, // Adjusted based on screen width
+            color: Colors.white,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }

@@ -14,6 +14,7 @@ class User {
   String branch;
   String degree;
   String passingYear;
+  String password;
 
   User({
     required this.fullName,
@@ -29,6 +30,7 @@ class User {
     required this.branch,
     required this.degree,
     required this.passingYear,
+    required this.password,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -38,7 +40,7 @@ class User {
       gender: Gender.values.firstWhere((e) => e.toString() == 'Gender.${json['gender']}', orElse: () => Gender.Other),
       email: json['email'] ?? '',
       dob: json['date_of_birth'] ?? '',
-      birthPlace: json['birthPlace'] ?? '',
+      birthPlace: json['birth_Place'] ?? '',
       phone: json['phone_number'] ?? '',
       whatsapp: json['whatsapp_number'] ?? '',
       collegeName: json['college_name'] ?? '',
@@ -46,6 +48,7 @@ class User {
       branch: json['branch_name'] ?? '',
       degree: json['degree'] ?? '',
       passingYear: json['passing_year'] ?? '',
+      password: json['password']?? '',
     );
   }
 
@@ -57,7 +60,7 @@ class User {
       'gender': gender.toString().split('.').last,
       'email': email,
       'date_of_birth': dob,
-      'birthPlace': birthPlace,
+      'birth_Place': birthPlace,
       'phone_number': phone,
       'whatsapp_number': whatsapp,
       'college_name': collegeName,
@@ -65,6 +68,7 @@ class User {
       'branch_name': branch,
       'degree': degree,
       'passing_year': passingYear,
+      'password': password,
     };
   }
 }

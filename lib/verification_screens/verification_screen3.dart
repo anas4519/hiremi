@@ -179,8 +179,6 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
             };
 
            print('Transaction successful! Transaction ID: ${transactionResponse['TXNID']}');
-           
-
             // Post transaction response to callback URL
             await _postTransactionResponse(callbackUrll, txnDetails);
             // Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const VerifiedPage()));
@@ -220,7 +218,9 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
         // console.log(callbackResponse.body);
 
         // Redirect to CallbackScreen
-        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>VerifiedPage()));
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=>const VerifiedPage()),
+              (Route<dynamic> route) => false,
+        );
 
       } else {
         print('Failed to post transaction response. Status code: ${callbackResponse.statusCode}');
@@ -264,7 +264,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                   SizedBox(height: screenHeight * 0.0075),
                   Text(
                     _fullName,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: screenHeight * 0.0075),
                   Container(
@@ -321,7 +321,6 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                     SizedBox(height: screenHeight * 0.01),
                     buildLabeledTextField(
                       context,
-                      
                       "Enrollment Number / Roll Number / College ID / UAN Number etc.",
                       "0105IT171125",
                       controller: _EnrollementNumberController,
@@ -359,7 +358,6 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                               if (_isAllFieldsValid()) {
                                 //_saveFormDetails();
                                 _makeTransactionRequest(context, amount);
-
                               } else {
                                 setState(() {});
                               }

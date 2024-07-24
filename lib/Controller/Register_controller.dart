@@ -23,7 +23,7 @@ class RegistrationController {
         // Handle errors based on response.statusCode
         print("${response.body}");
 
-        print('Error hai bro ${response.statusCode}: ${response.body}');
+        print('Error hai bro ${response.body.toString()}');
         return false; // Registration failed
       }
     } catch (e) {
