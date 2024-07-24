@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
     // final textTheme = GoogleFonts.poppinsTextTheme();
      return GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Hiremi',
         theme: ThemeData(
           drawerTheme: const DrawerThemeData(
             backgroundColor: Colors.white
