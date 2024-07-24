@@ -353,7 +353,7 @@ class _DrawerChildState extends ConsumerState<DrawerChild> {
                       },
                       icon: const Icon(Icons.navigate_next))),
               SizedBox(
-                height: screenHeight * 0.2,
+                height: screenHeight * 0.08,
               ),
               ListTile(
                   onTap: () async {
