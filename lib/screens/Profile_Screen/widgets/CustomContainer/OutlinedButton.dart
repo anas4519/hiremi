@@ -28,9 +28,16 @@ class OutlinedContainer extends StatelessWidget {
               children: [
                 Text(title,style:const TextStyle(fontSize: 16.0,fontWeight: FontWeight.w500,color: AppColors.black,)),
                 if(showEdit)
-                  InkWell(
+                  GestureDetector(
                       onTap: onTap,
-                      child: Image.asset('images/icons/img_3.png',height: 16,width: 16,)),
+                      child: Container(
+                          height: Sizes.responsiveLg(context),
+                          width: Sizes.responsiveLg(context),
+                          padding: EdgeInsets.all(Sizes.responsiveSm(context) * 0.5,),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: Image.asset('images/icons/img_3.png',height: 16,width: 16,))),
               ],
             ),
             child ?? const SizedBox(),
