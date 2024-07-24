@@ -127,6 +127,7 @@ class _DrawerChildState extends ConsumerState<DrawerChild> {
                       style: TextStyle(
                           fontSize: screenWidth * 0.04,
                           fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: screenHeight * 0.005),
                     if (!isVerified)

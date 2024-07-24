@@ -180,6 +180,7 @@ class _VerificationStatusState extends State<VerificationStatus> {
                             fontSize: screenWidth *
                                 0.04, // Adjusted based on screen width
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(
                           width: screenWidth *
