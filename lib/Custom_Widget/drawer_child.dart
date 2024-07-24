@@ -12,7 +12,6 @@ import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/about_us.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,6 +27,7 @@ class DrawerChild extends ConsumerStatefulWidget {
 class _DrawerChildState extends ConsumerState<DrawerChild> {
   String FullName = "";
   String storedEmail = "";
+
   @override
   void initState() {
     super.initState();
@@ -356,8 +356,16 @@ class _DrawerChildState extends ConsumerState<DrawerChild> {
                 height: screenHeight * 0.2,
               ),
               ListTile(
-                  onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (ctx) => const HelpSupport())),
+                  onTap: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    await prefs.setString('isLogin', 'false');
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LogIn()),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
                   leading: Container(
                     height: screenHeight * 0.04,
                     width: screenHeight * 0.04,
@@ -379,7 +387,8 @@ class _DrawerChildState extends ConsumerState<DrawerChild> {
                           backgroundColor:
                               WidgetStatePropertyAll(Color(0xFFECF5FF))),
                       onPressed: () async {
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
                         await prefs.setString('isLogin', 'false');
                         Navigator.pushAndRemoveUntil(
                           context,
