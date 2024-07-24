@@ -12,11 +12,13 @@ class VerifiedProfileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Row(
       children: [
         CircleAvatar(
           backgroundColor: const Color(0xFFFBECEC),
-          radius: MediaQuery.of(context).size.width * 0.07,
+          radius: screenWidth * 0.07,
           child: const Icon(
             Icons.person,
             color: Color(0xFFC1272D),
@@ -29,9 +31,13 @@ class VerifiedProfileWidget extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '$name',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            SizedBox(
+              width: screenWidth * 0.5,
+              child: Text(
+                '$name',
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             Row(
               children: [
@@ -47,16 +53,14 @@ class VerifiedProfileWidget extends StatelessWidget {
                   appId,
                   style: const TextStyle(fontSize: 10.7, color: Colors.grey),
                 ),
-                
               ],
             ),
-            
           ],
         ),
         const Spacer(),
         Container(
-          height: MediaQuery.of(context).size.width * 0.08,
-          width: MediaQuery.of(context).size.width * 0.17,
+          height: screenWidth * 0.08,
+          width: screenWidth * 0.17,
           decoration: BoxDecoration(
             color: Colors.green,
             borderRadius: BorderRadius.circular(8),
@@ -66,10 +70,9 @@ class VerifiedProfileWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset('images/new_releases (1).png'),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
+                SizedBox(width: screenWidth * 0.01),
                 const Text(
-                  'Verfied',
-
+                  'Verified',
                   style: TextStyle(color: Colors.white, fontSize: 8.42),
                 ),
               ],
