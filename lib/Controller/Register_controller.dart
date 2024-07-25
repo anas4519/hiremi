@@ -17,19 +17,20 @@ class RegistrationController {
         body: jsonEncode(user.toJson()),
         headers: {'Content-Type': 'application/json'},
       );
-      if (response.statusCode == 200) {
-        return true; // Registration successful
-      } else {
-        // Handle errors based on response.statusCode
-        print("${response.body}");
 
-        print('Error hai bro ${response.body.toString()}');
-        return false; // Registration failed
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Registration successful
+        return true;
+      } else {
+        // Log the error response body for debugging
+        print('Error: ${response.statusCode} - ${response.body}');
+        return false;
       }
     } catch (e) {
       // Handle network or server errors
-      print('Error sending request: $e');
-      return false; // Registration failed
+      print('Network/Server error: $e');
+      return false;
     }
   }
 }
+
