@@ -1,15 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:hiremi_version_two/Custom_Widget/custom_alert_2.dart';
 import 'package:hiremi_version_two/Custom_Widget/drawer_child.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/Query_Starting_screen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
+import 'package:hiremi_version_two/repository/User.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class QueriesScreen extends StatefulWidget {
-  const QueriesScreen({Key? key}) : super(key: key);
+  const QueriesScreen({super.key});
 
   @override
   State<QueriesScreen> createState() => _QueriesScreenState();
@@ -22,7 +25,7 @@ class _QueriesScreenState extends State<QueriesScreen> {
   final _queryTypeController = TextEditingController();
   final _problemDescriptionController = TextEditingController();
   final _dobController = TextEditingController();
-  late int ID;
+  bool isFirstComplete = true;
 
   @override
   void dispose() {
@@ -38,29 +41,12 @@ class _QueriesScreenState extends State<QueriesScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _retrieveId();
+    _retrieveFirstscreen();
   }
 
-  Future<void> _retrieveId() async {
+  Future<void> _retrieveFirstscreen() async {
     final prefs = await SharedPreferences.getInstance();
-    final int? savedId = prefs.getInt('userId');
-    if (savedId != null) {
-      ID = savedId;
-      print(ID);
-      print("Retrieved id is $savedId");
-    } else {
-      print("No id found in SharedPreferences");
-    }
-  }
-
-  Future<void> _loadSavedId() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? savedId = prefs.getString('id');
-    if (savedId != null) {
-      print('Saved ID: $savedId');
-    } else {
-      print('No ID found in SharedPreferences.');
-    }
+    isFirstComplete = prefs.getBool('isFirstComplete')!;
   }
 
   Future<void> _submitQuery() async {
@@ -71,13 +57,14 @@ class _QueriesScreenState extends State<QueriesScreen> {
       final problemDescription = _problemDescriptionController.text;
       final dateOfBirth = _dobController.text;
 
+      print(userRepository.currentUser!.userId);
       final Map<String, dynamic> requestData = {
         'name': fullName,
         'email': emailAddress,
         'issue': queryType,
         'description': problemDescription,
         'date_of_birth': dateOfBirth,
-        'register': ID,
+        'register': userRepository.currentUser!.userId,
       };
 
       try {
@@ -88,14 +75,19 @@ class _QueriesScreenState extends State<QueriesScreen> {
           },
           body: jsonEncode(requestData),
         );
-
         if (response.statusCode == 200) {
-          
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Query Submitted Successfully'),
+              margin: EdgeInsets.all(20),
+              backgroundColor: Colors.green,
+            ),
+          );
         } else {
           print(response.statusCode);
           print(response.body);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to submit query.')),
+            const SnackBar(content: Text('Failed to submit query.')),
           );
         }
       } catch (e) {
@@ -128,18 +120,28 @@ class _QueriesScreenState extends State<QueriesScreen> {
     if (pickedDate != null && pickedDate != DateTime.now()) {
       setState(() {
         _dobController.text =
-            "${pickedDate.toLocal()}".split(' ')[0]; // Format as yyyy-mm-dd
+            DateFormat('dd/MM/yyyy').format(pickedDate); // Format as yyyy-mm-dd
       });
     }
   }
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  List<String> queryType = [
+    'Job Related',
+    'Internship Related',
+    'Mentorship Related',
+    'Corporate Training Related',
+    'Training Program Related',
+    'Career Problem',
+  ];
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -193,7 +195,7 @@ class _QueriesScreenState extends State<QueriesScreen> {
         child: DrawerChild(),
       ),
       body: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.02),
+        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -204,270 +206,410 @@ class _QueriesScreenState extends State<QueriesScreen> {
                   child: Padding(
                     padding: EdgeInsets.all(screenHeight * 0.00),
                     child: Image.asset(
-                      'images/At the office-pana.png',
+                      'images/query_screen.png',
                     ),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.01),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: RichText(
-                        text: const TextSpan(
-                          text: 'Full Name', // First part of the text
-                          style: TextStyle(
-                            color: Colors.black, // Style for the first part
-                            fontSize: 12.0, // Adjusted font size
+                !isFirstComplete
+                    ? QueryStartingScreen(
+                        onTap: () async {
+                          final prefs = await SharedPreferences.getInstance();
+                          prefs.setBool('isFirstComplete', true);
+                          setState(() {
+                            isFirstComplete = true;
+                          });
+                        },
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: Sizes.responsiveMdSm(context)),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Sizes.responsiveSm(context)),
+                            child: TextFieldWithTitleForQuery(
+                              controller: _fullNameController,
+                              title: 'Full Name',
+                              hintText: 'Full Name',
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your full name';
+                                }
+                                return null;
+                              },
+                            ),
                           ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: ' *', // Second part of the text
-                              style: TextStyle(
-                                color: Colors.red, // Style for the second part
-                                fontSize: 12.0, // Adjusted font size
+                          SizedBox(
+                            height: Sizes.responsiveSm(context),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Sizes.responsiveSm(context)),
+                            child: TextFieldWithTitleForQuery(
+                              controller: _emailController,
+                              title: 'Email Address',
+                              hintText: 'Email Address',
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your email address';
+                                }
+                                // Simple email validation
+                                final emailRegex =
+                                    RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+                                if (!emailRegex.hasMatch(value)) {
+                                  return 'Please enter a valid email address';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            height: Sizes.responsiveSm(context),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Sizes.responsiveSm(context)),
+                            child: TextFieldWithTitleForQuery(
+                              controller: _dobController,
+                              title: 'Date of Birth',
+                              onTap: _selectDateOfBirth,
+                              readOnly: true,
+                              hintText: 'Date of Birth',
+                              suffix: const Icon(
+                                Icons.calendar_today_outlined,
+                                size: 20,
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please select your date of birth';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            height: Sizes.responsiveSm(context),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Sizes.responsiveSm(context)),
+                              child: buildLabeledTextField(
+                                context,
+                                'Query Type',
+                                'Query Type',
+                                controller: _queryTypeController,
+                                dropdownItems: queryType,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _queryTypeController.text = value!;
+                                  });
+                                },
+                              )),
+                          SizedBox(
+                            height: Sizes.responsiveSm(context),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Sizes.responsiveSm(context)),
+                            child: TextFieldWithTitleForQuery(
+                              controller: _problemDescriptionController,
+                              title: 'Problem Description',
+                              hintText: 'Problem Description',
+                              maxLines: 4,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please describe the problem';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          SizedBox(height: Sizes.responsiveMd(context)),
+                          Center(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: AppColors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                              onPressed: () {
+                                _submitQuery();
+                              },
+                              child: const Text(
+                                'Generate Query',
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.005),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 0),
-                      child: TextFormField(
-                        controller: _fullNameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your full name';
-                          }
-                          return null;
-                        },
-                        style: const TextStyle(fontSize: 12.0),
-                        decoration: InputDecoration(
-                          hintText: 'Full Name',
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 8.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
                           ),
-                        ),
+                          SizedBox(
+                            height: screenHeight * 0.1,
+                          )
+                        ],
                       ),
-                    ),
-                    SizedBox(height: screenHeight * 0.01),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: RichText(
-                        text: const TextSpan(
-                          text: 'Email Address', // First part of the text
-                          style: TextStyle(
-                            color: Colors.black, // Style for the first part
-                            fontSize: 12.0, // Adjusted font size
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: ' *', // Second part of the text
-                              style: TextStyle(
-                                color: Colors.red, // Style for the second part
-                                fontSize: 12.0, // Adjusted font size
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.005),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        controller: _emailController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email address';
-                          }
-                          // Simple email validation
-                          final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-                          if (!emailRegex.hasMatch(value)) {
-                            return 'Please enter a valid email address';
-                          }
-                          return null;
-                        },
-                        style: const TextStyle(fontSize: 12.0),
-                        decoration: InputDecoration(
-                          hintText: 'Email Address',
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 8.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.005),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: RichText(
-                        text: const TextSpan(
-                          text: 'Date of Birth', // First part of the text
-                          style: TextStyle(
-                            color: Colors.black, // Style for the first part
-                            fontSize: 12.0, // Adjusted font size
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: ' *', // Second part of the text
-                              style: TextStyle(
-                                color: Colors.red, // Style for the second part
-                                fontSize: 12.0, // Adjusted font size
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 0),
-                      child: TextFormField(
-                        controller: _dobController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select your date of birth';
-                          }
-                          return null;
-                        },
-                        style: const TextStyle(fontSize: 12.0),
-                        decoration: InputDecoration(
-                          hintText: 'Date of Birth (yyyy-mm-dd)',
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 8.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.calendar_today),
-                            onPressed: _selectDateOfBirth,
-                          ),
-                        ),
-                        readOnly: true,
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.01),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: RichText(
-                        text: const TextSpan(
-                          text: 'Query Type', // First part of the text
-                          style: TextStyle(
-                            color: Colors.black, // Style for the first part
-                            fontSize: 12.0, // Adjusted font size
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: ' *', // Second part of the text
-                              style: TextStyle(
-                                color: Colors.red, // Style for the second part
-                                fontSize: 12.0, // Adjusted font size
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.005),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 0),
-                      child: TextFormField(
-                        controller: _queryTypeController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter the query type';
-                          }
-                          return null;
-                        },
-                        style: const TextStyle(fontSize: 12.0),
-                        decoration: InputDecoration(
-                          hintText: 'Query Type',
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 8.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.01),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: RichText(
-                        text: const TextSpan(
-                          text: 'Problem Description', // First part of the text
-                          style: TextStyle(
-                            color: Colors.black, // Style for the first part
-                            fontSize: 12.0, // Adjusted font size
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: ' *', // Second part of the text
-                              style: TextStyle(
-                                color: Colors.red, // Style for the second part
-                                fontSize: 12.0, // Adjusted font size
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.005),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 0),
-                      child: TextFormField(
-                        controller: _problemDescriptionController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please describe the problem';
-                          }
-                          return null;
-                        },
-                        maxLines: 4,
-                        style: const TextStyle(fontSize: 12.0),
-                        decoration: InputDecoration(
-                          hintText: 'Problem Description',
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 8.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.01),
-                    Center(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: AppColors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                        onPressed: (){
-                          _submitQuery();
-                          
-                        },
-                        child: const Text(
-                          'Generate Query',
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: screenHeight * 0.1,
-                    )
-                  ],
-                ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildLabeledTextField(
+    BuildContext context,
+    String label,
+    String hintText, {
+    bool showPositionedBox = false,
+    IconData? prefixIcon,
+    bool obscureText = false,
+    List<String>? dropdownItems,
+    TextEditingController? controller,
+    String? Function(String?)? validator,
+    VoidCallback? onTap,
+    void Function(String?)? onChanged,
+    TextInputType? keyboardType,
+  }) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: label,
+              style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.black),
+            ),
+            TextSpan(
+              text: " *",
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.primary),
+            ),
+          ],
+        ),
+      ),
+      SizedBox(height: Sizes.responsiveSm(context)),
+      DropdownButtonFormField<String>(
+        dropdownColor: Colors.white,
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: AppColors.black,
+        ),
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: AppColors.black.withOpacity(0.8)),
+          prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+          contentPadding: EdgeInsets.symmetric(
+              horizontal: Sizes.responsiveMdSm(context),
+              vertical: Sizes.responsiveXs(context)),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(3),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(3),
+            borderSide: BorderSide(
+              color: AppColors.green,
+              width: 0.37,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(3),
+            borderSide: BorderSide(
+              color: AppColors.green,
+              width: 0.37,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(3),
+            borderSide: BorderSide(
+              color: AppColors.green,
+              width: 0.37,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(3),
+            borderSide: BorderSide(
+              color: AppColors.green,
+              width: 0.37,
+            ),
+          ),
+        ),
+        value: controller?.text.isNotEmpty == true ? controller?.text : null,
+        hint: Text(hintText),
+        onChanged: onChanged,
+        items: dropdownItems!.map((String item) {
+          return DropdownMenuItem<String>(
+            value: item,
+            child: Text(item),
+          );
+        }).toList(),
+        validator: validator,
+      ),
+    ]);
+  }
+}
+
+class TextFieldWithTitleForQuery extends StatelessWidget {
+  const TextFieldWithTitleForQuery({
+    super.key,
+    required this.controller,
+    required this.title,
+    required this.hintText,
+    this.starNeeded = true,
+    this.prefix,
+    this.suffix,
+    this.spaceBtwTextField,
+    this.maxLines,
+    this.validator,
+    this.textInputType = TextInputType.text,
+    this.readOnly = false,
+    this.onTap,
+  });
+
+  final TextEditingController controller;
+  final String title, hintText;
+  final bool starNeeded;
+  final Widget? prefix, suffix;
+  final double? spaceBtwTextField;
+  final int? maxLines;
+  final String? Function(String?)? validator;
+  final TextInputType textInputType;
+  final bool readOnly;
+  final void Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+            ),
+            if (starNeeded)
+              Text(
+                '*',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.primary,
+                ),
+              ),
+          ],
+        ),
+        SizedBox(
+          height: spaceBtwTextField ?? Sizes.responsiveSm(context),
+        ),
+        CustomTextFieldQuery(
+            controller: controller,
+            hintText: hintText,
+            prefix: prefix,
+            suffix: suffix,
+            validator: validator,
+            textInputType: textInputType,
+            readOnly: readOnly,
+            onTap: onTap,
+            maxLines: maxLines),
+      ],
+    );
+  }
+}
+
+class CustomTextFieldQuery extends StatelessWidget {
+  const CustomTextFieldQuery({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    this.textInputType = TextInputType.text,
+    this.maxLines,
+    this.suffix,
+    this.prefix,
+    this.validator,
+    this.readOnly = false,
+    this.onTap,
+  });
+
+  final TextEditingController controller;
+  final String hintText;
+  final TextInputType textInputType;
+  final int? maxLines;
+  final Widget? suffix;
+  final Widget? prefix;
+  final String? Function(String?)? validator;
+  final bool readOnly;
+  final void Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      validator: validator,
+      controller: controller,
+      onTap: onTap,
+      cursorColor: AppColors.black,
+      textAlign: TextAlign.start,
+      maxLines: maxLines,
+      readOnly: readOnly,
+      style: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+      ),
+      expands: false,
+      keyboardType: textInputType,
+      decoration: InputDecoration(
+        hintText: hintText,
+        suffixIcon: suffix,
+        prefixIcon: prefix,
+        suffixIconColor: AppColors.secondaryText,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: Sizes.responsiveSm(context),
+            horizontal: Sizes.responsiveMd(context)),
+        alignLabelWithHint: true,
+        hintStyle: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: AppColors.black.withOpacity(0.8),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(3),
+          borderSide: BorderSide(
+            color: AppColors.secondaryText,
+            width: 0.37,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(3),
+          borderSide: BorderSide(
+            color: AppColors.green,
+            width: 0.37,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(3),
+          borderSide: BorderSide(
+            color: AppColors.green,
+            width: 0.37,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(3),
+          borderSide: BorderSide(
+            color: AppColors.green,
+            width: 0.37,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(3),
+          borderSide: BorderSide(
+            color: AppColors.green,
+            width: 0.37,
           ),
         ),
       ),

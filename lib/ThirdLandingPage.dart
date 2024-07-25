@@ -58,6 +58,7 @@ class ThirdLandingPage extends StatelessWidget {
                     onPressed: () async {
                       final prefs = await SharedPreferences.getInstance();
                       await prefs.setString('onBoardingComplete', 'true');
+                      prefs.setBool('isFirstComplete', false);
                       Navigator.push(
                         context,
                         SlidePageRoute(page: const LogIn()),

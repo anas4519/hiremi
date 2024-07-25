@@ -98,6 +98,7 @@ class _NewNavbarState extends ConsumerState<NewNavbar> {
   Widget build(BuildContext context) {
     final isVerified = ref.watch(verificationProvider);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         body: _pages[widget.initTabIndex],
         bottomNavigationBar: Container(
