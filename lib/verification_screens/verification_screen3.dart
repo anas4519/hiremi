@@ -372,6 +372,12 @@ class _VerificationScreen3State extends ConsumerState<VerificationScreen3> {
                               if (!isVerified) {
                                 _makeTransactionRequest(context, amount);
                               }
+                              else{
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(builder: (ctx) => const VerifiedPage()),
+                                      (Route<dynamic> route) => false,
+                                );
+                              }
                             }
                           },
                           child: Row(
