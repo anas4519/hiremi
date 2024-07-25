@@ -43,6 +43,7 @@ class _VerificationScreen3State extends ConsumerState<VerificationScreen3> {
     if (Email.isEmpty) {
       _printSavedEmail();
     }
+
   }
 
   bool _isAllFieldsValid() {
@@ -70,10 +71,11 @@ class _VerificationScreen3State extends ConsumerState<VerificationScreen3> {
       if (transactionResponse != null &&
           transactionResponse['STATUS'] == 'TXN_SUCCESS') {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (ctx) => const VerifiedPage()));
+            .pushAndRemoveUntil(MaterialPageRoute(builder: (ctx) => const VerifiedPage()),
+              (Route<dynamic> route) => false,
+        );
         print("Success");
         checkOrderStatus(orderId);
-
         return transactionResponse;
       } else {
         checkOrderStatus(orderId);
@@ -190,7 +192,6 @@ class _VerificationScreen3State extends ConsumerState<VerificationScreen3> {
                 'Transaction successful! Transaction ID: ${transactionResponse['TXNID']}');
             // Post transaction response to callback URL
             await _postTransactionResponse(callbackUrll, txnDetails);
-            // Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const VerifiedPage()));
           } else {
             print(
                 'Error: Transaction failed or missing transaction ID in response');
@@ -225,10 +226,8 @@ class _VerificationScreen3State extends ConsumerState<VerificationScreen3> {
         print('Transaction response posted successfully');
         print(callbackResponse.statusCode);
         print(callbackResponse.body);
-
         // console.log(callbackResponse.body);
-
-        // Redirect to CallbackScreen
+        // Redirect to Verified Screen
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (ctx) => const VerifiedPage()),
           (Route<dynamic> route) => false,

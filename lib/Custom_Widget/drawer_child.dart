@@ -11,6 +11,7 @@ import 'package:hiremi_version_two/Settings.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/about_us.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
+import 'package:hiremi_version_two/repository/User.dart';
 import 'package:http/http.dart' as http;
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,15 +26,12 @@ class DrawerChild extends ConsumerStatefulWidget {
 }
 
 class _DrawerChildState extends ConsumerState<DrawerChild> {
-  String FullName = "";
   String storedEmail = "";
 
   @override
   void initState() {
     super.initState();
-    // _scrollController.addListener(_onScroll);
 
-    fetchAndSaveFullName();
     _printSavedEmail();
   }
 
@@ -44,38 +42,6 @@ class _DrawerChildState extends ConsumerState<DrawerChild> {
     storedEmail = email;
   }
 
-  Future<void> fetchAndSaveFullName() async {
-    const String apiUrl = "http://13.127.81.177:8000/api/registers/";
-
-    try {
-      final response = await http.get(Uri.parse(apiUrl));
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final prefs = await SharedPreferences.getInstance();
-        storedEmail = prefs.getString('email') ?? 'No email saved';
-
-        for (var user in data) {
-          if (user['email'] == storedEmail) {
-            setState(() {
-              FullName = user['full_name'] ?? 'No name saved';
-            });
-            await prefs.setString('full_name', FullName);
-            print('Full name saved: $FullName');
-            break;
-          }
-        }
-
-        if (FullName.isEmpty) {
-          print('No matching email found');
-        }
-      } else {
-        print('Failed to fetch full name');
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +89,7 @@ class _DrawerChildState extends ConsumerState<DrawerChild> {
                     ),
                     SizedBox(height: screenHeight * 0.01),
                     Text(
-                      FullName,
+                      userRepository.currentUser!.fullName,
                       style: TextStyle(
                           fontSize: screenWidth * 0.04,
                           fontWeight: FontWeight.bold),

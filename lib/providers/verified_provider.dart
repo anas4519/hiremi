@@ -22,12 +22,12 @@ class VerificationNotifier extends StateNotifier<bool> {
         bool isVerified = false;
         for (var user in data) {
           if (user['email'] == storedEmail) {
+            print(user['verified']);
             String verified = user['verified'] ? 'true' : 'false';
             isVerified = verified == 'true';
             break;
           }
         }
-
         state = isVerified;
       } else {
         print('Failed to fetch verification status');
