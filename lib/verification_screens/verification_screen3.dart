@@ -16,12 +16,14 @@ class VerificationScreen3 extends StatefulWidget {
 
 class _VerificationScreen3State extends State<VerificationScreen3> {
   final _formKey = GlobalKey<FormState>();
-  String _fullName="";
-  double amount= 1;
-  String Email="";
+  String _fullName = "";
+  double amount = 1;
+  String Email = "";
 
-  final TextEditingController _IntrestedDomainController = TextEditingController();
-  final TextEditingController _EnrollementNumberController = TextEditingController();
+  final TextEditingController _IntrestedDomainController =
+      TextEditingController();
+  final TextEditingController _EnrollementNumberController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -29,7 +31,8 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
     _EnrollementNumberController.dispose();
     super.dispose();
   }
-@override
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -40,17 +43,18 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
       _printSavedEmail();
     }
   }
+
   bool _isAllFieldsValid() {
     return _formKey.currentState?.validate() ?? false;
   }
-
 
   Future<void> _printSavedEmail() async {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('email') ?? 'No email saved';
     print(email);
-    Email=email;
+    Email = email;
   }
+
   Future<void> _fetchFullName() async {
     final prefs = await SharedPreferences.getInstance();
     String? fullName = prefs.getString('full_name') ?? 'No name saved';
@@ -58,24 +62,28 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
       _fullName = fullName;
     });
   }
-  Future<Map?> _initiateTransaction(String txnToken, String orderId, String amount, String mid, String callbackUrl, bool isStaging) async {
+
+  Future<Map?> _initiateTransaction(String txnToken, String orderId,
+      String amount, String mid, String callbackUrl, bool isStaging) async {
     try {
       // Initiate the transaction using Paytm Router SDK
-      var transactionResponse = await PaytmRouterSdk.startTransaction(mid, orderId, amount, txnToken, callbackUrl, isStaging);
+      var transactionResponse = await PaytmRouterSdk.startTransaction(
+          mid, orderId, amount, txnToken, callbackUrl, isStaging);
 
       // Handle the transaction response
 
-      if (transactionResponse != null && transactionResponse['STATUS'] == 'TXN_SUCCESS') {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => const VerifiedPage()));
+      if (transactionResponse != null &&
+          transactionResponse['STATUS'] == 'TXN_SUCCESS') {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (ctx) => const VerifiedPage()));
         print("Success");
         checkOrderStatus(orderId);
-
 
         return transactionResponse;
       } else {
         checkOrderStatus(orderId);
-        throw Exception('Transaction failed: ${transactionResponse!['RESPMSG']}');
+        throw Exception(
+            'Transaction failed: ${transactionResponse!['RESPMSG']}');
       }
     } catch (e) {
       // Error occurred during transaction initiation
@@ -90,6 +98,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
     print('Enrollment Number: $enrollmentNumber');
     print('Interested Domain: $interestedDomain');
   }
+
   final String orderStatusUrl = 'http://13.127.81.177:8000/order-status/';
   Future<void> checkOrderStatus(String orderId) async {
     try {
@@ -114,13 +123,11 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
       print("Error: $e");
     }
   }
-  Future<void> _makeTransactionRequest(BuildContext context, amount) async {
 
+  Future<void> _makeTransactionRequest(BuildContext context, amount) async {
     try {
       print("Helllo");
       // Ensure email is loaded
-
-
 
       // API endpoint
       var url = 'http://13.127.81.177:8000/pay/';
@@ -145,10 +152,13 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
       // Checking response status
       if (response.statusCode == 200) {
         var responseData = json.decode(response.body);
-        print('Response data: $responseData'); // Print response data for debugging
+        print(
+            'Response data: $responseData'); // Print response data for debugging
 
         // Check if all required fields are present in the response
-        if (responseData.containsKey('txnToken') && responseData.containsKey('orderId') && responseData.containsKey('amount')) {
+        if (responseData.containsKey('txnToken') &&
+            responseData.containsKey('orderId') &&
+            responseData.containsKey('amount')) {
           var txnToken = responseData['txnToken'];
           var orderId = responseData['orderId'];
           var amount = responseData['amount'];
@@ -157,10 +167,12 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
           var isStaging = false; // Set to true for staging environment
 
           // Use router SDK to initiate transaction
-          var transactionResponse = await _initiateTransaction(txnToken, orderId, amount, mid, callbackUrll, isStaging);
+          var transactionResponse = await _initiateTransaction(
+              txnToken, orderId, amount, mid, callbackUrll, isStaging);
 
           // Check if transactionResponse is not null and contains 'TXNID'
-          if (transactionResponse != null && transactionResponse.containsKey('TXNID')) {
+          if (transactionResponse != null &&
+              transactionResponse.containsKey('TXNID')) {
             print("Helloin if section");
             var txnDetails = {
               'BANKTXNID': transactionResponse['BANKTXNID'],
@@ -178,28 +190,32 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
               'TXNID': transactionResponse['TXNID']
             };
 
-           print('Transaction successful! Transaction ID: ${transactionResponse['TXNID']}');
+            print(
+                'Transaction successful! Transaction ID: ${transactionResponse['TXNID']}');
             // Post transaction response to callback URL
             await _postTransactionResponse(callbackUrll, txnDetails);
             // Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const VerifiedPage()));
           } else {
-           print('Error: Transaction failed or missing transaction ID in response');
+            print(
+                'Error: Transaction failed or missing transaction ID in response');
           }
         } else {
-         print('Error: Missing required data in response');
+          print('Error: Missing required data in response');
         }
       } else {
         // Request failed
         print(response.statusCode);
         print(response.body);
-       print( 'Request failed with status: ${response.statusCode}');
+        print('Request failed with status: ${response.statusCode}');
       }
     } catch (e) {
       // Error occurred
-      print( 'Error: $e');
+      print('Error: $e');
     }
   }
-  Future<void> _postTransactionResponse(String callbackUrll, Map<String, dynamic> response) async {
+
+  Future<void> _postTransactionResponse(
+      String callbackUrll, Map<String, dynamic> response) async {
     try {
       // Making POST request to callback URL with transaction response data
       var callbackResponse = await http.post(
@@ -210,26 +226,27 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
 
       // Checking response status
       if (callbackResponse.statusCode == 200) {
-
         print('Transaction response posted successfully');
         print(callbackResponse.statusCode);
         print(callbackResponse.body);
-        
+
         // console.log(callbackResponse.body);
 
         // Redirect to CallbackScreen
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=>const VerifiedPage()),
-              (Route<dynamic> route) => false,
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (ctx) => const VerifiedPage()),
+          (Route<dynamic> route) => false,
         );
-
       } else {
-        print('Failed to post transaction response. Status code: ${callbackResponse.statusCode}');
+        print(
+            'Failed to post transaction response. Status code: ${callbackResponse.statusCode}');
       }
     } catch (e) {
       // Error occurred while posting transaction response
       print('Error posting transaction response: $e');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -264,7 +281,8 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                   SizedBox(height: screenHeight * 0.0075),
                   Text(
                     _fullName,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: screenHeight * 0.0075),
                   Container(
@@ -314,7 +332,8 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                       padding: EdgeInsets.all(screenWidth * 0.04),
                       child: const Text(
                         'Last Step Verification',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.start,
                       ),
                     ),
@@ -345,34 +364,39 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                       },
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                    Row(
-                      children: [
-                        const Spacer(),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: const Color(0xFFC1272D),
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              if (_isAllFieldsValid()) {
-                                //_saveFormDetails();
-                                _makeTransactionRequest(context, amount);
-                              } else {
-                                setState(() {});
-                              }
-                            },
-                            child: Text(
-                              'Review & Next >',
-                              style: TextStyle(
-                                  fontSize: screenHeight * 0.015,
-                                  color: Colors.white),
-                            ),
+                    Center(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.green,
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            if (_isAllFieldsValid()) {
+                              _makeTransactionRequest(context, amount);
+                            } else {
+                              setState(() {});
+                            }
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset('images/new_releases (1).png'),
+                              SizedBox(
+                                width: screenWidth * 0.02,
+                              ),
+                              Text(
+                                'Submit and Proceed Payment >',
+                                style: TextStyle(
+                                    fontSize: screenHeight * 0.015,
+                                    color: Colors.white),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                    const SizedBox(height: 70),
                   ],
                 ),
               ),
@@ -384,18 +408,18 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
   }
 
   Widget buildLabeledTextField(
-      BuildContext context,
-      String label,
-      String hintText, {
-        bool showPositionedBox = false,
-        IconData? prefixIcon,
-        bool obscureText = false,
-        List<String>? dropdownItems,
-        TextEditingController? controller,
-        String? Function(String?)? validator,
-        VoidCallback? onTap,
-        TextInputType? keyboardType,
-      }) {
+    BuildContext context,
+    String label,
+    String hintText, {
+    bool showPositionedBox = false,
+    IconData? prefixIcon,
+    bool obscureText = false,
+    List<String>? dropdownItems,
+    TextEditingController? controller,
+    String? Function(String?)? validator,
+    VoidCallback? onTap,
+    TextInputType? keyboardType,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -423,45 +447,45 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
               horizontal: MediaQuery.of(context).size.width * 0.04),
           child: dropdownItems != null
               ? DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              hintText: hintText,
-              prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            value: controller?.text.isNotEmpty == true
-                ? controller?.text
-                : null,
-            hint: Text(hintText),
-            onChanged: (String? newValue) {
-              setState(() {
-                controller?.text = newValue!;
-              });
-            },
-            items: dropdownItems.map((String item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                child: Text(item),
-              );
-            }).toList(),
-            validator: validator,
-            isExpanded: true,
-          )
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  value: controller?.text.isNotEmpty == true
+                      ? controller?.text
+                      : null,
+                  hint: Text(hintText),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      controller?.text = newValue!;
+                    });
+                  },
+                  items: dropdownItems.map((String item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    );
+                  }).toList(),
+                  validator: validator,
+                  isExpanded: true,
+                )
               : TextFormField(
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: hintText,
-              prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            obscureText: obscureText,
-            validator: validator,
-            onTap: onTap,
-            keyboardType: keyboardType,
-          ),
+                  controller: controller,
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  obscureText: obscureText,
+                  validator: validator,
+                  onTap: onTap,
+                  keyboardType: keyboardType,
+                ),
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
       ],

@@ -5,67 +5,24 @@ import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
 import 'package:hiremi_version_two/Custom_Widget/dropdown.dart';
 import 'package:hiremi_version_two/Models/register_model.dart';
 import 'package:hiremi_version_two/verification_screens/verification_screen3.dart';
-import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class VerificationScreen2 extends StatefulWidget {
-  const VerificationScreen2({Key? key}) : super(key: key);
+  const VerificationScreen2({super.key});
 
   @override
   State<VerificationScreen2> createState() => _VerificationScreenState();
 }
 
 class _VerificationScreenState extends State<VerificationScreen2> {
-final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   Gender? _selectedGender = Gender.Male;
-  String? _selectedState;
-  DateTime? _selectedDate;
-String _userId="";
-String _fullName="";
-
+  String _userId = "";
+  String _fullName = "";
 
   // List<String> _states = ['State 1', 'State 2', 'State 3', 'State 4'];
-
-  final List<String> _states = [
-    'Andhra Pradesh',
-    'Arunachal Pradesh',
-    'Assam',
-    'Bihar',
-    'Chhattisgarh',
-    'Goa',
-    'Gujarat',
-    'Haryana',
-    'Himachal Pradesh',
-    'Jharkhand',
-    'Karnataka',
-    'Kerala',
-    'Madhya Pradesh',
-    'Maharashtra',
-    'Manipur',
-    'Meghalaya',
-    'Mizoram',
-    'Nagaland',
-    'Odisha',
-    'Punjab',
-    'Rajasthan',
-    'Sikkim',
-    'Tamil Nadu',
-    'Telangana',
-    'Tripura',
-    'Uttar Pradesh',
-    'Uttarakhand',
-    'West Bengal',
-    'Andaman and Nicobar Islands',
-    'Chandigarh',
-    'Dadra and Nagar Haveli and Daman and Diu',
-    'Delhi',
-    'Jammu and Kashmir',
-    'Ladakh',
-    'Lakshadweep',
-    'Puducherry',
-  ];
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _fatherNameController = TextEditingController();
@@ -107,14 +64,16 @@ String _fullName="";
     _confirmPasswordController.dispose();
     super.dispose();
   }
-@override
-void initState() {
-  super.initState();
-  _fetchUserData();
-  if (_fullName.isEmpty) {
-    _fetchFullName();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+    if (_fullName.isEmpty) {
+      _fetchFullName();
+    }
   }
-}
+
 // Future<void> _fetchUserData() async {
 //   SharedPreferences prefs = await SharedPreferences.getInstance();
 //   String? storedEmail = prefs.getString('email');
@@ -169,6 +128,7 @@ void initState() {
       _fullName = fullName;
     });
   }
+
   Future<void> _fetchUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? storedEmail = prefs.getString('email');
@@ -185,7 +145,7 @@ void initState() {
           print('All user data: $data');
 
           final userData = data.firstWhere(
-                (user) => user['email'] == storedEmail,
+            (user) => user['email'] == storedEmail,
             orElse: () => null,
           );
 
@@ -202,13 +162,13 @@ void initState() {
               _collegeStateController.text = userData['college_state'] ?? '';
 
               print('Setting branch name: ${userData['branch_name']}');
-              _branchController.text = userData['branch_name'] ?? '';
+              // _branchController.text = (userData['branch_name'] ?? '').toString();
 
               print('Setting degree name: ${userData['degree_name']}');
               _degreeController.text = userData['degree_name'] ?? '';
 
               print('Setting passing year: ${userData['passing_year']}');
-              _passingYearController.text = (userData['passing_year'] ?? '').toString();
+              // _passingYearController.text = (userData['passing_year'] ?? '').toString();
             });
           } else {
             print('No user found with the stored email');
@@ -224,45 +184,41 @@ void initState() {
     }
   }
 
-
   Future<void> _updateUserData() async {
-  if (!_isAllFieldsValid()) return;
+    if (!_isAllFieldsValid()) return;
 
-  try {
-    final response = await http.patch(
-      Uri.parse('http://13.127.81.177:8000/api/registers/$_userId/'),
+    try {
+      final response = await http.patch(
+        Uri.parse('http://13.127.81.177:8000/api/registers/$_userId/'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'college_name': _collegeNameController.text,
+          'college_state': _collegeStateController.text,
+          'branch_name': _branchController.text,
+          'degree_name': _degreeController.text,
+          'passing_year': _passingYearController.text
 
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-
-        'college_name':_collegeNameController.text,
-        'college_state':_collegeStateController.text,
-        'branch_name':_branchController.text,
-        'degree_name':_degreeController.text,
-        'passing_year':_passingYearController.text
-
-
-        // Include other fields similarly
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      print('User data updated successfully');
-      Navigator.push(
-        context,
-        SlidePageRoute(page: VerificationScreen3()),
+          // Include other fields similarly
+        }),
       );
-    } else {
-      print("$_userId");
-      print('Failed to update user data: ${response.statusCode}');
-      print(response.body);
+
+      if (response.statusCode == 200) {
+        print('User data updated successfully');
+        Navigator.push(
+          context,
+          SlidePageRoute(page: VerificationScreen3()),
+        );
+      } else {
+        print("$_userId");
+        print('Failed to update user data: ${response.statusCode}');
+        print(response.body);
+      }
+    } catch (e) {
+      print('Error in catch: $e');
     }
-  } catch (e) {
-    print('Error in catch: $e');
   }
-}
 
   bool _isAllFieldsValid() {
     return _formKey.currentState?.validate() ?? false;
@@ -302,7 +258,7 @@ void initState() {
                     backgroundColor: Colors.grey.shade300,
                   ),
                   SizedBox(height: screenHeight * 0.0075),
-                   Text(
+                  Text(
                     _fullName,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
@@ -338,133 +294,129 @@ void initState() {
                 ],
               ),
             ),
-
             SizedBox(height: MediaQuery.of(context).size.height * 0.0425),
             Container(
               height: 1,
               width: screenWidth * 0.9,
               color: Colors.grey,
             ),
-
             Form(
               key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: screenHeight * 0.02),
-                      Padding(
-                        padding: EdgeInsets.all(screenWidth*0.04),
-                        child: const Text(
-                          'Education Information',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.start,
-                        ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: screenHeight * 0.02),
+                    Padding(
+                      padding: EdgeInsets.all(screenWidth * 0.04),
+                      child: const Text(
+                        'Education Information',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.start,
                       ),
-                      SizedBox(height: screenHeight * 0.01),
+                    ),
+                    SizedBox(height: screenHeight * 0.01),
 
-                      buildLabeledTextField(
-                        context,
-                        "College Name",
-                        "Enter Your College Name",
-                        controller: _collegeNameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your college name';
-                          }
-                          return null;
-                        },
-                      ),
-                      //buildStateDropdown(),
-                      buildLabeledTextField(
-                        context,
-                        "College's State",
-                        "Enter Your College's State",
-                        controller: _collegeStateController,
-                        dropdownItems:  DropdownData.states,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please enter your College's State";
-                          }
-                          return null;
-                        },
-                      ),
-                      buildLabeledTextField(
-                        context,
-                        "Branch",
-                        "Enter Your Branch Name",
-                        controller: _branchController,
-                        dropdownItems:  DropdownData.branch,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your branch';
-                          }
-                          return null;
-                        },
-                      ),
-                      buildLabeledTextField(
-                        context,
-                        "Degree",
-                        "Enter Your Degree Name",
-                        controller: _degreeController,
-                        dropdownItems:  DropdownData.degrees,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your degree';
-                          }
-                          return null;
-                        },
-                      ),
-                      buildLabeledTextField(
-                        context,
-                        "Passing Year",
-                        "Enter Your Passing Year",
-                        controller: _passingYearController,
-
-                        dropdownItems:  DropdownData.passingyear,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your passing year';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                      Row(
-                        children: [
-                          const Spacer(),
-                          Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: const Color(0xFFC1272D),
-                              ),
-                              child: TextButton(
-                                onPressed: () {
-                                  if (_isAllFieldsValid()) {
-                                    // Navigator.of(context).push(MaterialPageRoute(
-                                    //     builder: (ctx) => const VerificationScreen3()));
-                                    _updateUserData();
-                                  } else {
-                                    setState(() {});
-                                  }
-                                },
-                                child: Text(
-                                  'Review & Next >',
-                                  style: TextStyle(
-                                      fontSize: screenHeight * 0.015,
-                                      color: Colors.white),
-                                ),
-                              ),
+                    buildLabeledTextField(
+                      context,
+                      "College Name",
+                      "Enter Your College Name",
+                      controller: _collegeNameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your college name';
+                        }
+                        return null;
+                      },
+                    ),
+                    //buildStateDropdown(),
+                    buildLabeledTextField(
+                      context,
+                      "College's State",
+                      "Enter Your College's State",
+                      controller: _collegeStateController,
+                      dropdownItems: DropdownData.states,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter your College's State";
+                        }
+                        return null;
+                      },
+                    ),
+                    buildLabeledTextField(
+                      context,
+                      "Branch",
+                      "Enter Your Branch Name",
+                      controller: _branchController,
+                      dropdownItems: DropdownData.branch,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your branch';
+                        }
+                        return null;
+                      },
+                    ),
+                    buildLabeledTextField(
+                      context,
+                      "Degree",
+                      "Enter Your Degree Name",
+                      controller: _degreeController,
+                      dropdownItems: DropdownData.degrees,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your degree';
+                        }
+                        return null;
+                      },
+                    ),
+                    buildLabeledTextField(
+                      context,
+                      "Passing Year",
+                      "Enter Your Passing Year",
+                      controller: _passingYearController,
+                      dropdownItems: DropdownData.passingyear,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your passing year';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                    Row(
+                      children: [
+                        const Spacer(),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: const Color(0xFFC1272D),
+                          ),
+                          child: TextButton(
+                            onPressed: () {
+                              if (_isAllFieldsValid()) {
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //     builder: (ctx) => const VerificationScreen3()));
+                                _updateUserData();
+                              } else {
+                                setState(() {});
+                              }
+                            },
+                            child: Text(
+                              'Review & Next >',
+                              style: TextStyle(
+                                  fontSize: screenHeight * 0.015,
+                                  color: Colors.white),
                             ),
-                        ],
-                      ),
-                      SizedBox(height: 70),
-                    ],
-                  ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-
+            ),
           ],
         ),
       ),
@@ -486,24 +438,20 @@ void initState() {
     );
   }
 
-
-
-
-
   Widget buildLabeledTextField(
-      BuildContext context,
-      String label,
-      String hintText, {
-        bool showPositionedBox = false,
-        IconData? prefixIcon,
-        bool obscureText = false,
-        List<String>? dropdownItems,
-        TextEditingController? controller,
-        String? Function(String?)? validator,
-        VoidCallback? onTap,
-        TextInputType? keyboardType,
-        bool readOnly = false, // Added parameter
-      }) {
+    BuildContext context,
+    String label,
+    String hintText, {
+    bool showPositionedBox = false,
+    IconData? prefixIcon,
+    bool obscureText = false,
+    List<String>? dropdownItems,
+    TextEditingController? controller,
+    String? Function(String?)? validator,
+    VoidCallback? onTap,
+    TextInputType? keyboardType,
+    bool readOnly = false, // Added parameter
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -531,53 +479,51 @@ void initState() {
               horizontal: MediaQuery.of(context).size.width * 0.04),
           child: dropdownItems != null
               ? DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              hintText: hintText,
-              prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            value: controller?.text.isNotEmpty == true
-                ? controller?.text
-                : null,
-            hint: Text(hintText),
-            onChanged: (String? newValue) {
-              if (newValue != null) {
-                controller?.text = newValue;
-              }
-            },
-            items: dropdownItems.map((String item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                child: Text(item),
-              );
-            }).toList(),
-            validator: validator,
-            isExpanded: true,
-          )
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  value: controller?.text.isNotEmpty == true
+                      ? controller?.text
+                      : null,
+                  hint: Text(hintText),
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      controller?.text = newValue;
+                    }
+                  },
+                  items: dropdownItems.map((String item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    );
+                  }).toList(),
+                  validator: validator,
+                  isExpanded: true,
+                )
               : TextFormField(
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: hintText,
-              prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            obscureText: obscureText,
-            validator: validator,
-            onTap: onTap,
-            keyboardType: keyboardType,
-            readOnly: readOnly, // Added line
-          ),
+                  controller: controller,
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  obscureText: obscureText,
+                  validator: validator,
+                  onTap: onTap,
+                  keyboardType: keyboardType,
+                  readOnly: readOnly, // Added line
+                ),
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
       ],
     );
   }
-
-
 
   Widget buildGenderField() {
     return Column(
