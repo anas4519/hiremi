@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/API_Integration/Internship/Apiservices.dart';
 import 'package:hiremi_version_two/Custom_Widget/OppurtunityCard.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 
 class FresherJobs extends StatefulWidget {
@@ -35,14 +36,25 @@ class _FresherJobsState extends State<FresherJobs> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => const NotificationScreen()));
-              },
-              icon: const Icon(Icons.notifications_outlined),
-              style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)))
+          Padding(
+            padding:
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+            child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const NotificationScreen(),
+                      ));
+                    },
+                    icon: const Icon(Icons.notifications_outlined),
+                  ),
+                )),
+          ),
         ],
       ),
       body: Column(
