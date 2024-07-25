@@ -120,7 +120,7 @@ class _QueriesScreenState extends State<QueriesScreen> {
     if (pickedDate != null && pickedDate != DateTime.now()) {
       setState(() {
         _dobController.text =
-            DateFormat('dd/MM/yyyy').format(pickedDate); // Format as yyyy-mm-dd
+        "${pickedDate.toLocal()}".split(' ')[0]; // F/ Format as yyyy-mm-dd
       });
     }
   }
