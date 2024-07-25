@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
 import 'package:hiremi_version_two/Custom_Widget/dropdown.dart';
 import 'package:hiremi_version_two/Models/register_model.dart';
+import 'package:hiremi_version_two/repository/User.dart';
 import 'package:hiremi_version_two/verification_screens/verification_screen3.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -259,8 +260,8 @@ class _VerificationScreenState extends State<VerificationScreen2> {
                   ),
                   SizedBox(height: screenHeight * 0.0075),
                   Text(
-                    _fullName,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    userRepository.currentUser!.fullName,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: screenHeight * 0.0075),
                   Container(

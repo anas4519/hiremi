@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hiremi_version_two/repository/User.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/paytmPayment.dart';
@@ -280,7 +281,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                   ),
                   SizedBox(height: screenHeight * 0.0075),
                   Text(
-                    _fullName,
+                    userRepository.currentUser!.fullName,
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),

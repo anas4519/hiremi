@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Controller/VerifyController.dart';
-import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
 import 'package:hiremi_version_two/Models/VerifyModel.dart';
-import 'package:hiremi_version_two/Register.dart';
+import 'package:hiremi_version_two/repository/User.dart';
 import 'package:hiremi_version_two/verification_screens/verification_screen1.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -307,8 +306,8 @@ Future<void> _fetchFullName() async {
                   ),
                   SizedBox(height: screenHeight * 0.0075),
                    Text(
-                    _fullName,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                     userRepository.currentUser!.fullName,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: screenHeight * 0.0075),
                   Container(
@@ -349,10 +348,6 @@ Future<void> _fetchFullName() async {
               width: screenWidth * 0.9,
               color: Colors.grey,
             ),
-
-            // backgroundColor: Colors.white,
-            // borderColor: Colors.black,
-            // borderWidth: 0.53,
             Form(
               key: _formKey,
                 child: Padding(

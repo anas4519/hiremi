@@ -2,16 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
-import 'package:hiremi_version_two/Models/register_model.dart';
+import 'package:hiremi_version_two/repository/User.dart';
 import 'package:hiremi_version_two/verification_screens/verifiaction_screen2.dart';
-import 'package:hiremi_version_two/verify.dart';
-import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class VerificationScreen1 extends StatefulWidget {
-  const VerificationScreen1({Key? key}) : super(key: key);
+  const VerificationScreen1({super.key});
 
   @override
   State<VerificationScreen1> createState() => _VerificationScreen1State();
@@ -194,7 +192,7 @@ class _VerificationScreen1State extends State<VerificationScreen1> {
                     ),
                     SizedBox(height: screenHeight * 0.0075),
                     Text(
-                      _fullName,
+                      userRepository.currentUser!.fullName,
                       style:
                           const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
