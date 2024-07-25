@@ -1,23 +1,26 @@
 import 'dart:convert';
-import 'package:hiremi_version_two/repository/User.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
-import 'package:hiremi_version_two/paytmPayment.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hiremi_version_two/repository/User.dart';
 import 'package:hiremi_version_two/verified_page.dart';
+import 'package:http/http.dart' as http;
 import 'package:paytm_routersdk/paytm_routersdk.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class VerificationScreen3 extends StatefulWidget {
-  const VerificationScreen3({Key? key}) : super(key: key);
+import '../providers/verified_provider.dart';
+
+class VerificationScreen3 extends ConsumerStatefulWidget {
+  const VerificationScreen3({super.key});
 
   @override
-  State<VerificationScreen3> createState() => _VerificationScreen3State();
+  ConsumerState<VerificationScreen3> createState() =>
+      _VerificationScreen3State();
 }
 
-class _VerificationScreen3State extends State<VerificationScreen3> {
+class _VerificationScreen3State extends ConsumerState<VerificationScreen3> {
   final _formKey = GlobalKey<FormState>();
-  String _fullName = "";
   double amount = 1;
   String Email = "";
 
@@ -37,9 +40,6 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (_fullName.isEmpty) {
-      _fetchFullName();
-    }
     if (Email.isEmpty) {
       _printSavedEmail();
     }
@@ -56,13 +56,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
     Email = email;
   }
 
-  Future<void> _fetchFullName() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? fullName = prefs.getString('full_name') ?? 'No name saved';
-    setState(() {
-      _fullName = fullName;
-    });
-  }
+
 
   Future<Map?> _initiateTransaction(String txnToken, String orderId,
       String amount, String mid, String callbackUrl, bool isStaging) async {
@@ -101,6 +95,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
   }
 
   final String orderStatusUrl = 'http://13.127.81.177:8000/order-status/';
+
   Future<void> checkOrderStatus(String orderId) async {
     try {
       final response = await http.post(
@@ -138,7 +133,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
 
       // Parameters
       var params = {
-        'name': _fullName,
+        'name': userRepository.currentUser!.fullName,
         'amount': amount.toString(),
         'orderId': orderId,
         'email': "yashmanu0761@gmail.com" // Add email to the parameters
@@ -252,7 +247,7 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-
+    bool isVerified = ref.watch(verificationProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -374,9 +369,9 @@ class _VerificationScreen3State extends State<VerificationScreen3> {
                         child: TextButton(
                           onPressed: () {
                             if (_isAllFieldsValid()) {
-                              _makeTransactionRequest(context, amount);
-                            } else {
-                              setState(() {});
+                              if (!isVerified) {
+                                _makeTransactionRequest(context, amount);
+                              }
                             }
                           },
                           child: Row(
