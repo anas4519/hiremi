@@ -5,10 +5,10 @@ import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 
-
-
 class HelpSupport extends StatefulWidget {
-  const HelpSupport({Key? key, }) : super(key: key);
+  const HelpSupport({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<HelpSupport> createState() => _HelpSupportState();
@@ -27,7 +27,6 @@ class _HelpSupportState extends State<HelpSupport> {
           "Help & Support",
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
-        
         centerTitle: true,
         actions: [
           Padding(
@@ -55,14 +54,120 @@ class _HelpSupportState extends State<HelpSupport> {
         child: Padding(
           padding: EdgeInsets.all(screenHeight * 0.03),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Center(
                   child: Image(
-                      image: const AssetImage(
-                          'images/Contact us-cuate (1).png'))),
+                      image:
+                          const AssetImage('images/Contact us-cuate (1).png'))),
               SizedBox(
                 height: screenHeight * 0.02,
               ),
+              const Text(
+                'Got App Related Query?',
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Color(0xFF41485E),
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: screenHeight * 0.05,
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            Icons.call,
+                            color: Color(0xFFC1272D),
+                          ),
+                          SizedBox(width: screenWidth * 0.04),
+                          const Text(
+                            'Phone:',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(width: screenWidth * 0.01),
+                          const Expanded(
+                            child: Text(
+                              '+91 89 7845 4512',
+                              style: TextStyle(
+                                  color: Color(0xFFC1272D),
+                                  fontWeight: FontWeight.bold),
+                              overflow: TextOverflow
+                                  .ellipsis, // Ensure text does not overflow
+                            ),
+                          ),
+                        ]),
+                  ),
+                  SizedBox(
+                    height: screenHeight * 0.01,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.public,
+                          color: Color(0xFFC1272D),
+                        ),
+                        SizedBox(
+                          width: screenWidth * 0.04,
+                        ),
+                        const Text(
+                          'Website: ',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: screenWidth * 0.01),
+                        const Expanded(
+                          child: Text(
+                            'www.hiremi.in',
+                            style: TextStyle(
+                                color: Color(0xFFC1272D),
+                                fontWeight: FontWeight.bold),
+                            overflow: TextOverflow
+                                .ellipsis, // Ensure text does not overflow
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: screenHeight * 0.01,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            Icons.send,
+                            color: Color(0xFFC1272D),
+                          ),
+                          SizedBox(width: screenWidth * 0.04),
+                          const Text(
+                            'Email:',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(width: screenWidth * 0.01),
+                          const Expanded(
+                            child: Text(
+                              'hiremi@support.com',
+                              style: TextStyle(
+                                  color: Color(0xFFC1272D),
+                                  fontWeight: FontWeight.bold),
+                              overflow: TextOverflow
+                                  .ellipsis, // Ensure text does not overflow
+                            ),
+                          ),
+                        ]),
+                  ),
+                ],
+              ),
+              SizedBox(height: screenHeight*0.05,),
               Container(
                 height: 160,
                 width: 800,
@@ -103,13 +208,13 @@ class _HelpSupportState extends State<HelpSupport> {
                             builder: (BuildContext context) {
                               return //CustomAlertBox();
 
-                              const CustomAlert2();
+                                  const CustomAlert2();
                             },
                           );
                         },
                         style: ButtonStyle(
-                            backgroundColor:
-                                const MaterialStatePropertyAll(Color(0xFFC1272D)),
+                            backgroundColor: const MaterialStatePropertyAll(
+                                Color(0xFFC1272D)),
                             shape: MaterialStatePropertyAll(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0)))),
@@ -123,125 +228,7 @@ class _HelpSupportState extends State<HelpSupport> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: screenHeight * 0.04,
-              ),
-              Row(
-                children: [
-                  Container(
-                    height: screenHeight * 0.002,
-                    width: screenWidth * 0.390,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade400),
-                    ),
-                  ),
-                  SizedBox(
-                    width: screenWidth * 0.02,
-                  ),
-                  const Text('or', style: TextStyle(fontWeight: FontWeight.bold)),
-                  SizedBox(
-                    width: screenWidth * 0.02,
-                  ),
-                  Container(
-                    height: screenHeight * 0.002,
-                    width: screenWidth * 0.390,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade400),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: screenHeight * 0.03,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(Icons.call, color: Color(0xFFC1272D),),
-                      SizedBox(width: screenWidth * 0.04),
-                      const Text(
-                        'Phone:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: screenWidth * 0.01),
-                      const Expanded(
-                        child: Text(
-                          '+91 89 7845 4512',
-                          style: TextStyle(
-                              color: Color(0xFFC1272D), fontWeight: FontWeight.bold),
-                          overflow: TextOverflow
-                              .ellipsis, // Ensure text does not overflow
-                        ),
-                      ),
-                    ]),
-              ),
-              SizedBox(
-                height: screenHeight * 0.01,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(Icons.public, color: Color(0xFFC1272D),),
-                    SizedBox(
-                      width: screenWidth * 0.04,
-                    ),
-                    const Text(
-                      'Website: ',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(width: screenWidth * 0.01),
-                    const Expanded(
-                      child: Text(
-                        'www.hiremi.in',
-                        style: TextStyle(
-                            color: Color(0xFFC1272D), fontWeight: FontWeight.bold),
-                        overflow: TextOverflow
-                            .ellipsis, // Ensure text does not overflow
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: screenHeight * 0.01,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(Icons.send, color: Color(0xFFC1272D),),
-                      SizedBox(width: screenWidth * 0.04),
-                      const Text(
-                        'Email:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: screenWidth * 0.01),
-                      const Expanded(
-                        child: Text(
-                          'hiremi@support.com',
-                          style: TextStyle(
-                              color: Color(0xFFC1272D), fontWeight: FontWeight.bold),
-                          overflow: TextOverflow
-                              .ellipsis, // Ensure text does not overflow
-                        ),
-                      ),
-                    ]),
-              ),
-              SizedBox(
-                height: screenHeight * 0.04,
-              ),
-              Container(
-                height: screenHeight * 0.002,
-                width: screenWidth * 0.900,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade400),
-                ),
-              ),
+              
             ],
           ),
         ),

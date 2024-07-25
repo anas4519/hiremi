@@ -113,7 +113,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               // User info section
               VerifiedProfileWidget(name: FullName, appId: 'HM 23458 73432'),
-              SizedBox(height: screenHeight * 0.02),
+              SizedBox(height: screenHeight * 0.05),
               // Account section
               const Text(
                 'Account',
@@ -132,6 +132,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   border: Border.all(color: Colors.black),
                   borderRadius: BorderRadius.circular(screenHeight * 0.01),
                 ),
+
                 child: RawMaterialButton(
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
@@ -209,36 +210,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: Row(
                           children: [
                             Icon(
-                              Icons.folder_shared_rounded,
-                              color: AppColors.primary,
-                              size: screenHeight * 0.03,
-                            ),
-                            SizedBox(
-                              width: screenWidth * 0.03,
-                            ),
-                            Text(
-                              'Manage Permission',
-                              style: TextStyle(fontSize: screenHeight * 0.02),
-                            ),
-                            Spacer(),
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.arrow_forward_ios,
-                                size: screenHeight * 0.02,
-                              ),
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      WidgetStatePropertyAll(AppColors.bgBlue)),
-                            )
-                          ],
-                        ),
-                      ),
-                      RawMaterialButton(
-                        onPressed: () {},
-                        child: Row(
-                          children: [
-                            Icon(
                               Icons.lock_open_rounded,
                               color: AppColors.primary,
                               size: screenHeight * 0.03,
@@ -298,7 +269,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: Row(
                           children: [
                             Icon(
-                              Icons.location_on,
+                              Icons.explore,
                               color: AppColors.primary,
                               size: screenHeight * 0.03,
                             ),
@@ -306,19 +277,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               width: screenWidth * 0.03,
                             ),
                             Text(
-                              'Location',
-                              style: TextStyle(fontSize: screenHeight * 0.02),
+                              'Terms and Conditions Section',
+                              style: TextStyle(fontSize: screenHeight * 0.017),
                             ),
                             Spacer(),
-                            Transform.scale(
-                              scale: 0.7,
-                              child: Switch(
-                                value: true,
-                                onChanged: (value) {},
-                                activeColor: customRed,
-                                activeTrackColor: Colors.grey[300],
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.arrow_forward_ios,
+                                size: screenHeight * 0.02,
                               ),
-                            ),
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStatePropertyAll(AppColors.bgBlue)),
+                            )
                           ],
                         ),
                       ),
