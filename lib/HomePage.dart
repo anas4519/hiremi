@@ -1,16 +1,14 @@
 import 'dart:convert';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/API_Integration/Internship/Apiservices.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:hiremi_version_two/Custom_Widget/OppurtunityCard.dart';
 import 'package:hiremi_version_two/Custom_Widget/Verifiedtrue.dart';
 import 'package:hiremi_version_two/Custom_Widget/banners.dart';
-import 'package:hiremi_version_two/Custom_Widget/drawer_child.dart';
 import 'package:hiremi_version_two/Custom_Widget/verification_status.dart';
 import 'package:hiremi_version_two/InternshipScreen.dart';
-import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/experienced_jobs.dart';
@@ -18,9 +16,8 @@ import 'package:hiremi_version_two/fresherJobs.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
 import 'package:hiremi_version_two/repository/User.dart';
 import 'package:hiremi_version_two/repository/model/userModel.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Models/register_model.dart';
 
@@ -39,6 +36,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   bool _isLoading = true;
   String FullName = "";
   String storedEmail = '';
+
   // bool isVerified = ref.watch(verificationProvider);
   User? matchingUser;
 
@@ -123,6 +121,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       print('Error: $e');
     }
   }
+
   // Future<void> _checkVerified() async {
   //   const String apiUrl = "http://13.127.81.177:8000/api/registers/";
 
@@ -155,8 +154,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   //   }
   // }
 
-
-
   @override
   Widget build(BuildContext context) {
     bool isVerified = ref.watch(verificationProvider);
@@ -166,247 +163,272 @@ class _HomePageState extends ConsumerState<HomePage> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(screenWidth * 0.04),
+          padding: EdgeInsets.symmetric(vertical: Sizes.responsiveMd(context)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (!isVerified)
-                VerificationStatus(
-                    fullName: userRepository.currentUser?.fullName,
-                    percent: 0.25),
-              if (isVerified)
-                VerifiedProfileWidget(
-                    name: 'Hi, ${userRepository.currentUser?.fullName}',
-                    appId: '00011102'),
-              SizedBox(height: screenHeight * 0.02),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Explore hiremi',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-
-                  Column(
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Sizes.responsiveMd(context)),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          height: 155,
-                          viewportFraction: 0.95,
-                          autoPlay: true,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _current = index;
-                            });
-                          },
-                        ),
-                        items: [1, 2, 3, 4, 5].map((i) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return AdBanner();
-                            },
-                          );
-                        }).toList(),
+                      if (!isVerified)
+                        VerificationStatus(
+                            fullName: userRepository.currentUser?.fullName,
+                            percent: 0.25),
+                      if (isVerified)
+                        VerifiedProfileWidget(
+                            name: 'Hi, ${userRepository.currentUser?.fullName}',
+                            appId: '00011102'),
+                      SizedBox(height: Sizes.responsiveXxl(context)),
+                      const Text(
+                        'Explore hiremi',
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [1, 2, 3, 4, 5].asMap().entries.map((entry) {
-                          return GestureDetector(
-                            onTap: () => _controller.animateToPage(entry.key),
-                            child: Container(
-                              width: 12.0,
-                              height: 12.0,
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 4.0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: (Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? Colors.white
-                                        : AppColors.primary)
-                                    .withOpacity(
-                                        _current == entry.key ? 0.9 : 0.4),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  // const CircleRow(),
-                ],
+                      SizedBox(height: Sizes.responsiveMd(context)),
+                    ]),
               ),
-              SizedBox(height: screenHeight * 0.02),
-              const Text(
-                "Hiremi's Featured",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              Row(
+              Column(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFFFF6E01), Color(0xFFFEBC0D)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) =>
-                              InternshipsScreen(isVerified: isVerified),
-                        ));
+                  CarouselSlider(
+                    options: CarouselOptions(
+                      height: 140,
+                      viewportFraction: 0.95,
+                      autoPlay: true,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _current = index;
+                        });
                       },
-                      child: Row(
-                        children: [
-                          Container(
-                            width: screenWidth * 0.05,
-                            height: screenWidth * 0.05,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                            child: Icon(
-                              Icons.spa,
-                              size: screenWidth * 0.02,
-                              color: Colors.orange,
-                            ),
-                          ),
-                          SizedBox(width: screenWidth * 0.015),
-                          Text(
-                            'Internships',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: screenWidth * 0.025,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
+                    items: [1, 2, 3, 4, 5].map((i) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: screenWidth * 0.025),
+                            child: AdBanner(),
+                          );
+                        },
+                      );
+                    }).toList(),
                   ),
-                  SizedBox(width: screenWidth * 0.01),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFFFC3E41), Color(0xFFFF6E01)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) =>
-                                FresherJobs(isVerified: isVerified)));
-                      },
-                      child: Row(
-                        children: [
-                          Container(
-                            width: screenWidth * 0.05,
-                            height: screenWidth * 0.05,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                            child: Icon(
-                              Icons.work,
-                              size: screenWidth * 0.02,
-                              color: Colors.deepOrange,
-                            ),
-                          ),
-                          SizedBox(width: screenWidth * 0.015),
-                          Text(
-                            'Fresher Jobs',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: screenWidth * 0.025,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  SizedBox(
+                    height: Sizes.responsiveMdSm(context),
                   ),
-                  SizedBox(width: screenWidth * 0.01),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFFCB44BD), Color(0xFFDB6AA0)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => const Experienced_Jobs()));
-                      },
-                      child: Row(
-                        children: [
-                          Container(
-                            width: screenWidth * 0.05,
-                            height: screenWidth * 0.05,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                            child: Icon(
-                              Icons.work,
-                              size: screenWidth * 0.02,
-                              color: Colors.purpleAccent,
-                            ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [1, 2, 3, 4, 5].asMap().entries.map((entry) {
+                      return GestureDetector(
+                        onTap: () => _controller.animateToPage(entry.key),
+                        child: Container(
+                          width: 12.0,
+                          height: 12.0,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 4.0),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: (Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.white
+                                    : AppColors.primary)
+                                .withOpacity(
+                                    _current == entry.key ? 0.9 : 0.4),
                           ),
-                          SizedBox(width: screenWidth * 0.015),
-                          Text(
-                            'Experienced Jobs',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: screenWidth * 0.025,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                        ),
+                      );
+                    }).toList(),
+                  )
                 ],
               ),
+              SizedBox(height: Sizes.responsiveMd(context)),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Sizes.responsiveMd(context)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Hiremi's Featured",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    SizedBox(height: screenHeight * 0.02),
+                    Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFFF6E01), Color(0xFFFEBC0D)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) =>
+                                    InternshipsScreen(isVerified: isVerified),
+                              ));
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: screenWidth * 0.05,
+                                  height: screenWidth * 0.05,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                  ),
+                                  child: Icon(
+                                    Icons.spa,
+                                    size: screenWidth * 0.02,
+                                    color: Colors.orange,
+                                  ),
+                                ),
+                                SizedBox(width: screenWidth * 0.015),
+                                Text(
+                                  'Internships',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: screenWidth * 0.025,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: screenWidth * 0.01),
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFFC3E41), Color(0xFFFF6E01)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (ctx) =>
+                                      FresherJobs(isVerified: isVerified)));
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: screenWidth * 0.05,
+                                  height: screenWidth * 0.05,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                  ),
+                                  child: Icon(
+                                    Icons.work,
+                                    size: screenWidth * 0.02,
+                                    color: Colors.deepOrange,
+                                  ),
+                                ),
+                                SizedBox(width: screenWidth * 0.015),
+                                Text(
+                                  'Fresher Jobs',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: screenWidth * 0.025,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: screenWidth * 0.01),
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFCB44BD), Color(0xFFDB6AA0)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (ctx) => const Experienced_Jobs()));
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: screenWidth * 0.05,
+                                  height: screenWidth * 0.05,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                  ),
+                                  child: Icon(
+                                    Icons.work,
+                                    size: screenWidth * 0.02,
+                                    color: Colors.purpleAccent,
+                                  ),
+                                ),
+                                SizedBox(width: screenWidth * 0.015),
+                                Text(
+                                  'Experienced Jobs',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: screenWidth * 0.025,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
               SizedBox(height: screenHeight * 0.02),
-              const Text(
-                'Latest Opportunities',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Sizes.responsiveMd(context)),
+                child: const Text(
+                  'Latest Opportunities',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
               ),
               SizedBox(height: screenHeight * 0.01),
-              Column(
-                children: _jobs.map((job) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: screenHeight * 0.02),
-                    child: OpportunityCard(
-                      dp: Image.asset(
-                          'images/icons/logo1.png'), // Placeholder image
-                      profile: job['profile'] ?? 'N/A',
-                      companyName: job['company_name'] ?? 'N/A',
-                      location: job['location'] ?? 'N/A',
-                      stipend: job['Stipend']?.toString() ?? 'N/A',
-                      mode: 'Remote', // Replace with actual data if available
-                      type: 'Job', // Replace with actual data if available
-                      exp: 1, // Replace with actual data if available
-                      daysPosted: 0, // Replace with actual data if available
-                      ctc: job['Stipend']?.toString() ??
-                          '0', // Example, replace with actual field
-                      description:
-                          job['description'] ?? 'No description available',
-                      education: job['education'],
-                      skillsRequired: job['skills_required'],
-                      whoCanApply: job['who_can_apply'],
-                    ),
-                  );
-                }).toList(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Sizes.responsiveMd(context)),
+                child: Column(
+                  children: _jobs.map((job) {
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: screenHeight * 0.02),
+                      child: OpportunityCard(
+                        dp: Image.asset('images/icons/logo1.png'),
+                        // Placeholder image
+                        profile: job['profile'] ?? 'N/A',
+                        companyName: job['company_name'] ?? 'N/A',
+                        location: job['location'] ?? 'N/A',
+                        stipend: job['Stipend']?.toString() ?? 'N/A',
+                        mode: 'Remote',
+                        // Replace with actual data if available
+                        type: 'Job',
+                        // Replace with actual data if available
+                        exp: 1,
+                        // Replace with actual data if available
+                        daysPosted: 0,
+                        // Replace with actual data if available
+                        ctc: job['Stipend']?.toString() ?? '0',
+                        // Example, replace with actual field
+                        description:
+                            job['description'] ?? 'No description available',
+                        education: job['education'],
+                        skillsRequired: job['skills_required'],
+                        whoCanApply: job['who_can_apply'],
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             ],
           ),
