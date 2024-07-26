@@ -37,20 +37,21 @@ class ThirdLandingPage extends StatelessWidget {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.095),
         
-                  const Text("Get Personalized ", style: TextStyle(
+                  const Text("Discover Exclusive ", style: TextStyle(
                     fontSize: 28.0,
                     fontWeight: FontWeight.w500,
                   ),),
-                  const Text("Career Guidance.", style: TextStyle(
+                  const Text("Opportunities", style: TextStyle(
                     fontSize: 28.0,
                     color:Color(0xFF34AD78),
                     fontWeight: FontWeight.w500,
                   ),),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                  const Text("Receive tailored advice and insights to help you make the best hiring decisions.",
+                  const Text("Get personalized job and internship opportunities in various domains tailored to your skills.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
+                      fontSize: 12
                     ),),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.1235),
                   CustomElevatedButton(

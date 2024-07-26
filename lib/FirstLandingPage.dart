@@ -58,9 +58,9 @@ class _FirstLandingPageState extends State<FirstLandingPage> {
                       ],
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                   const Text(
-                    "Your path to the perfect hire starts here. Let's build a stronger team together with the best talent at your fingertips.",
+                    "Where your career needs are at your fingertips.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 12.0,

@@ -143,19 +143,11 @@ final List<String> _states = [
                         color: Colors.black,
                       ),
                     ),
-                    TextSpan(
-                      text: "Start your journey with us ",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
-                      ),
-                    ),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.0425),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             CurvedContainer(
               backgroundColor: Colors.white,
               borderColor: Colors.black,

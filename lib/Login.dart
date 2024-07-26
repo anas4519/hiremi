@@ -155,27 +155,20 @@ class _LogInState extends State<LogIn> {
                     text: const TextSpan(
                       children: [
                         TextSpan(
-                          text: "Let's sign you in,\n",
+                          text: "Let's Sign into Hiremi",
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w500,
                             color: Colors.black,
                           ),
                         ),
-                        TextSpan(
-                          text: "We're waiting for you",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                          ),
-                        ),
+                        
                       ],
                     ),
                   ),
                 ),
 
-                SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.036),
 
                 // Reusable CurvedContainer
                 CurvedContainer(
@@ -421,7 +414,7 @@ class _LogInState extends State<LogIn> {
                               child: const Text(
                                 "or",
                                 style: TextStyle(
-                                  color: Colors.grey,
+                                  color: Colors.black,
                                   fontSize: 16,
                                 ),
                               ),

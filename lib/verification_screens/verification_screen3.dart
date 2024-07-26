@@ -110,6 +110,7 @@ class _VerificationScreen3State extends ConsumerState<VerificationScreen3> {
         print("Order is complete");
         print(response.statusCode);
         print(response.body);
+        
         // Navigator.of(context).push(MaterialPageRoute(
         //     builder: (ctx) => const VerifiedPage()));
       } else {
