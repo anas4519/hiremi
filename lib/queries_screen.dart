@@ -25,7 +25,7 @@ class _QueriesScreenState extends State<QueriesScreen> {
   final _queryTypeController = TextEditingController();
   final _problemDescriptionController = TextEditingController();
   final _dobController = TextEditingController();
-  bool isFirstComplete = true;
+  bool? isFirstComplete = true;
 
   @override
   void dispose() {
@@ -39,14 +39,15 @@ class _QueriesScreenState extends State<QueriesScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _retrieveFirstscreen();
   }
 
   Future<void> _retrieveFirstscreen() async {
     final prefs = await SharedPreferences.getInstance();
-    isFirstComplete = prefs.getBool('isFirstComplete')!;
+    setState(() {
+      isFirstComplete = prefs.getBool('isFirstComplete')!;
+    });
   }
 
   Future<void> _submitQuery() async {
@@ -158,7 +159,7 @@ class _QueriesScreenState extends State<QueriesScreen> {
                     ),
                   ),
                 ),
-                !isFirstComplete
+                !isFirstComplete!
                     ? QueryStartingScreen(
                         onTap: () async {
                           final prefs = await SharedPreferences.getInstance();

@@ -154,6 +154,13 @@ class _HomePageState extends ConsumerState<HomePage> {
   //   }
   // }
 
+  final List<String> bannerImages = [
+    'images/icons/Hiremi Banner.png',
+    'images/icons/Hiremi Banner2.png',
+    'images/icons/Hiremi Banner3.png',
+    'images/icons/Hiremi Banner4.png',
+    'images/icons/Hiremi Banner5.png'
+  ];
   @override
   Widget build(BuildContext context) {
     bool isVerified = ref.watch(verificationProvider);
@@ -202,13 +209,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                         });
                       },
                     ),
-                    items: [1, 2, 3, 4, 5].map((i) {
+                    items: bannerImages.map((i) {
                       return Builder(
                         builder: (BuildContext context) {
                           return Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: screenWidth * 0.025),
-                            child: AdBanner(),
+                            child:  AdBanner(
+                              isVerified: isVerified,
+                              image: i,
+                            ),
                           );
                         },
                       );
