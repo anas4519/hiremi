@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/verified_notification.dart';
+import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/providers/notification_provider.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
@@ -29,14 +30,17 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(Icons.notifications),
-            color: AppColors.primary,
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(AppColors.bgBlue),
+          Padding(
+            padding:  EdgeInsets.only(right: Sizes.responsiveSm(context)),
+            child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.notifications),
+              color: AppColors.primary,
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(AppColors.bgBlue),
+              ),
             ),
           ),
         ],
