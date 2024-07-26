@@ -273,9 +273,9 @@ class _VerificationStatusState extends State<VerificationStatus> {
                       child: Row(
                         children: [
                           Image.asset(
-                            'images/new_releases (1).png',
-                            height: MediaQuery.of(context).size.width * 0.025,
-                            width: MediaQuery.of(context).size.width * 0.025,
+                            'images/icons/new_releases.png',
+                            height: 12,
+                            width: 12,
                           ),
                           SizedBox(
                             width: screenWidth *

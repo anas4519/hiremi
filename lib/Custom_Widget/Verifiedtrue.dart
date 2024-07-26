@@ -69,7 +69,7 @@ class VerifiedProfileWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('images/new_releases (1).png'),
+                Image.asset('images/icons/new_releases.png',height: 12,width: 12,),
                 SizedBox(width: screenWidth * 0.01),
                 const Text(
                   'Verified',
