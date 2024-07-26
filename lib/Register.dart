@@ -84,6 +84,7 @@ final List<String> _states = [
   final TextEditingController _confirmPasswordController = TextEditingController();
 
   RegistrationController _registrationController = RegistrationController();
+  final ScrollController _scrollController = ScrollController();
 
   void _handleGenderChange(Gender? value) {
     setState(() {
@@ -476,6 +477,8 @@ final List<String> _states = [
                               ),
                             );
                           }
+                        } else{
+                          _scrollToFirstInvalidField();
                         }
                       },
                     ),
@@ -490,6 +493,21 @@ final List<String> _states = [
       ),
     );
   }
+
+  void _scrollToFirstInvalidField() {
+  final invalidFields = _formKey.currentState!.validate() as Map;
+  for (var key in invalidFields.keys) {
+    if (!invalidFields[key]) {
+      _scrollController.position.ensureVisible(
+        key.currentContext!.findRenderObject()!,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+      break;
+    }
+  }
+}
+
 
   Widget buildSectionHeader(String title) {
     return Padding(

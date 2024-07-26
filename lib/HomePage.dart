@@ -175,7 +175,8 @@ class _HomePageState extends ConsumerState<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: Sizes.responsiveMd(context)),
+                padding: EdgeInsets.symmetric(
+                    horizontal: Sizes.responsiveMd(context)),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -190,8 +191,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                       SizedBox(height: Sizes.responsiveXxl(context)),
                       const Text(
                         'Explore hiremi',
-                        style:
-                            TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                       SizedBox(height: Sizes.responsiveMd(context)),
                     ]),
@@ -215,7 +216,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           return Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: screenWidth * 0.025),
-                            child:  AdBanner(
+                            child: AdBanner(
                               isVerified: isVerified,
                               image: i,
                             ),
@@ -243,8 +244,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                         Brightness.dark
                                     ? Colors.white
                                     : AppColors.primary)
-                                .withOpacity(
-                                    _current == entry.key ? 0.9 : 0.4),
+                                .withOpacity(_current == entry.key ? 0.9 : 0.4),
                           ),
                         ),
                       );
@@ -254,13 +254,15 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
               SizedBox(height: Sizes.responsiveMd(context)),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: Sizes.responsiveMd(context)),
+                padding: EdgeInsets.symmetric(
+                    horizontal: Sizes.responsiveMd(context)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       "Hiremi's Featured",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     SizedBox(height: screenHeight * 0.02),
                     Row(
@@ -400,7 +402,8 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
               SizedBox(height: screenHeight * 0.02),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: Sizes.responsiveMd(context)),
+                padding: EdgeInsets.symmetric(
+                    horizontal: Sizes.responsiveMd(context)),
                 child: const Text(
                   'Latest Opportunities',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -408,7 +411,8 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
               SizedBox(height: screenHeight * 0.01),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: Sizes.responsiveMd(context)),
+                padding: EdgeInsets.symmetric(
+                    horizontal: Sizes.responsiveMd(context)),
                 child: Column(
                   children: _jobs.map((job) {
                     return Padding(

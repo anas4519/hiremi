@@ -49,13 +49,16 @@ class _SeceondlandingpageState extends State<Seceondlandingpage> {
                     color:Color(0xFF34AD78),
                     fontWeight: FontWeight.w500,
                   ),),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                  const Text("Receive tailored advice and insights to help you make the\nbest decisions for your career.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12
-                    ),),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                  Padding(
+                    padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.06),
+                    child: const Text("Receive tailored advice and insights to help you make the\nbest decisions for your career.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12
+                      ),),
+                  ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.1235),
                   CustomElevatedButton(
                     text: 'Next  >',

@@ -11,7 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Utils/colors.dart';
 
 class VerificationStatus extends StatefulWidget {
-  const VerificationStatus({super.key,required this.fullName, required this.percent});
+  const VerificationStatus(
+      {super.key, required this.fullName, required this.percent});
   final double percent;
   final String? fullName;
 
@@ -20,8 +21,6 @@ class VerificationStatus extends StatefulWidget {
 }
 
 class _VerificationStatusState extends State<VerificationStatus> {
-
-
   @override
   Widget build(BuildContext context) {
     double percentage = widget.percent * 100;
@@ -173,14 +172,17 @@ class _VerificationStatusState extends State<VerificationStatus> {
                   children: [
                     Row(
                       children: [
-                        Text(
-                          widget.fullName ?? '',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: screenWidth *
-                                0.04, // Adjusted based on screen width
-                          ),
-                          overflow: TextOverflow.ellipsis,
+                        SizedBox(
+                          child: Text(
+                              widget.fullName != null &&
+                                      widget.fullName!.length > 12
+                                  ? '${widget.fullName!.substring(0, 12)}...'
+                                  : widget.fullName ?? '',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: screenWidth * 0.04,
+                              ),
+                              overflow: TextOverflow.ellipsis),
                         ),
                         SizedBox(
                           width: screenWidth *
