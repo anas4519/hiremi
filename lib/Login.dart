@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/Curved_Container.dart';
 import 'package:hiremi_version_two/Custom_Widget/Elevated_Button.dart';
@@ -162,7 +163,6 @@ class _LogInState extends State<LogIn> {
                             color: Colors.black,
                           ),
                         ),
-                        
                       ],
                     ),
                   ),
@@ -233,6 +233,9 @@ class _LogInState extends State<LogIn> {
                           }
                           return null;
                         },
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.0185,
                       ),
 
                       // SizedBox(height: MediaQuery.of(context).size.height * 0.0075),
@@ -346,8 +349,8 @@ class _LogInState extends State<LogIn> {
                         // Set to true to show the box with the prefix icon
                       ),
 
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.00085),
+                      // SizedBox(
+                      //     height: MediaQuery.of(context).size.height * 0.00085),
                       Padding(
                         padding: EdgeInsets.only(
                             left: MediaQuery.of(context).size.width * 0.56),
@@ -373,7 +376,7 @@ class _LogInState extends State<LogIn> {
                       ),
 
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.0027),
+                          height: MediaQuery.of(context).size.height * 0.02),
                       Center(
                         child: CustomElevatedButton(
                           width: MediaQuery.of(context).size.width * 0.775,
@@ -383,16 +386,37 @@ class _LogInState extends State<LogIn> {
                         ),
                       ),
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.009),
-                      const Center(
-                        child: Text(
-                          "By clicking Login, you agree to Hiremi’s Terms & Conditions.",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          height: MediaQuery.of(context).size.height * 0.01),
+                      Center(
+                          child: RichText(
+                              text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black, // Default text color
                         ),
-                      ),
+                        children: [
+                          const TextSpan(
+                            text: "By logging in, you agree to Hiremi’s ",
+                          ),
+                          TextSpan(
+                            text: "Terms & Conditions",
+                            style: const TextStyle(
+                              color: Colors.blue, // Link color
+                              decoration: TextDecoration
+                                  .underline, // Optional: underline
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                // Handle link tap
+                                
+                              },
+                          ),
+                          const TextSpan(
+                            text: ".",
+                          ),
+                        ],
+                      ))),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.0205),
                       Padding(
@@ -502,7 +526,7 @@ class _LogInState extends State<LogIn> {
             ),
           ),
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.015),
         Padding(
           padding: EdgeInsets.symmetric(
               horizontal: MediaQuery.of(context).size.width * 0.1),
@@ -639,7 +663,7 @@ class _LogInState extends State<LogIn> {
                       keyboardType: keyboardType,
                     ),
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.0),
       ],
     );
   }
