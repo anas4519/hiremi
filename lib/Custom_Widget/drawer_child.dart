@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
@@ -12,7 +10,6 @@ import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/about_us.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
 import 'package:hiremi_version_two/repository/User.dart';
-import 'package:http/http.dart' as http;
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,7 +39,6 @@ class _DrawerChildState extends ConsumerState<DrawerChild> {
     storedEmail = email;
   }
 
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -66,7 +62,8 @@ class _DrawerChildState extends ConsumerState<DrawerChild> {
 
     return Drawer(
       child: Padding(
-        padding: EdgeInsets.fromLTRB( screenWidth * 0.04, screenWidth * 0.04, screenWidth * 0.04, screenWidth * 0.07),
+        padding: EdgeInsets.fromLTRB(screenWidth * 0.04, screenWidth * 0.04,
+            screenWidth * 0.04, screenWidth * 0.07),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -79,11 +76,7 @@ class _DrawerChildState extends ConsumerState<DrawerChild> {
                     radius: screenWidth * 0.10,
                     lineWidth: 4,
                     percent: isVerified ? 1 : 0.25,
-                    center:
-                        isVerified ?  Icon(
-                          Icons.person,
-                          color: AppColors.primary,
-                        ): const Text('25%'),
+                    center: isVerified ? const Text('100%') : const Text('25%'),
                     progressColor: Colors.green,
                     backgroundColor: Colors.transparent,
                   ),
@@ -100,8 +93,7 @@ class _DrawerChildState extends ConsumerState<DrawerChild> {
                     Container(
                       height: screenHeight * 0.03,
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(screenWidth * 0.1),
+                        borderRadius: BorderRadius.circular(screenWidth * 0.1),
                         border: Border.all(color: const Color(0xFFC1272D)),
                       ),
                       child: Padding(
@@ -357,8 +349,7 @@ class _DrawerChildState extends ConsumerState<DrawerChild> {
                       await prefs.setString('isLogin', 'false');
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const LogIn()),
+                        MaterialPageRoute(builder: (context) => const LogIn()),
                         (Route<dynamic> route) => false,
                       );
                     },

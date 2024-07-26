@@ -193,7 +193,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 children: [
                   CarouselSlider(
                     options: CarouselOptions(
-                      height: 140,
+                      height: 155,
                       viewportFraction: 0.95,
                       autoPlay: true,
                       onPageChanged: (index, reason) {
