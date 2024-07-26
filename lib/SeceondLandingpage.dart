@@ -40,20 +40,21 @@ class _SeceondlandingpageState extends State<Seceondlandingpage> {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.095),
         
-                  const Text("Discover Exclusive", style: const TextStyle(
+                  const Text("Get Personalized", style: const TextStyle(
                     fontSize: 28.0,
                     fontWeight: FontWeight.w500,
                   ),),
-                  const Text("Job Opportunities.", style: TextStyle(
+                  const Text("Career Guidance.", style: TextStyle(
                     fontSize: 28.0,
                     color:Color(0xFF34AD78),
                     fontWeight: FontWeight.w500,
                   ),),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                  const Text("Find and connect with top candidates who are looking for unique and exciting roles.",
+                  const Text("Receive tailored advice and insights to help you make the\nbest decisions for your career.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
+                      fontSize: 12
                     ),),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.1235),
                   CustomElevatedButton(
