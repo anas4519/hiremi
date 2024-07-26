@@ -28,29 +28,28 @@ class SAppbar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       backgroundColor: Colors.white,
       leading: Padding(
-        padding: EdgeInsets.only(left: Sizes.responsiveDefaultSpace(context),
+        padding: EdgeInsets.only(
+            left: Sizes.responsiveDefaultSpace(context),
             top: Sizes.responsiveSm(context),
             bottom: Sizes.responsiveSm(context)),
         child: Container(
-    padding: EdgeInsets.all(Sizes.responsiveMdSm(context)),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
               color: AppColors.bgBlue,
             ),
             child: Center(
               child: IconButton(
-                  onPressed: () => {
-                  scaffoldKey.currentState?.openDrawer(),
-              },
-                  icon: const Icon(Icons.notes_outlined,
-                    size: 22,)
-              ),
+                  onPressed: () => scaffoldKey.currentState?.openDrawer(),
+                  icon: const Icon(
+                    Icons.notes_outlined,
+                    size: 22,
+                  )),
             )),
       ),
       title: Text(
         title!,
         style: const TextStyle(
-            fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.black),
+            fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
       ),
       centerTitle: true,
       actions: [
