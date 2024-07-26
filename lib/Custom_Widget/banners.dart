@@ -14,6 +14,7 @@ class AdBanner extends ConsumerWidget {
     final isVerified = ref.watch(verificationProvider);
 
     return Container(
+      padding: EdgeInsets.all(screenWidth * 0.04),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(screenWidth * 0.02),
         gradient: const LinearGradient(
@@ -27,8 +28,13 @@ class AdBanner extends ConsumerWidget {
       ),
       width: screenWidth * 0.95,
       height: screenHeight * 0.181,
-      
-      child: Padding(
+      child: 
+          isVerified?
+              ClipRRect(
+                borderRadius: BorderRadius.circular(screenWidth * 0.02),
+                  child: Image.asset('images/Mentor Banner.png',fit: BoxFit.fill,))
+              :
+      Padding(
         padding: EdgeInsets.all(screenWidth * 0.04),
         child: Row(
           children: [

@@ -16,66 +16,13 @@ class AppliesScreen extends StatefulWidget {
 }
 
 class _AppliesScreenState extends State<AppliesScreen> {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      key: scaffoldKey,
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: Padding(
-          padding: EdgeInsets.only(left: Sizes.responsiveDefaultSpace(context),
-              top: Sizes.responsiveSm(context),
-              bottom: Sizes.responsiveSm(context)),
-          child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: AppColors.bgBlue,
-              ),
-              child: Center(
-                child: IconButton(
-                    onPressed: () =>
-                        scaffoldKey.currentState?.openDrawer(),
-                    icon: const Icon(Icons.notes_outlined,
-                      size: 22,)
-                ),
-              )),
-        ),
-        title: const Text(
-          "Applies",
-          style: TextStyle(
-              fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
-        ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding:
-            EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
-            child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.bgBlue,
-                ),
-                child: Center(
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => const NotificationScreen(),
-                      ));
-                    },
-                    icon: const Icon(Icons.notifications_outlined),
-                  ),
-                )),
-          ),
-        ],
-      ),
-      drawer: const Drawer(
-        child: DrawerChild(),
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

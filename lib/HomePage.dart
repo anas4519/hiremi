@@ -157,7 +157,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
 
 
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     bool isVerified = ref.watch(verificationProvider);
@@ -165,59 +164,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
-      key: scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: Padding(
-          padding: EdgeInsets.only(
-              left: Sizes.responsiveDefaultSpace(context),
-              top: Sizes.responsiveSm(context),
-              bottom: Sizes.responsiveSm(context)),
-          child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: AppColors.bgBlue,
-              ),
-              child: Center(
-                child: IconButton(
-                    onPressed: () => scaffoldKey.currentState?.openDrawer(),
-                    icon: const Icon(
-                      Icons.notes_outlined,
-                      size: 22,
-                    )),
-              )),
-        ),
-        title: const Text(
-          "Hiremi's Home",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding:
-                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
-            child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.bgBlue,
-                ),
-                child: Center(
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => const NotificationScreen(),
-                      ));
-                    },
-                    icon: const Icon(Icons.notifications_outlined),
-                  ),
-                )),
-          ),
-        ],
-      ),
-      drawer: const Drawer(
-        backgroundColor: Colors.white,
-        child: DrawerChild(),
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(screenWidth * 0.04),

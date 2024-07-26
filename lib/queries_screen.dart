@@ -125,7 +125,6 @@ class _QueriesScreenState extends State<QueriesScreen> {
     }
   }
 
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   List<String> queryType = [
     'Job Related',
     'Internship Related',
@@ -142,58 +141,7 @@ class _QueriesScreenState extends State<QueriesScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      key: scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
-          "Queries",
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-        ),
-        leading: Padding(
-          padding: EdgeInsets.only(
-              left: Sizes.responsiveDefaultSpace(context),
-              top: Sizes.responsiveSm(context),
-              bottom: Sizes.responsiveSm(context)),
-          child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: AppColors.bgBlue,
-              ),
-              child: Center(
-                child: IconButton(
-                    onPressed: () => scaffoldKey.currentState?.openDrawer(),
-                    icon: const Icon(
-                      Icons.notes_outlined,
-                      size: 22,
-                    )),
-              )),
-        ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding:
-                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
-            child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.bgBlue,
-                ),
-                child: Center(
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => const NotificationScreen(),
-                      ));
-                    },
-                    icon: const Icon(Icons.notifications_outlined),
-                  ),
-                )),
-          ),
-        ],
-      ),
-      drawer: const Drawer(
-        child: DrawerChild(),
-      ),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
         child: SingleChildScrollView(

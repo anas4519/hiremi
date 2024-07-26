@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,6 +21,7 @@ import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustu
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/ProfileSummary.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/Projects.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/ResumeSection.dart';
+import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/appbar/AppBar.dart';
 import 'Edit_Profile_Section/BasicDetails/AddBasicDetails.dart';
 import 'Edit_Profile_Section/Experience/AddExperience.dart';
 import 'Edit_Profile_Section/Key Skills/AddKeySkills.dart';
@@ -39,65 +39,11 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final controller = Get.put(ProfileController());
 
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: Padding(
-          padding: EdgeInsets.only(
-              left: Sizes.responsiveDefaultSpace(context),
-              top: Sizes.responsiveSm(context),
-              bottom: Sizes.responsiveSm(context)),
-          child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: AppColors.bgBlue,
-              ),
-              child: Center(
-                child: IconButton(
-                    onPressed: () => scaffoldKey.currentState?.openDrawer(),
-                    icon: const Icon(
-                      Icons.notes_outlined,
-                      size: 22,
-                    )),
-              )),
-        ),
-        title: const Text(
-          "Profile",
-          style: TextStyle(
-              fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
-        ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding:
-                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
-            child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.bgBlue,
-                ),
-                child: Center(
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => const NotificationScreen(),
-                      ));
-                    },
-                    icon: const Icon(Icons.notifications_outlined),
-                  ),
-                )),
-          ),
-        ],
-      ),
-      drawer: const Drawer(
-        child: DrawerChild(),
-      ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
