@@ -103,7 +103,7 @@ class ThirdLandingPage extends StatelessWidget {
                         children: [
                           const Text("Let's Get Stared", style: TextStyle(color: Colors.white),),
                           SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                          const Icon(Icons.run_circle, color: Colors.white,)
+                          const Icon(Icons.run_circle, color: Colors.white, size: 18,)
                         ],
                       ),
                     ),

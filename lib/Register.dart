@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hiremi_version_two/Apis/api.dart';
 import 'package:hiremi_version_two/Controller/Register_controller.dart';
 import 'package:hiremi_version_two/Custom_Widget/Curved_Container.dart';
 import 'package:hiremi_version_two/Custom_Widget/Elevated_Button.dart';
 import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
 import 'package:hiremi_version_two/Login.dart';
 import 'package:hiremi_version_two/Models/register_model.dart';
-import 'package:hiremi_version_two/api_services/user_services.dart';
 import 'package:intl/intl.dart';
 
 class Registers extends StatefulWidget {
@@ -346,7 +344,7 @@ final List<String> _states = [
                       "Branch",
                       "Enter Your Branch Name",
                       controller: _branchController,
-                      dropdownItems: ['Degree 1', 'Degree 2', 'Degree 3'],
+                      dropdownItems: ['CSE', 'IT', 'ECE'],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your branch';

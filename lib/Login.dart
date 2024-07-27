@@ -156,7 +156,7 @@ class _LogInState extends State<LogIn> {
                     text: const TextSpan(
                       children: [
                         TextSpan(
-                          text: "Let's Sign into Hiremi",
+                          text: "Let's Sign Into Hiremi",
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w500,
@@ -367,7 +367,7 @@ class _LogInState extends State<LogIn> {
                             );
                           },
                           child: const Text(
-                            'Forget Password?',
+                            'Forgot Password?',
                             style: TextStyle(
                                 color: Colors
                                     .blueAccent), // Adjust text color as needed

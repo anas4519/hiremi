@@ -154,7 +154,6 @@ class _VerificationScreenState extends State<VerificationScreen2> {
             print('Matched user data: $userData');
             setState(() {
               _userId = userData['id'].toString();
-
               // Print statements to debug the data being set
               print('Setting college name: ${userData['college_name']}');
               _collegeNameController.text = userData['college_name'] ?? '';
@@ -163,13 +162,13 @@ class _VerificationScreenState extends State<VerificationScreen2> {
               _collegeStateController.text = userData['college_state'] ?? '';
 
               print('Setting branch name: ${userData['branch_name']}');
-              // _branchController.text = (userData['branch_name'] ?? '').toString();
+              _branchController.text = (userData['branch_name'] ?? '').toString();
 
               print('Setting degree name: ${userData['degree_name']}');
               _degreeController.text = userData['degree_name'] ?? '';
 
               print('Setting passing year: ${userData['passing_year']}');
-              // _passingYearController.text = (userData['passing_year'] ?? '').toString();
+              _passingYearController.text = (userData['passing_year'] ?? '').toString();
             });
           } else {
             print('No user found with the stored email');
