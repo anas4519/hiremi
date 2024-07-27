@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class VerificationNotifier extends StateNotifier<bool> {
   VerificationNotifier() : super(false) {
-    // _initializeVerificationStatus();
+    _initializeVerificationStatus();
   }
 
   Future<void> _initializeVerificationStatus() async {
