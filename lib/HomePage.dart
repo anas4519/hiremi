@@ -161,6 +161,14 @@ class _HomePageState extends ConsumerState<HomePage> {
     'images/icons/Hiremi Banner4.png',
     'images/icons/Hiremi Banner5.png'
   ];
+  final List<String> verifiedBannerImages = [
+    'images/icons/Hiremi Verified Banner.png',
+    'images/icons/Hiremi Verified Banner2.png',
+    'images/icons/Hiremi Verified Banner3.png',
+    'images/icons/Hiremi Verified Banner4.png',
+    'images/icons/Hiremi Verified Banner5.png'
+  ];
+
   @override
   Widget build(BuildContext context) {
     bool isVerified = ref.watch(verificationProvider);
@@ -200,31 +208,45 @@ class _HomePageState extends ConsumerState<HomePage> {
               Column(
                 children: [
                   CarouselSlider(
-                    options: CarouselOptions(
-                      height: 155,
-                      viewportFraction: 0.95,
-                      autoPlay: true,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          _current = index;
-                        });
-                      },
-                    ),
-                    items: bannerImages.map((i) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: screenWidth * 0.025),
-                            child: AdBanner(
-                              isVerified: isVerified,
-                              image: i,
-                            ),
-                          );
+                      options: CarouselOptions(
+                        height: 155,
+                        viewportFraction: 0.95,
+                        autoPlay: true,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _current = index;
+                          });
                         },
-                      );
-                    }).toList(),
-                  ),
+                      ),
+                      items: isVerified
+                          ? verifiedBannerImages.map((i) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: screenWidth * 0.025),
+                                    child: AdBanner(
+                                      isVerified: isVerified,
+                                      image: i,
+                                    ),
+                                  );
+                                },
+                              );
+                            }).toList()
+                          : bannerImages.map((i) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: screenWidth * 0.025),
+                                    child: AdBanner(
+                                      isVerified: isVerified,
+                                      image: i,
+                                    ),
+                                  );
+                                },
+                              );
+                            }).toList()),
                   SizedBox(
                     height: Sizes.responsiveMdSm(context),
                   ),
