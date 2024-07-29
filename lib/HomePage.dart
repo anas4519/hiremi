@@ -209,8 +209,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                 children: [
                   CarouselSlider(
                       options: CarouselOptions(
-                        height: 155,
                         viewportFraction: 0.95,
+                        height: 125,
                         autoPlay: true,
                         onPageChanged: (index, reason) {
                           setState(() {
@@ -261,12 +261,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                           margin: const EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 4.0),
                           decoration: BoxDecoration(
+                            border: Border.all(width: 0.25,color: Colors.black),
                             shape: BoxShape.circle,
                             color: (Theme.of(context).brightness ==
                                         Brightness.dark
                                     ? Colors.white
                                     : AppColors.primary)
-                                .withOpacity(_current == entry.key ? 0.9 : 0.4),
+                                .withOpacity(_current == entry.key ? 0.9 : 0.0),
                           ),
                         ),
                       );

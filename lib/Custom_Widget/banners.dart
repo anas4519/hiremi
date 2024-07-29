@@ -30,7 +30,7 @@ class AdBanner extends StatelessWidget {
             borderRadius: BorderRadius.circular(screenWidth * 0.02),
             child: Image.asset(
               image,
-              fit: BoxFit.fill,
+              fit: BoxFit.contain,
             )),
       ),
     );

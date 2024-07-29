@@ -26,58 +26,57 @@ class _FirstLandingPageState extends State<FirstLandingPage> {
             );
           }
         },
-        child: SingleChildScrollView(
-          child: SafeArea(
-            child: Container(
-              child: Column(
-                children: [
-                  Center(
-                    child: Image.asset(
-                      'images/onboarding-Welcome.png',
-                      width: imageSizeWidth,
-                      height: imageSizeHeight,
-                    ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 25.0),
+            child: Column(
+              children: [
+                Center(
+                  child: Image.asset(
+                    'images/onboarding-Welcome.png',
+                    width: imageSizeWidth,
+                    height: imageSizeHeight,
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.095),
-                  const Text.rich(
-                    TextSpan(
-                      text: '   Nice to see you,\nWelcome to ',
-                      style: TextStyle(
-                        fontSize: 28.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: 'Hiremi.',
-                          style: TextStyle(
-                            color: Color(0xFFC1272D), // Set the color of "Hiremi" to red
-                            fontSize: 28.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                  const Text(
-                    "Where your career needs are at your fingertips.",
-                    textAlign: TextAlign.center,
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.095),
+                const Text.rich(
+                  TextSpan(
+                    text: '   Nice to see you,\nWelcome to ',
                     style: TextStyle(
-                      fontSize: 12.0,
+                      fontSize: 28.0,
+                      fontWeight: FontWeight.w500,
                     ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'Hiremi.',
+                        style: TextStyle(
+                          color: Color(0xFFC1272D), // Set the color of "Hiremi" to red
+                          fontSize: 28.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.185),
-                  CustomElevatedButton(
-                    text: 'Next  >',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        SlidePageRoute(page: const Seceondlandingpage()),
-                      );
-                    },
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                const Text(
+                  "Where your career needs are at your fingertips.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12.0,
                   ),
-                ],
-              ),
+                ),
+                const Spacer(),
+                CustomElevatedButton(
+                  text: 'Next  >',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      SlidePageRoute(page: const Seceondlandingpage()),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),
