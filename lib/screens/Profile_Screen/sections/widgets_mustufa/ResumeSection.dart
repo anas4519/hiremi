@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
+import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 
 class ResumeSection extends StatefulWidget {
-  const ResumeSection({super.key, required this.resumeLink, required this.profileId,});
+  const ResumeSection({
+    super.key,
+    required this.resumeLink,
+  });
 
-  final TextEditingController resumeLink;
-  final int? profileId;
+  final String resumeLink;
 
   @override
   State<ResumeSection> createState() => _ResumeSectionState();
 }
 
 class _ResumeSectionState extends State<ResumeSection> {
-  String link =
-      'https://drive.google.com/file/d/0B1HXnM1lBuoqMzVhZjcwNTAtZWI5OS00ZDg3LWEyM...';
+  final controller = ProfileController.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      resumeLink.text = controller.resumeLink.value;
+    });
+  }
+
+  final TextEditingController resumeLink = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +119,7 @@ class _ResumeSectionState extends State<ResumeSection> {
             SizedBox(
               height: Sizes.responsiveLg(context),
               child: TextField(
-                controller: widget.resumeLink,
+                controller: resumeLink,
                 cursorColor: AppColors.black,
                 textAlign: TextAlign.start,
                 style: const TextStyle(
@@ -118,10 +130,8 @@ class _ResumeSectionState extends State<ResumeSection> {
                 cursorHeight: Sizes.responsiveMdSm(context),
                 cursorWidth: Sizes.responsiveXxs(context) * 0.6,
                 decoration: InputDecoration(
-                  prefixIconConstraints: const BoxConstraints(
-                    minHeight: 20,
-                    minWidth: 20
-                  ),
+                  prefixIconConstraints:
+                      const BoxConstraints(minHeight: 20, minWidth: 20),
                   prefixIcon: const Icon(
                     Icons.attach_file,
                     color: AppColors.black,
@@ -174,8 +184,11 @@ class _ResumeSectionState extends State<ResumeSection> {
                         vertical: Sizes.responsiveHorizontalSpace(context),
                         horizontal: Sizes.responsiveMdSm(context)),
                   ),
-                  onPressed: (){
-                    FocusScope.of(context).unfocus();
+                  onPressed: () async {
+                    if (resumeLink.text.isNotEmpty) {
+                      FocusScope.of(context).unfocus();
+                      await controller.addResumeLink(resumeLink.text);
+                    }
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,

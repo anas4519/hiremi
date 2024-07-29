@@ -422,17 +422,6 @@ class _AddExperienceState extends State<AddExperience> {
                             onPressed: () {
                               if (formKey.currentState!.validate() &&
                                   isValid()) {
-                                Map<String, String>? experienceDetail = {
-                                  'organization': organizationController.text,
-                                  'jobTitle': jobTitleController.text,
-                                  'jobType': jobType,
-                                  'skillSet': skillSetController.text,
-                                  'joiningDate': joiningDateController.text,
-                                  'leavingDate': leavingDateController.text,
-                                  'isCurrentCompany': isCurrentCompany,
-                                };
-                                controller
-                                    .addExperienceDetail(experienceDetail);
                                 Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
@@ -465,16 +454,6 @@ class _AddExperienceState extends State<AddExperience> {
                             onPressed: () {
                               if (formKey.currentState!.validate() &&
                                   isValid()) {
-                                controller
-                                    .addExperienceDetail ({
-                                  'organization': organizationController.text,
-                                  'jobTitle': jobTitleController.text,
-                                  'jobType': jobType,
-                                  'skillSet': skillSetController.text,
-                                  'joiningDate': joiningDateController.text,
-                                  'leavingDate': leavingDateController.text,
-                                  'isCurrentCompany': isCurrentCompany,
-                                });
                                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                                     builder: (ctx) => const AddProjects()));
                               }

@@ -186,13 +186,6 @@ class _PersonalLinksState extends State<PersonalLinks> {
                                   Sizes.responsiveVerticalSpace(context) * 2,
                               horizontal: Sizes.responsiveMdSm(context))),
                       onPressed: () {
-                        if (linkTitle.text.isNotEmpty &&
-                            personalLink.text.isNotEmpty) {
-                          controller.addPersonalLinks(
-                              linkTitle.text, personalLink.text);
-                          linkTitle.clear();
-                          personalLink.clear();
-                        }
                       },
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,

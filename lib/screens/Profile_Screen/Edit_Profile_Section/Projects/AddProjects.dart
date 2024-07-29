@@ -12,8 +12,7 @@ import '../Personal Details/AddPersonalDetails.dart';
 import '../widgets/TextFieldWithTitle.dart';
 
 class AddProjects extends StatefulWidget {
-  const AddProjects({super.key, this.profileId});
-  final int? profileId;
+  const AddProjects({super.key});
 
   @override
   State<AddProjects> createState() => _AddProjectsState();
@@ -300,15 +299,6 @@ class _AddProjectsState extends State<AddProjects> {
                       onPressed: () {
                         if (formKey.currentState!.validate() &&
                             projectStatus.isNotEmpty) {
-                          controller.addProjectsDetail({
-                            'ProjectTitle': titleController.text,
-                            'Client': clientController.text,
-                            'ProjectLink': projectLinkController.text,
-                            'StartingDate': startingDateController.text,
-                            'CompletedDate': completionDateController.text,
-                            'Description': descriptionController.text,
-                            'ProjectStatus': projectStatus,
-                          });
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
@@ -340,15 +330,6 @@ class _AddProjectsState extends State<AddProjects> {
                       onPressed: () {
                         if (formKey.currentState!.validate() &&
                             projectStatus.isNotEmpty) {
-                          controller.addProjectsDetail({
-                            'ProjectTitle': titleController.text,
-                            'Client': clientController.text,
-                            'ProjectLink': projectLinkController.text,
-                            'StartingDate': startingDateController.text,
-                            'CompletedDate': completionDateController.text,
-                            'Description': descriptionController.text,
-                            'ProjectStatus': projectStatus,
-                          });
                           Navigator.of(context).pushReplacement(MaterialPageRoute(
                               builder: (ctx) => const AddPersonalDetails()));
                         }

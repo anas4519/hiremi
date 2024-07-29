@@ -10,7 +10,6 @@ class ProfileStatusSection extends StatelessWidget {
   });
 
   final String fullName;
-
   @override
   Widget build(BuildContext context) {
     return Center(

@@ -1,16 +1,14 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hiremi_version_two/repository/User.dart';
-import 'package:http/http.dart' as http;
-import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 import 'package:hiremi_version_two/Screens/Profile_Screen/sections/widgets_mustufa/ProfileStatusSection.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
+import 'package:hiremi_version_two/repository/User.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/Edit_Profile_Section/Education/AddEducation.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/Edit_Profile_Section/Languages/AddLanguages.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/Edit_Profile_Section/Personal%20Details/AddPersonalDetails.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/Edit_Profile_Section/Projects/AddProjects.dart';
+import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/BasicDetails.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/Education.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/Experience.dart';
@@ -21,6 +19,7 @@ import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustu
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/ProfileSummary.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/Projects.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/ResumeSection.dart';
+
 import 'Edit_Profile_Section/BasicDetails/AddBasicDetails.dart';
 import 'Edit_Profile_Section/Experience/AddExperience.dart';
 import 'Edit_Profile_Section/Key Skills/AddKeySkills.dart';
@@ -37,35 +36,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final controller = Get.put(ProfileController());
-  int? profileId;
-  Future<void> _getProfileId() async {
-    try{
-      const api = 'http://13.127.81.177:8000/api/profiles/';
-      final response = await http.get(Uri.parse(api));
-      if(response.statusCode == 200){
-        final List<dynamic> users = jsonDecode(response.body);
-        for(var user in users){
-          if(user['register'] == userRepository.currentUser?.userId){
-            print('User is registered to Profile');
-            setState(() {
-              profileId = user['id'];
-            });
-          }
-          else{
-            print('user is not registered');
-          }
-        }
-        print('Can\'t find User');
-      }
-    }catch(e){
-      print(e.toString());
-    }
-  }
-  @override
-  void initState() {
-    super.initState();
-    _getProfileId();
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,11 +49,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               top: Sizes.responsiveDefaultSpace(context),
               bottom: Sizes.responsiveXxl(context) * 2.5),
           child: Obx(
-            () => Column(
+                () => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ProfileStatusSection(
-                  fullName: controller.fullName.value,
+                  fullName: userRepository.currentUser!.fullName,
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -97,7 +68,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 ResumeSection(
                   resumeLink: controller.resumeLink.value,
-                  profileId: profileId,
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -110,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   state: controller.state.value,
                   whatsappNumber: controller.whatsappNumber.value,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  AddBasicDetails(profileId: profileId,))),
+                      builder: (context) =>  const AddBasicDetails())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -118,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ProfileSummary(
                   summary: controller.summary.value,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  AddProfileSummary(profileId: profileId))),
+                      builder: (context) =>  const AddProfileSummary())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -126,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 KeySkills(
                   skills: controller.skills,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  AddKeySkills(profileId: profileId))),
+                      builder: (context) =>  const AddKeySkills())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -134,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Education(
                   education: controller.educationDetails,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  AddEducation(profileId: profileId))),
+                      builder: (context) =>  const AddEducation())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -142,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Experience(
                   experience: controller.experience,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  AddExperience(profileId: profileId))),
+                      builder: (context) =>  const AddExperience())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -150,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Projects(
                   projects: controller.projects,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  AddProjects(profileId: profileId))),
+                      builder: (context) =>  const AddProjects())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -165,24 +135,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mStatus: controller.selectedMaritalStatus.value,
                   pAddress: controller.permanentAddress.value,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  AddPersonalDetails(profileId: profileId))),
+                      builder: (context) =>  const AddPersonalDetails())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
                 ),
-                 PersonalLinks(profileId: profileId),
+                const PersonalLinks(),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
                 ),
                 Languages(
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  AddLanguages(profileId: profileId))),
+                      builder: (context) =>  const AddLanguages())),
                   languages: controller.languages,
                 ),
               ],
             ),
-          ),
-        ),
+          ),),
       ),
     );
   }

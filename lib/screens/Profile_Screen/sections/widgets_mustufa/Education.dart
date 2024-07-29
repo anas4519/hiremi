@@ -26,10 +26,10 @@ class Education extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: education!
                 .map((edu) => EducationChild(
-                    course: edu['educationLevel']!,
+                    course: edu['education']!,
                     place: edu['course']!,
-                    duration: edu['year']!,
                     marks: edu['marks']!,
+                    duration: edu['passing_year']!,
             ))
                 .toList(),
           ),

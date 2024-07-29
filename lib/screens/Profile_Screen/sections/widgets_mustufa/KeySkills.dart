@@ -7,8 +7,9 @@ import 'package:hiremi_version_two/Utils/colors.dart';
 
 
 class KeySkills extends StatelessWidget {
-   const KeySkills({super.key, this.skills, this.onTap,
+   const KeySkills({super.key, this.onTap, this.skills,
   });
+
   final List<String>? skills ;
 
    final void Function()? onTap;

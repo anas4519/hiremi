@@ -115,8 +115,6 @@ class _AddLanguagesState extends State<AddLanguages> {
                         suffix: GestureDetector(
                           onTap: () {
                             if (formKey.currentState!.validate()) {
-                              controller.addLanguage(languageController.text);
-                              languageController.clear();
                             }
                           },
                           child: Icon(
@@ -126,32 +124,6 @@ class _AddLanguagesState extends State<AddLanguages> {
                           ),
                         ),
                         hintText: 'eg: Hindi, English etc.'),
-                    SizedBox(
-                      height: Sizes.responsiveXs(context),
-                    ),
-                      Obx(
-                        () => Wrap(
-                          spacing: 8.0,
-                          children: controller.languages.map((language) {
-                            return Chip(
-                              shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      width: 0.37, color: AppColors.primary),
-                                  borderRadius: BorderRadius.circular(50)),
-                              backgroundColor: AppColors.white,
-                              deleteIconColor: AppColors.primary,
-                              label: Text(language),
-                              labelStyle: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.black),
-                              onDeleted: () {
-                                controller.removeLanguage(language);
-                              },
-                            );
-                          }).toList(),
-                        ),
-                      ),
                     SizedBox(
                       height: Sizes.responsiveMd(context) * 2,
                     ),

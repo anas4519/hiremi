@@ -6,7 +6,6 @@ import 'package:hiremi_version_two/Utils/validators/validation.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 
-
 import '../../../../Notofication_screen.dart';
 import '../../../Drawer_Child_Screens/drawer_child.dart';
 import '../Education/AddEducation.dart';
@@ -14,8 +13,10 @@ import '../widgets/TextFieldWithTitle.dart';
 
 class AddKeySkills extends StatefulWidget {
   const AddKeySkills({
-    super.key, this.profileId,
+    super.key,
+    this.profileId,
   });
+
   final int? profileId;
 
   @override
@@ -29,6 +30,11 @@ class _AddKeySkillsState extends State<AddKeySkills> {
 
   final controller = Get.put(ProfileController());
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +71,7 @@ class _AddKeySkillsState extends State<AddKeySkills> {
         actions: [
           Padding(
             padding:
-            EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
             child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -109,12 +115,6 @@ class _AddKeySkillsState extends State<AddKeySkills> {
               title: 'Key Skills',
               hintText: 'Eg: Flutter Developer',
               suffix: GestureDetector(
-                onTap: () {
-                  if (formKey.currentState!.validate()) {
-                    controller.addSkill(skillController.text);
-                    skillController.clear();
-                  }
-                },
                 child: Icon(
                   Icons.add,
                   size: 20,
@@ -126,30 +126,6 @@ class _AddKeySkillsState extends State<AddKeySkills> {
             ),
             SizedBox(
               height: Sizes.responsiveXs(context),
-            ),
-            Obx(
-              () => Wrap(
-                spacing: 8.0,
-                children: controller.skills.map((skill) {
-                  return Chip(
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 0.37, color: AppColors.primary),
-                        borderRadius: BorderRadius.circular(50)),
-                    backgroundColor: AppColors.white,
-                    deleteIconColor: AppColors.primary,
-                    label: Text(skill),
-                    labelStyle: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.black),
-                    onDeleted: () {
-                      setState(() {
-                        controller.removeSkill(skill);
-                      });
-                    },
-                  );
-                }).toList(),
-              ),
             ),
             SizedBox(
               height: Sizes.responsiveMd(context),
@@ -166,19 +142,29 @@ class _AddKeySkillsState extends State<AddKeySkills> {
                           vertical: Sizes.responsiveHorizontalSpace(context),
                           horizontal: Sizes.responsiveMdSm(context)),
                     ),
-                    onPressed: () {
-                      if (formKey.currentState!.validate() ||
-                          controller.skills.isEmpty) {
-                        return;
-                      }
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NewNavbar(
+                    onPressed: () async {
+                      if (formKey.currentState!.validate()) {
+                        final success = await controller.addKeySkills(skillController.text);
+                        if (success) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>  NewNavbar(
                                   initTabIndex: 3,
                                 )),
-                        (Route<dynamic> route) => false,
-                      );
+                            (Route<dynamic> route) => false,
+                          );
+                        } else {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NewNavbar(
+                                      initTabIndex: 3,
+                                    )),
+                            (Route<dynamic> route) => false,
+                          );
+                        }
+                      }
                     },
                     child: const Text(
                       'Save',
@@ -197,13 +183,28 @@ class _AddKeySkillsState extends State<AddKeySkills> {
                           vertical: Sizes.responsiveSm(context),
                           horizontal: Sizes.responsiveMdSm(context)),
                     ),
-                    onPressed: () {
-                      if (formKey.currentState!.validate() ||
-                          controller.skills.isEmpty) {
-                        return;
+                    onPressed: () async {
+                      if (formKey.currentState!.validate()) {
+                        final success = await controller.addKeySkills(skillController.text);
+                        if (success) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AddEducation()),
+                                (Route<dynamic> route) => false,
+                          );
+                        } else {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    NewNavbar(
+                                      initTabIndex: 3,
+                                    )),
+                                (Route<dynamic> route) => false,
+                          );
+                        }
                       }
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const AddEducation()));
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,

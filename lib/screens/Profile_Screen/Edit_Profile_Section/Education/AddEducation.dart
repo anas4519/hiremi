@@ -12,8 +12,10 @@ import '../widgets/TextFieldWithTitle.dart';
 
 class AddEducation extends StatefulWidget {
   const AddEducation({
-    super.key, this.profileId,
+    super.key,
+    this.profileId,
   });
+
   final int? profileId;
 
   @override
@@ -28,8 +30,8 @@ class _AddEducationState extends State<AddEducation> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   List<String> listOfEducationLevels = [
-    'High School',
-    'Intermediate',
+    '12th',
+    '10th',
     'Diploma',
     'Bachelor',
     'Master',
@@ -37,8 +39,8 @@ class _AddEducationState extends State<AddEducation> {
   ];
 
   Map<String, List<String>> educationToCourses = {
-    'High School': ['Science', 'Commerce', 'Arts'],
-    'Intermediate': ['Science', 'Commerce', 'Arts'],
+    '12th': ['Science', 'Commerce', 'Arts'],
+    '10th': ['Science', 'Commerce', 'Arts'],
     'Diploma': ['Diploma in Engineering', 'Diploma in Computer Science'],
     'Bachelor': [
       'Bachelor of Technology (B.Tech)',
@@ -65,6 +67,7 @@ class _AddEducationState extends State<AddEducation> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final controller = ProfileController.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +104,7 @@ class _AddEducationState extends State<AddEducation> {
         actions: [
           Padding(
             padding:
-            EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
             child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -161,17 +164,14 @@ class _AddEducationState extends State<AddEducation> {
                 height: Sizes.responsiveMd(context),
               ),
               buildLabeledTextField(
-                context,
-                'Subject/Course',
-                'Select Subject or Course Level',
-                controller: courseController,
-                dropdownItems: listOfCourses,
-                validator: (value) =>
-                    SValidator.validateEmptyText('Course', value),
-                onChanged: (value) {
-                  courseController.text = value!;
-                }
-              ),
+                  context, 'Subject/Course', 'Select Subject or Course Level',
+                  controller: courseController,
+                  dropdownItems: listOfCourses,
+                  validator: (value) =>
+                      SValidator.validateEmptyText('Course', value),
+                  onChanged: (value) {
+                    courseController.text = value!;
+                  }),
               SizedBox(
                 height: Sizes.responsiveMd(context),
               ),
@@ -235,22 +235,34 @@ class _AddEducationState extends State<AddEducation> {
                             vertical: Sizes.responsiveHorizontalSpace(context),
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          controller.addEducationDetail({
-                            'educationLevel': educationController.text,
-                            'course': courseController.text,
-                            'year': yearController.text,
-                            'marks': marksController.text,
-                          });
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NewNavbar(
-                                      initTabIndex: 3,
-                                    )),
-                            (Route<dynamic> route) => false,
-                          );
+                          final success =
+                              await controller.addEducation(
+                                educationController.text,
+                                courseController.text,
+                                marksController.text,
+                                yearController.text,
+                              );
+                          if (success) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  NewNavbar(
+                                    initTabIndex: 3,
+                                  )),
+                                  (Route<dynamic> route) => false,
+                            );
+                          } else {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewNavbar(
+                                    initTabIndex: 3,
+                                  )),
+                                  (Route<dynamic> route) => false,
+                            );
+                          }
                         }
                       },
                       child: const Text(
@@ -271,16 +283,33 @@ class _AddEducationState extends State<AddEducation> {
                             vertical: Sizes.responsiveSm(context),
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          controller.addEducationDetail({
-                            'educationLevel': educationController.text,
-                            'course': courseController.text,
-                            'year': yearController.text,
-                            'marks': marksController.text,
-                          });
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(
-                              builder: (context) => const AddExperience()));
+
+                          final success =
+                          await controller.addEducation(
+                            educationController.text,
+                            courseController.text,
+                            yearController.text,
+                            marksController.text,
+                          );
+                          if (success) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AddExperience()),
+                              (Route<dynamic> route) => false,
+                            );
+                          } else {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewNavbar(
+                                        initTabIndex: 3,
+                                      )),
+                              (Route<dynamic> route) => false,
+                            );
+                          }
                         }
                       },
                       child: Row(

@@ -74,61 +74,6 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Future<void> _updateUserData(bool save) async {
-    if (!formKey.currentState!.validate() && !isValid()) return;
-    try {
-      final response = await http.patch(
-        Uri.parse(
-            'http://13.127.81.177:8000/api/registers/${userRepository.currentUser!.userId}/'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'date_of_birth': dobController.text,
-          'gender': controller.selectedGender.toString(),
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        print('User data updated successfully');
-        if(save) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) => NewNavbar(
-                  initTabIndex: 3,
-                )),
-                (Route<dynamic> route) => false,
-          );
-          controller.addPersonalDetails(
-              homeController.text,
-              pinCodeController.text,
-              permanentAddressController.text,
-              localAddressController.text,
-              dobController.text,
-              categoryController.text);
-        }
-        else{
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (ctx) => const AddLanguages()));
-          controller.addPersonalDetails(
-              homeController.text,
-              pinCodeController.text,
-              permanentAddressController.text,
-              localAddressController.text,
-              dobController.text,
-              categoryController.text);
-        }
-      } else {
-        print("${userRepository.currentUser!.userId}");
-        print('Failed to update user data: ${response.statusCode}');
-        print(response.body);
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -535,7 +480,6 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
                       onPressed: () {
-                      _updateUserData(true);
                       },
                       child: const Text(
                         'Save',
@@ -556,7 +500,6 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
                       onPressed: () {
-                        _updateUserData(false);
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,

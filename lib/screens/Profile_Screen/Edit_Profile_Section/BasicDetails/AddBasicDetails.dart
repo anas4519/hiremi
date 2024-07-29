@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
+import 'package:hiremi_version_two/Screens/Profile_Screen/Edit_Profile_Section/ProfileSummary/ProfileSummary.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
@@ -8,14 +9,13 @@ import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/screens/Drawer_Child_Screens/drawer_child.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 
-import '../ProfileSummary/ProfileSummary.dart';
 import '../widgets/TextFieldWithTitle.dart';
 
 class AddBasicDetails extends StatefulWidget {
   const AddBasicDetails({
-    super.key, this.profileId,
+    super.key,
   });
-  final int? profileId;
+
   @override
   State<AddBasicDetails> createState() => _AddBasicDetailsState();
 }
@@ -30,16 +30,6 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
 
   GlobalKey<FormState> bdKey = GlobalKey<FormState>();
   final controller = ProfileController.instance;
-
-  @override
-  void initState() {
-    super.initState();
-    cityController.text = controller.city.value;
-    stateController.text = controller.state.value;
-    emailController.text = controller.email.value;
-    phoneController.text = controller.phoneNumber.value;
-    whatsappController.text = controller.whatsappNumber.value;
-  }
 
   List<String> states = [
     'Andhra Pradesh',
@@ -84,6 +74,19 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      cityController.text = controller.city.value;
+      selectedState = controller.state.value;
+      emailController.text = controller.email.value;
+      phoneController.text = controller.phoneNumber.value;
+      whatsappController.text = controller.whatsappNumber.value;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     var selectedState = 'Assam';
     return Scaffold(
@@ -120,7 +123,7 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
         actions: [
           Padding(
             padding:
-            EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
             child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -348,16 +351,33 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
                             vertical: Sizes.responsiveHorizontalSpace(context),
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (bdKey.currentState!.validate() &&
                             controller.lookingFor.isNotEmpty) {
-                          controller.basicDetails(
-                              cityController.text.trim(),
-                              stateController.text.trim(),
-                              emailController.text.trim(),
-                              phoneController.text.trim(),
-                              whatsappController.text.trim(),
-                              controller.lookingFor.value);
+                          final details = {
+                            "looking_for":
+                                controller.lookingFor.value.toString(),
+                            "city": cityController.text.toString(),
+                            "state": stateController.text.toString(),
+                            "email": emailController.text.toString(),
+                            "phone_number": phoneController.text.toString(),
+                            "whatsapp_number":
+                                whatsappController.text.toString(),
+                            "profile": controller.profileId.value.toString(),
+                          };
+                          final response =
+                              await controller.addBasicDetails(details);
+                          if (response) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewNavbar(
+                                        initTabIndex: 3,
+                                      )),
+                              (Route<dynamic> route) => false,
+                            );
+                          }
+                        } else {
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
@@ -386,18 +406,40 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
                             vertical: Sizes.responsiveSm(context),
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (bdKey.currentState!.validate() &&
                             controller.lookingFor.isNotEmpty) {
-                          controller.basicDetails(
-                              cityController.text.trim(),
-                              stateController.text.trim(),
-                              emailController.text.trim(),
-                              phoneController.text.trim(),
-                              whatsappController.text.trim(),
-                              opportunity);
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(
-                              builder: (ctx) => const AddProfileSummary()));
+                          final details = {
+                            "looking_for":
+                                controller.lookingFor.value.toString(),
+                            "city": cityController.text.toString(),
+                            "state": stateController.text.toString(),
+                            "email": emailController.text.toString(),
+                            "phone_number": phoneController.text.toString(),
+                            "whatsapp_number":
+                                whatsappController.text.toString(),
+                            "profile": controller.profileId.value.toString(),
+                          };
+                          final response =
+                              await controller.addBasicDetails(details);
+                          if (response) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AddProfileSummary()),
+                              (Route<dynamic> route) => false,
+                            );
+                          }
+                        } else {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NewNavbar(
+                                      initTabIndex: 3,
+                                    )),
+                            (Route<dynamic> route) => false,
+                          );
                         }
                       },
                       child: Row(

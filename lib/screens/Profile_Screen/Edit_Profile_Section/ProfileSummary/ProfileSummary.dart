@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hiremi_version_two/Utils/validators/validation.dart';
-import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
+import 'package:hiremi_version_two/Utils/validators/validation.dart';
+import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
-
-
 import '../../../../Notofication_screen.dart';
 import '../../../Drawer_Child_Screens/drawer_child.dart';
 import '../Key Skills/AddKeySkills.dart';
@@ -13,9 +11,9 @@ import '../widgets/TextFieldWithTitle.dart';
 
 class AddProfileSummary extends StatefulWidget {
   const AddProfileSummary({
-    super.key, this.profileId,
+    super.key,
   });
-  final int? profileId;
+
 
   @override
   State<AddProfileSummary> createState() => _AddProfileSummaryState();
@@ -30,10 +28,12 @@ class _AddProfileSummaryState extends State<AddProfileSummary> {
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    summaryController.text = controller.summary.value;
+    setState(() {
+      summaryController.text = controller.summary.value ?? '';
+    });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +70,7 @@ class _AddProfileSummaryState extends State<AddProfileSummary> {
         actions: [
           Padding(
             padding:
-            EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
             child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -148,17 +148,30 @@ class _AddProfileSummaryState extends State<AddProfileSummary> {
                             vertical: Sizes.responsiveHorizontalSpace(context),
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          controller.saveSummary(summaryController.text.trim());
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NewNavbar(
-                                      initTabIndex: 3,
-                                    )),
-                            (Route<dynamic> route) => false,
+                          final success = await controller.addSummary(
+                            summaryController.text
                           );
+                          if (success) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewNavbar(
+                                        initTabIndex: 3,
+                                      )),
+                              (Route<dynamic> route) => false,
+                            );
+                          } else {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewNavbar(
+                                        initTabIndex: 3,
+                                      )),
+                              (Route<dynamic> route) => false,
+                            );
+                          }
                         }
                       },
                       child: const Text(
@@ -179,11 +192,28 @@ class _AddProfileSummaryState extends State<AddProfileSummary> {
                             vertical: Sizes.responsiveSm(context),
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          controller.saveSummary(summaryController.text.trim());
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(
-                              builder: (ctx) => const AddKeySkills()));
+                          final success = await controller.addSummary(
+                            summaryController.text
+                          );
+                          if (success) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AddKeySkills()),
+                                  (Route<dynamic> route) => false,
+                            );
+                          } else {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewNavbar(
+                                    initTabIndex: 3,
+                                  )),
+                                  (Route<dynamic> route) => false,
+                            );
+                          }
                         }
                       },
                       child: Row(
