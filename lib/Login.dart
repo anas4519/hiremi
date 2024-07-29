@@ -10,6 +10,7 @@ import 'package:hiremi_version_two/Forget_Your_Password.dart';
 import 'package:hiremi_version_two/Register.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -407,8 +408,12 @@ class _LogInState extends State<LogIn> {
                                   .underline, // Optional: underline
                             ),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                // Handle link tap
+                              ..onTap = () async{
+                                final Uri url =
+                                    Uri.parse('http://www.hiremi.in/about.html');
+                                if (!await launchUrl(url)) {
+                                  throw Exception('Could not launch $url');
+                                }
                                 
                               },
                           ),

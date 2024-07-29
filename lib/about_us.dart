@@ -8,8 +8,8 @@ import 'package:url_launcher/url_launcher.dart';
 // ignore: camel_case_types
 class About_Us extends StatefulWidget {
   const About_Us({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<About_Us> createState() => _About_UsState();
@@ -17,13 +17,7 @@ class About_Us extends StatefulWidget {
 
 // ignore: camel_case_types
 class _About_UsState extends State<About_Us> {
-  Future<void> _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (!await launchUrl(uri)) {
-      throw 'Could not launch $url';
-    }
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -32,7 +26,7 @@ class _About_UsState extends State<About_Us> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
-          "About Us",
+          "About App",
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
         centerTitle: true,
