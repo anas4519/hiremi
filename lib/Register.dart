@@ -16,7 +16,7 @@ class Registers extends StatefulWidget {
 
 class _RegistersState extends State<Registers> {
   final _formKey = GlobalKey<FormState>();
-  Gender? _selectedGender=Gender.Male;
+  Gender? _selectedGender = Gender.Male;
   String? _selectedState;
   DateTime? _selectedDate;
   bool _isObscure = true;
@@ -24,47 +24,44 @@ class _RegistersState extends State<Registers> {
 
   // List<String> _states = ['State 1', 'State 2', 'State 3', 'State 4'];
 
-
-
-final List<String> _states = [
-  'Andhra Pradesh',
-  'Arunachal Pradesh',
-  'Assam',
-  'Bihar',
-  'Chhattisgarh',
-  'Goa',
-  'Gujarat',
-  'Haryana',
-  'Himachal Pradesh',
-  'Jharkhand',
-  'Karnataka',
-  'Kerala',
-  'Madhya Pradesh',
-  'Maharashtra',
-  'Manipur',
-  'Meghalaya',
-  'Mizoram',
-  'Nagaland',
-  'Odisha',
-  'Punjab',
-  'Rajasthan',
-  'Sikkim',
-  'Tamil Nadu',
-  'Telangana',
-  'Tripura',
-  'Uttar Pradesh',
-  'Uttarakhand',
-  'West Bengal',
-  'Andaman and Nicobar Islands',
-  'Chandigarh',
-  'Dadra and Nagar Haveli and Daman and Diu',
-  'Delhi',
-  'Jammu and Kashmir',
-  'Ladakh',
-  'Lakshadweep',
-  'Puducherry',
-];
-
+  final List<String> _states = [
+    'Andhra Pradesh',
+    'Arunachal Pradesh',
+    'Assam',
+    'Bihar',
+    'Chhattisgarh',
+    'Goa',
+    'Gujarat',
+    'Haryana',
+    'Himachal Pradesh',
+    'Jharkhand',
+    'Karnataka',
+    'Kerala',
+    'Madhya Pradesh',
+    'Maharashtra',
+    'Manipur',
+    'Meghalaya',
+    'Mizoram',
+    'Nagaland',
+    'Odisha',
+    'Punjab',
+    'Rajasthan',
+    'Sikkim',
+    'Tamil Nadu',
+    'Telangana',
+    'Tripura',
+    'Uttar Pradesh',
+    'Uttarakhand',
+    'West Bengal',
+    'Andaman and Nicobar Islands',
+    'Chandigarh',
+    'Dadra and Nagar Haveli and Daman and Diu',
+    'Delhi',
+    'Jammu and Kashmir',
+    'Ladakh',
+    'Lakshadweep',
+    'Puducherry',
+  ];
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _fatherNameController = TextEditingController();
@@ -79,7 +76,8 @@ final List<String> _states = [
   final TextEditingController _degreeController = TextEditingController();
   final TextEditingController _passingYearController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   RegistrationController _registrationController = RegistrationController();
   final ScrollController _scrollController = ScrollController();
@@ -89,9 +87,9 @@ final List<String> _states = [
       _selectedGender = value;
     });
   }
+
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-
 
   @override
   void dispose() {
@@ -114,12 +112,12 @@ final List<String> _states = [
 
   @override
   Widget build(BuildContext context) {
-
     double imageSize = MediaQuery.of(context).size.width * 0.6;
     double imageHeight = MediaQuery.of(context).size.height * 0.157;
 
     return Scaffold(
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           children: [
             Center(
@@ -155,7 +153,8 @@ final List<String> _states = [
                 key: _formKey,
                 child: Column(
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.045),
+                    SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.045),
                     buildSectionHeader("Personal Information"),
                     buildLabeledTextField(
                       context,
@@ -164,6 +163,8 @@ final List<String> _states = [
                       controller: _fullNameController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
+                          _scrollController.jumpTo(
+                              _scrollController.position.minScrollExtent);
                           return 'Please enter your full name';
                         }
                         return null;
@@ -176,6 +177,8 @@ final List<String> _states = [
                       controller: _fatherNameController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
+                          _scrollController.jumpTo(
+                              _scrollController.position.minScrollExtent);
                           return 'Please enter your father\'s full name';
                         }
                         return null;
@@ -189,9 +192,13 @@ final List<String> _states = [
                       controller: _emailController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
+                          _scrollController.jumpTo(
+                              _scrollController.position.minScrollExtent);
                           return 'Please enter your email address';
                         }
                         if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                          _scrollController.jumpTo(
+                              _scrollController.position.minScrollExtent);
                           return 'Please enter a valid email address';
                         }
                         return null;
@@ -207,6 +214,8 @@ final List<String> _states = [
                       controller: _dobController,
                       validator: (value) {
                         if (_selectedDate == null) {
+                          _scrollController.jumpTo(
+                              _scrollController.position.minScrollExtent);
                           return 'Please select your date of birth';
                         }
                         return null;
@@ -221,7 +230,8 @@ final List<String> _states = [
                         if (pickedDate != null) {
                           setState(() {
                             _selectedDate = pickedDate;
-                            _dobController.text =DateFormat('yyyy-MM-dd').format(pickedDate);
+                            _dobController.text =
+                                DateFormat('yyyy-MM-dd').format(pickedDate);
                           });
                         }
                       },
@@ -259,17 +269,30 @@ final List<String> _states = [
                     buildLabeledTextField(
                       context,
                       "Phone Number",
-                      "+91",
+                      "",
                       keyboardType: TextInputType.phone,
                       controller: _phoneController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
+                          _scrollController.jumpTo((_scrollController
+                                      .position.minScrollExtent +
+                                  _scrollController.position.maxScrollExtent) /
+                              2);
+
                           return 'Please enter your phone number';
                         }
                         if (value.length != 10) {
+                          _scrollController.jumpTo((_scrollController
+                                      .position.minScrollExtent +
+                                  _scrollController.position.maxScrollExtent) /
+                              2);
                           return 'Please enter a valid phone number';
                         }
                         if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          _scrollController.jumpTo((_scrollController
+                                      .position.minScrollExtent +
+                                  _scrollController.position.maxScrollExtent) /
+                              2);
                           return 'Special characters are not allowed';
                         }
                         return null;
@@ -295,17 +318,29 @@ final List<String> _states = [
                     buildLabeledTextField(
                       context,
                       "WhatsApp Number",
-                      "+91",
+                      "",
                       keyboardType: TextInputType.phone,
                       controller: _whatsappController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
+                          _scrollController.jumpTo((_scrollController
+                                      .position.minScrollExtent +
+                                  _scrollController.position.maxScrollExtent) /
+                              2);
                           return 'Please enter your WhatsApp number';
                         }
                         if (value.length != 10) {
+                          _scrollController.jumpTo((_scrollController
+                                      .position.minScrollExtent +
+                                  _scrollController.position.maxScrollExtent) /
+                              2);
                           return 'Please enter a valid WhatsApp number';
                         }
                         if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          _scrollController.jumpTo((_scrollController
+                                      .position.minScrollExtent +
+                                  _scrollController.position.maxScrollExtent) /
+                              2);
                           return 'Please enter a valid WhatsApp number without special characters';
                         }
                         return null;
@@ -320,6 +355,10 @@ final List<String> _states = [
                       controller: _collegeNameController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
+                          _scrollController.jumpTo((_scrollController
+                                      .position.minScrollExtent +
+                                  _scrollController.position.maxScrollExtent) /
+                              2);
                           return 'Please enter your college name';
                         }
                         return null;
@@ -334,6 +373,10 @@ final List<String> _states = [
                       dropdownItems: _states,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
+                          _scrollController.jumpTo((_scrollController
+                                      .position.minScrollExtent +
+                                  _scrollController.position.maxScrollExtent) /
+                              2);
                           return "Please enter your College's State";
                         }
                         return null;
@@ -370,7 +413,6 @@ final List<String> _states = [
                       "Passing Year",
                       "Enter Your Passing Year",
                       controller: _passingYearController,
-
                       dropdownItems: ['2012', '2024', '2025'],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -401,10 +443,13 @@ final List<String> _states = [
                         onTap: () {
                           print("Clicked");
                           setState(() {
-                            _isConfirmPasswordObscure = !_isConfirmPasswordObscure; // Toggle password visibility
+                            _isConfirmPasswordObscure =
+                                !_isConfirmPasswordObscure; // Toggle password visibility
                           });
                         },
-                        child: Icon(_isConfirmPasswordObscure ? Icons.visibility_off : Icons.visibility),
+                        child: Icon(_isConfirmPasswordObscure
+                            ? Icons.visibility_off
+                            : Icons.visibility),
                       ),
                     ),
                     buildLabeledTextField(
@@ -427,10 +472,13 @@ final List<String> _states = [
                         onTap: () {
                           print("Clicked");
                           setState(() {
-                            _isObscure = !_isObscure; // Toggle password visibility
+                            _isObscure =
+                                !_isObscure; // Toggle password visibility
                           });
                         },
-                        child: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                        child: Icon(_isObscure
+                            ? Icons.visibility_off
+                            : Icons.visibility),
                       ),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.02),
@@ -456,7 +504,9 @@ final List<String> _states = [
                             passingYear: _passingYearController.text,
                             password: _passwordController.text,
                           );
-                          bool registrationSuccess = await _registrationController.registerUser(newUser);
+                          bool registrationSuccess =
+                              await _registrationController
+                                  .registerUser(newUser);
 
                           print(registrationSuccess);
                           if (registrationSuccess) {
@@ -465,27 +515,25 @@ final List<String> _states = [
                               context,
                               SlidePageRoute(page: const LogIn()),
                             );
-                          }
-                          else {
+                          } else {
                             // Show error message to user
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Registration failed. Please try again.'),
+                                content: Text(
+                                    'Registration failed. Please try again.'),
                                 duration: Duration(seconds: 3),
                               ),
                             );
                           }
-                        } else{
-                          _scrollToFirstInvalidField();
                         }
                       },
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.025),
+                    SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.025),
                   ],
                 ),
               ),
             ),
-
           ],
         ),
       ),
@@ -493,23 +541,23 @@ final List<String> _states = [
   }
 
   void _scrollToFirstInvalidField() {
-  final invalidFields = _formKey.currentState!.validate() as Map;
-  for (var key in invalidFields.keys) {
-    if (!invalidFields[key]) {
-      _scrollController.position.ensureVisible(
-        key.currentContext!.findRenderObject()!,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      break;
+    final invalidFields = _formKey.currentState!.validate() as Map;
+    for (var key in invalidFields.keys) {
+      if (!invalidFields[key]) {
+        _scrollController.position.ensureVisible(
+          key.currentContext!.findRenderObject()!,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+        break;
+      }
     }
   }
-}
-
 
   Widget buildSectionHeader(String title) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height * 0.02),
+      padding: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(context).size.height * 0.02),
       child: Text(
         title,
         style: const TextStyle(
@@ -606,24 +654,25 @@ final List<String> _states = [
   //   );
   // }
   Widget buildLabeledTextField(
-      BuildContext context,
-      String label,
-      String hintText, {
-        bool showPositionedBox = false,
-        IconData? prefixIcon,
-        Widget? suffixIcon,
-        bool obscureText = false,
-        List<String>? dropdownItems,
-        TextEditingController? controller,
-        String? Function(String?)? validator,
-        VoidCallback? onTap,
-        TextInputType? keyboardType,
-      }) {
+    BuildContext context,
+    String label,
+    String hintText, {
+    bool showPositionedBox = false,
+    IconData? prefixIcon,
+    Widget? suffixIcon,
+    bool obscureText = false,
+    List<String>? dropdownItems,
+    TextEditingController? controller,
+    String? Function(String?)? validator,
+    VoidCallback? onTap,
+    TextInputType? keyboardType,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.1),
           child: RichText(
             text: TextSpan(
               children: [
@@ -641,61 +690,63 @@ final List<String> _states = [
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.1),
           child: dropdownItems != null
               ? DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              hintText: hintText,
-              prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            value: controller?.text.isNotEmpty == true ? controller?.text : null,
-            hint: Text(hintText),
-            onChanged: (String? newValue) {
-              setState(() {
-                controller?.text = newValue!;
-              });
-            },
-            items: dropdownItems.map((String item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                child: Text(item),
-              );
-            }).toList(),
-            validator: validator,
-            isExpanded: true,
-          )
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  value: controller?.text.isNotEmpty == true
+                      ? controller?.text
+                      : null,
+                  hint: Text(hintText),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      controller?.text = newValue!;
+                    });
+                  },
+                  items: dropdownItems.map((String item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    );
+                  }).toList(),
+                  validator: validator,
+                  isExpanded: true,
+                )
               : TextFormField(
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: hintText,
-              prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-              suffixIcon: suffixIcon, // Ensure suffixIcon is added here
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            obscureText: obscureText,
-            validator: validator,
-            onTap: onTap,
-            keyboardType: keyboardType,
-          ),
+                  controller: controller,
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+                    suffixIcon: suffixIcon, // Ensure suffixIcon is added here
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  obscureText: obscureText,
+                  validator: validator,
+                  onTap: onTap,
+                  keyboardType: keyboardType,
+                ),
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
       ],
     );
   }
 
-
-
   Widget buildGenderField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.12),
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.12),
           child: RichText(
             text: const TextSpan(
               children: [
@@ -712,7 +763,8 @@ final List<String> _states = [
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.085),
+          padding:
+              EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.085),
           child: Row(
             children: [
               Radio(
@@ -741,9 +793,6 @@ final List<String> _states = [
     );
   }
 
-
-
-
   Widget buildStateDropdown() {
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -753,9 +802,7 @@ final List<String> _states = [
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-
         ],
       ),
     );

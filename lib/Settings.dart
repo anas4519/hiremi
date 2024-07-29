@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hiremi_version_two/screens/Drawer_Child_Screens/About_Us_Screen/AboutUsScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/Verifiedtrue.dart';
@@ -6,7 +7,6 @@ import 'package:hiremi_version_two/Help_Support.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
-import 'package:hiremi_version_two/about_us.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
