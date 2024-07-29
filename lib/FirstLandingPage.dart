@@ -66,7 +66,7 @@ class _FirstLandingPageState extends State<FirstLandingPage> {
                       fontSize: 12.0,
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.1235),
+                  const Spacer(),
                   CustomElevatedButton(
                     text: 'Next  >',
                     onPressed: () {
