@@ -11,6 +11,7 @@ import 'package:hiremi_version_two/Custom_Widget/verification_status.dart';
 import 'package:hiremi_version_two/InternshipScreen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
+import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/experienced_jobs.dart';
 import 'package:hiremi_version_two/fresherJobs.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
@@ -169,7 +170,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     'images/icons/Hiremi Verified Banner5.png'
   ];
 
-  @override
+    @override
   Widget build(BuildContext context) {
     bool isVerified = ref.watch(verificationProvider);
     final screenWidth = MediaQuery.of(context).size.width;
@@ -261,7 +262,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                           margin: const EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 4.0),
                           decoration: BoxDecoration(
-                            border: Border.all(width: 0.25,color: Colors.black),
+                            border:
+                                Border.all(width: 0.25, color: Colors.black),
                             shape: BoxShape.circle,
                             color: (Theme.of(context).brightness ==
                                         Brightness.dark
