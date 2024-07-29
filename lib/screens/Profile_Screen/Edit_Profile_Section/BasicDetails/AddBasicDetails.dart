@@ -13,9 +13,9 @@ import '../widgets/TextFieldWithTitle.dart';
 
 class AddBasicDetails extends StatefulWidget {
   const AddBasicDetails({
-    super.key,
+    super.key, this.profileId,
   });
-
+  final int? profileId;
   @override
   State<AddBasicDetails> createState() => _AddBasicDetailsState();
 }

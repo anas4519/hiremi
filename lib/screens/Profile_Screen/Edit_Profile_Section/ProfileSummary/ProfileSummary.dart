@@ -13,8 +13,9 @@ import '../widgets/TextFieldWithTitle.dart';
 
 class AddProfileSummary extends StatefulWidget {
   const AddProfileSummary({
-    super.key,
+    super.key, this.profileId,
   });
+  final int? profileId;
 
   @override
   State<AddProfileSummary> createState() => _AddProfileSummaryState();

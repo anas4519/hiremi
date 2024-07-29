@@ -12,8 +12,9 @@ import '../widgets/TextFieldWithTitle.dart';
 
 class AddEducation extends StatefulWidget {
   const AddEducation({
-    super.key,
+    super.key, this.profileId,
   });
+  final int? profileId;
 
   @override
   State<AddEducation> createState() => _AddEducationState();

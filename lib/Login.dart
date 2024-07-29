@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Custom_Widget/Curved_Container.dart';
 import 'package:hiremi_version_two/Custom_Widget/Elevated_Button.dart';
 import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
-import 'package:hiremi_version_two/Verify_ur_Email.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/Forget_Your_Password.dart';
 import 'package:hiremi_version_two/Register.dart';
@@ -25,19 +24,25 @@ class _LogInState extends State<LogIn> {
   final _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
   String? _savedEmail;
+  int? userId;
   bool isV = false;
 
-  Future<String?> _printSavedEmail() async {
-    // final prefs = await SharedPreferences.getInstance();
-    // final email = prefs.getString('email') ?? 'No email saved';
-    // print("email saved is $email");
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _savedEmail = prefs.getString('email') ?? 'No email saved';
-    });
 
-    print("Saved email is $_savedEmail");
-    isV = await _isEmailVerified();
+  Future<void> _buildProfileId() async {
+    try{
+      const String api = 'http://13.127.81.177:8000/api/profiles/';
+      final response = await http.post(Uri.parse(api),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          'register' : userId,
+        }),
+      );
+      if(response.statusCode == 200){
+        print('profile Id Built Successfully');
+      }
+    }catch(e){
+      print('error while calling api');
+    }
   }
 
   Future<bool> _isEmailVerified() async {
@@ -46,10 +51,12 @@ class _LogInState extends State<LogIn> {
     if (response.statusCode == 200) {
       final List<dynamic> users = jsonDecode(response.body);
       for (var user in users) {
-        if (user['email'] == _savedEmail && user['verified'] == true) {
+        if (user['email'] == _emailController.text) {
           print("Verified is true");
-          // final prefs = await SharedPreferences.getInstance();
-          // await prefs.setString('isLogin', 'true');
+          setState(() {
+            userId = user['id'];
+            print(userId);
+          });
           Navigator.pushAndRemoveUntil(
             context,
             SlidePageRoute(page: NewNavbar()),
@@ -82,19 +89,14 @@ class _LogInState extends State<LogIn> {
         "password": _passwordController.text,
       }),
     );
-
     if (response.statusCode == 200) {
       // Login successful
       print("Login successful");
-      _printSavedEmail();
+      await _isEmailVerified();
+      await _buildProfileId();
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('isLogin', 'true');
       await prefs.setString('email', _emailController.text);
-      await prefs.setString('isLogin', 'true');
-      Navigator.push(
-        context,
-        SlidePageRoute(page: NewNavbar()),
-      );
     } else {
       // Login failed
       print("Login failed");

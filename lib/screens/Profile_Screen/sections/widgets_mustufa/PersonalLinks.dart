@@ -12,8 +12,9 @@ import '../../widgets/CustomContainer/OutlinedButton.dart';
 
 class PersonalLinks extends StatefulWidget {
   const PersonalLinks({
-    super.key,
+    super.key, this.profileId,
   });
+  final int? profileId;
 
   @override
   State<PersonalLinks> createState() => _PersonalLinksState();

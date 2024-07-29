@@ -12,7 +12,8 @@ import '../Personal Details/AddPersonalDetails.dart';
 import '../widgets/TextFieldWithTitle.dart';
 
 class AddProjects extends StatefulWidget {
-  const AddProjects({super.key});
+  const AddProjects({super.key, this.profileId});
+  final int? profileId;
 
   @override
   State<AddProjects> createState() => _AddProjectsState();

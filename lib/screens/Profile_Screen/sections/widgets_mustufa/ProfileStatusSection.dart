@@ -6,10 +6,9 @@ import 'package:hiremi_version_two/Utils/colors.dart';
 class ProfileStatusSection extends StatelessWidget {
   const ProfileStatusSection({
     super.key,
-    required this.isVerified, required this.fullName,
+    required this.fullName,
   });
 
-  final bool isVerified;
   final String fullName;
 
   @override

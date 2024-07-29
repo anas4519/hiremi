@@ -14,8 +14,9 @@ import '../widgets/TextFieldWithTitle.dart';
 
 class AddKeySkills extends StatefulWidget {
   const AddKeySkills({
-    super.key,
+    super.key, this.profileId,
   });
+  final int? profileId;
 
   @override
   State<AddKeySkills> createState() => _AddKeySkillsState();

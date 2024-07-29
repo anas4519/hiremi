@@ -13,8 +13,9 @@ import '../widgets/TextFieldWithTitle.dart';
 
 class AddLanguages extends StatefulWidget {
   const AddLanguages({
-    super.key,
+    super.key, this.profileId,
   });
+  final int? profileId;
 
   @override
   State<AddLanguages> createState() => _AddLanguagesState();

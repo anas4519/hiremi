@@ -3,9 +3,10 @@ import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 
 class ResumeSection extends StatefulWidget {
-  const ResumeSection({super.key, required this.resumeLink,});
+  const ResumeSection({super.key, required this.resumeLink, required this.profileId,});
 
   final TextEditingController resumeLink;
+  final int? profileId;
 
   @override
   State<ResumeSection> createState() => _ResumeSectionState();

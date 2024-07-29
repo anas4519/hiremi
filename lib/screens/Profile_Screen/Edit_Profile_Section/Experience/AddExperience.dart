@@ -13,7 +13,8 @@ import '../Projects/AddProjects.dart';
 import '../widgets/TextFieldWithTitle.dart';
 
 class AddExperience extends StatefulWidget {
-  const AddExperience({super.key});
+  const AddExperience({super.key, this.profileId});
+  final int? profileId;
 
   @override
   State<AddExperience> createState() => _AddExperienceState();

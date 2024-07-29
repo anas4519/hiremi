@@ -18,7 +18,8 @@ import '../Languages/AddLanguages.dart';
 import '../widgets/TextFieldWithTitle.dart';
 
 class AddPersonalDetails extends StatefulWidget {
-  const AddPersonalDetails({super.key});
+  const AddPersonalDetails({super.key, this.profileId});
+  final int? profileId;
 
   @override
   State<AddPersonalDetails> createState() => _AddPersonalDetailsState();
