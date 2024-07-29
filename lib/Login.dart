@@ -412,7 +412,7 @@ class _LogInState extends State<LogIn> {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () async{
                                 final Uri url =
-                                    Uri.parse('http://www.hiremi.in/about.html');
+                                    Uri.parse('http://www.hiremi.in/terms&condition.html');
                                 if (!await launchUrl(url)) {
                                   throw Exception('Could not launch $url');
                                 }
