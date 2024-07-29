@@ -139,7 +139,7 @@ class _About_UsState extends State<About_Us> {
             ),
             InkWell(
               onTap: () {
-                _launchURL('http://www.hiremi.in/About%20Us%20page/about.html');
+                _launchURL('http://www.hiremi.in/about.html');
               },
               child: const Text(
                 'Learn more',

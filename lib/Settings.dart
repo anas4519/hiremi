@@ -9,6 +9,7 @@ import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
@@ -69,6 +70,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       print('Error: $e');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +134,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   border: Border.all(color: Colors.black),
                   borderRadius: BorderRadius.circular(screenHeight * 0.01),
                 ),
-
                 child: RawMaterialButton(
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
@@ -265,11 +266,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
                       RawMaterialButton(
-                        onPressed: () {},
+                        onPressed: () async{
+                          final Uri url =
+                                    Uri.parse('http://www.hiremi.in/about.html');
+                                if (!await launchUrl(url)) {
+                                  throw Exception('Could not launch $url');
+                                }
+                        },
                         child: Row(
                           children: [
                             Icon(
-                              Icons.explore,
+                              Icons.explore_outlined,
                               color: AppColors.primary,
                               size: screenHeight * 0.03,
                             ),
@@ -277,12 +284,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               width: screenWidth * 0.03,
                             ),
                             Text(
-                              'Terms and Conditions Section',
-                              style: TextStyle(fontSize: screenHeight * 0.017),
+                              'Terms and Conditions',
+                              style: TextStyle(fontSize: screenHeight * 0.02),
                             ),
                             Spacer(),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                final Uri url =
+                                    Uri.parse('http://www.hiremi.in/about.html');
+                                if (!await launchUrl(url)) {
+                                  throw Exception('Could not launch $url');
+                                }
+                              },
                               icon: Icon(
                                 Icons.arrow_forward_ios,
                                 size: screenHeight * 0.02,
