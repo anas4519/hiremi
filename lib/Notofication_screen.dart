@@ -3,21 +3,44 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/Custom_Widget/verified_notification.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
-import 'package:hiremi_version_two/providers/notification_provider.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationScreen extends ConsumerStatefulWidget {
-  const NotificationScreen({Key? key}) : super(key: key);
+  const NotificationScreen({super.key});
 
   @override
   ConsumerState<NotificationScreen> createState() => _NotificationScreenState();
 }
 
 class _NotificationScreenState extends ConsumerState<NotificationScreen> {
+  List<Widget> notifications = [];
+  late SharedPreferences prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotifications();
+  }
+
+  Future<void> _loadNotifications() async {
+    prefs = await SharedPreferences.getInstance();
+    bool isVerifiedNotificationVisible = prefs.getBool('isVerifiedNotificationVisible') ?? true;
+
+    if (isVerifiedNotificationVisible) {
+      notifications = [
+        VerifiedNotification(onClose: () {
+          setState(() {
+            notifications.removeAt(0);
+            prefs.setBool('isVerifiedNotificationVisible', false);
+          });
+        }),
+      ];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final notificationsNotifier = ref.watch(notificationsProvider.notifier);
-    final notifications = ref.watch(notificationsProvider);
     final isVerified = ref.watch(verificationProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -31,7 +54,7 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
         centerTitle: true,
         actions: [
           Padding(
-            padding:  EdgeInsets.only(right: Sizes.responsiveSm(context)),
+            padding: EdgeInsets.only(right: Sizes.responsiveSm(context)),
             child: IconButton(
               onPressed: () {
                 Navigator.of(context).pop();
@@ -68,12 +91,10 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
             : ListView.separated(
                 itemCount: notifications.length,
                 separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(height: screenHeight*0.01);
+                  return SizedBox(height: screenHeight * 0.01);
                 },
                 itemBuilder: (BuildContext context, int index) {
-                  return VerifiedNotification(
-                    onClose: () => notificationsNotifier.removeNotification(index),
-                  );
+                  return notifications[index];  
                 },
               ),
       ),

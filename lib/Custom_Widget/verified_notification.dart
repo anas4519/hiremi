@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class VerifiedNotification extends StatelessWidget {
   final VoidCallback onClose;
 
-  const VerifiedNotification({Key? key, required this.onClose}) : super(key: key);
+  const VerifiedNotification({required this.onClose, super.key});
 
   @override
   Widget build(BuildContext context) {
