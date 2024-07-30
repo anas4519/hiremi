@@ -174,6 +174,7 @@ class _FresherJobsState extends State<FresherJobs> {
                                   profile: job['profile'] ?? 'N/A',
                                   companyName: job['company_name'] ?? 'N/A',
                                   location: job['location'] ?? 'N/A',
+                                  eligible: job['eligibility'] ?? 'N/A',
                                   stipend: job['CTC']?.toString() ?? 'N/A',
                                   mode: 'Remote',
                                   type: 'Job',

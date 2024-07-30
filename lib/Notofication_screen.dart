@@ -70,14 +70,14 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(screenWidth * 0.04),
-        child: !isVerified
+        child: !isVerified || notifications.isEmpty
             ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset('images/Mail-bro 1.png', height: screenHeight * 0.3),
                     SizedBox(height: screenHeight * 0.02),
-                    Container(
+                    SizedBox(
                       width: screenWidth * 0.8,
                       child: const Text(
                         'NNN: No New Notifications! Please explore\nHiremi applications for a while.',

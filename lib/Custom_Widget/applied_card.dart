@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hiremi_version_two/Fresher_Jobs/detailedFresherJobs.dart';
-import 'package:hiremi_version_two/Internships/detailedInternship.dart';
-import 'package:hiremi_version_two/providers/verified_provider.dart';
 
-import 'Custom_alert_box.dart';
 
-class OpportunityCard extends ConsumerWidget {
-  const OpportunityCard({
-    super.key,
-    required this.dp,
-    required this.profile,
-    required this.companyName,
-    required this.location,
-    required this.stipend,
-    required this.mode,
-    required this.exp,
-    required this.type,
-    required this.daysPosted,
-    required this.ctc,
-    required this.description,
-    required this.education,
-    required this.skillsRequired,
-    required this.whoCanApply,
-    required this.eligible
-  });
+class AppliedCard extends ConsumerWidget {
+  const AppliedCard(
+      {super.key,
+      required this.dp,
+      required this.profile,
+      required this.companyName,
+      required this.location,
+      required this.stipend,
+      required this.mode,
+      required this.exp,
+      required this.type,
+      required this.daysPosted,
+      required this.ctc,
+      required this.description,
+      required this.education,
+      required this.skillsRequired,
+      required this.whoCanApply,
+      required this.eligible});
 
   final Image dp;
   final String profile;
@@ -44,7 +39,6 @@ class OpportunityCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var isVerified = ref.watch(verificationProvider);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -101,11 +95,11 @@ class OpportunityCard extends ConsumerWidget {
                 ],
               ),
               // SizedBox(height: MediaQuery.of(context).size.height*0.01),
-              const Row(
+              Row(
                 children: [
                   const Icon(Icons.school, color: Colors.grey, size: 8),
                   const SizedBox(width: 5),
-                  Text('BE/B.TECH/M.TECH/MCA/MBA/BCA/BSC/MSC', style: const TextStyle(fontSize: 8)),
+                  Text(eligible, style: const TextStyle(fontSize: 8)),
                 ],
               ),
               Row(
@@ -131,61 +125,7 @@ class OpportunityCard extends ConsumerWidget {
                   const Color(0xFFED509B), const Color(0xFFFFE5EE)),
               const Spacer(),
               ElevatedButton(
-                onPressed: () {
-                  if (!isVerified) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                              contentPadding: EdgeInsets.zero,
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              content: const CustomAlertbox());
-                        });
-                  } else {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (ctx) => type == 'Job'
-                            ? DetailedFresherJobs(
-                                id: 0,
-                                profile: profile,
-                                location: location,
-                                codeRequired: '',
-
-                                code: 0,
-
-                                companyName: companyName,
-                                education: education,
-                                skillsRequired: skillsRequired,
-                                knowledgeStars: null,
-                                whoCanApply: '',
-                                description: description,
-                                termsAndConditions: '',
-                                ctc: double.parse(
-                                    ctc), // Convert to appropriate type if needed
-                              )
-                            : DetailedInternship(
-                                id: 0,
-                                profile: profile,
-                                location: location,
-                                codeRequired: '',
-                                code: 0,
-                                companyName: companyName,
-                                education: education,
-                                skillsRequired: skillsRequired,
-                                knowledgeStars: null,
-                                whoCanApply: '',
-                                description: description,
-                                termsAndConditions: '',
-                                ctc: double.parse(
-                                    ctc), // Convert to appropriate type if needed
-                              ),
-                      ),
-                    );
-                  }
-                },
+                onPressed: () {},
                 style: ButtonStyle(
                   foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
                   backgroundColor:
@@ -197,7 +137,7 @@ class OpportunityCard extends ConsumerWidget {
                   ),
                 ),
                 child: const Text(
-                  'Apply Now >',
+                  'View',
                   style: TextStyle(fontSize: 10),
                 ),
               )
@@ -210,16 +150,17 @@ class OpportunityCard extends ConsumerWidget {
             color: Colors.grey,
           ),
           const SizedBox(height: 6),
-          Row(
+          const Row(
             children: [
-              const Icon(Icons.track_changes_outlined,
-                  color: Colors.green, size: 8),
-              const Text('Actively Recruiting',
-                  style: TextStyle(color: Colors.green, fontSize: 8)),
-              const Spacer(),
-              const Icon(Icons.av_timer, color: Colors.grey, size: 8),
-              Text('$daysPosted days ago',
-                  style: const TextStyle(color: Colors.grey, fontSize: 8)),
+              Icon(Icons.av_timer, size: 8, color: Colors.grey,),
+              Text('Application Status: ', style: TextStyle(fontSize: 8, color: Colors.grey)),
+              Text('Applied',
+                  style: TextStyle(color: Colors.green, fontSize: 8, fontWeight: FontWeight.bold)),
+              Spacer(),
+              Icon(Icons.av_timer, color: Colors.grey, size: 8),
+
+              Text('Applied date: 30/07/04',
+                  style: TextStyle(color: Colors.grey, fontSize: 8)),
             ],
           ),
         ],

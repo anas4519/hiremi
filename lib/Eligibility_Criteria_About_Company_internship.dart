@@ -7,10 +7,13 @@ import 'package:hiremi_version_two/Utils/colors.dart';
 
 
 class EligibilityCriteriaAboutCompany extends StatelessWidget {
-  const EligibilityCriteriaAboutCompany({Key? key}) : super(key: key);
+  const EligibilityCriteriaAboutCompany({super.key});
+
+
 
   @override
   Widget build(BuildContext context) {
+    List<String> benefits = ['Certificate', 'Letter of Recommedation'];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -20,7 +23,7 @@ class EligibilityCriteriaAboutCompany extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: AppColors.primary)),
         SizedBox(
-          height: Sizes.responsiveMd(context),
+          height: Sizes.responsiveMd(context)*0.5,
         ),
         Padding(
           padding: EdgeInsets.only(left: Sizes.responsiveXxs(context)),
@@ -42,6 +45,37 @@ class EligibilityCriteriaAboutCompany extends StatelessWidget {
                   'Skills and Interests: Relevant skills and a keen interest in recruitment and talent acquisition.'),
             ],
           ),
+        ),
+        SizedBox(
+          height: Sizes.responsiveLg(context),
+        ),
+         Text('Benefits',
+            style: TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary)),
+        SizedBox(
+          height: Sizes.responsiveSm(context)*0.5,
+        ),
+        Row(
+          children: benefits.map((skill) {
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFE5EE),
+                borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01),
+              ),
+              padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.01),
+              child: Text(
+                skill,
+                style: const TextStyle(
+                  fontSize: 8,
+                  fontWeight: FontWeight.w400,
+                  height: 1.5,
+                ),
+              ),
+            );
+          }).toList(),
         ),
         SizedBox(
           height: Sizes.responsiveLg(context),
