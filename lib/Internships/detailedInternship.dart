@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Eligibility_Criteria_About_Company.dart';
+import 'package:hiremi_version_two/Eligibility_Criteria_About_Company_internship.dart';
 import 'package:hiremi_version_two/Fresher_Jobs/roleDetails.dart';
 import 'package:hiremi_version_two/Fresher_Jobs/skillsRequired.dart';
 import 'package:hiremi_version_two/Internships/HeaderSectionInternship.dart';
@@ -118,7 +119,7 @@ class _DetailedInternshipState extends State<DetailedInternship> {
               ),
 
               /// Eligibility Criteria
-              EligibilityCriteriaAboutCompanyFresher(),
+              const EligibilityCriteriaAboutCompany()
             ],
           ),
         ),

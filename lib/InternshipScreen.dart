@@ -17,7 +17,6 @@ class InternshipsScreen extends StatefulWidget {
 
 class _InternshipsScreenState extends State<InternshipsScreen> {
   late Future<List<dynamic>> futureJobs;
-  List<dynamic> _jobs = [];
 
   @override
   void initState() {
@@ -186,6 +185,7 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
                               profile: job['profile'] ?? 'N/A',
                               companyName: job['company_name'] ?? 'N/A',
                               location: job['location'] ?? 'N/A',
+                              eligible: job['eligibility'] ?? 'N/A',
                               stipend: job['Stipend']?.toString() ?? 'N/A',
                               mode:
                                   'Remote', // Replace with actual data if available

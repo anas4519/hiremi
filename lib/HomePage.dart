@@ -448,6 +448,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         profile: job['profile'] ?? 'N/A',
                         companyName: job['company_name'] ?? 'N/A',
                         location: job['location'] ?? 'N/A',
+                        eligible: job['eligibility'] ?? 'N/A',
                         stipend: job['Stipend']?.toString() ?? 'N/A',
                         mode: 'Remote',
                         // Replace with actual data if available
