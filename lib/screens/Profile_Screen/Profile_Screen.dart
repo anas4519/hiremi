@@ -53,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ProfileStatusSection(
-                  fullName: userRepository.currentUser!.fullName,
+                  fullName: userRepository.currentUser!.fullName
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),

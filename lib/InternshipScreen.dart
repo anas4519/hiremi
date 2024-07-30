@@ -8,8 +8,7 @@ import 'package:hiremi_version_two/Utils/colors.dart';
 
 class InternshipsScreen extends StatefulWidget {
   //const InternshipsScreen({super.key, required this.isVerified});
-  const InternshipsScreen({Key? key, required this.isVerified})
-      : super(key: key);
+  const InternshipsScreen({super.key, required this.isVerified});
   final bool isVerified;
 
   @override
@@ -120,7 +119,7 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
             ),
           ),
           SizedBox(
-            height: screenHeight * 0.04, // 3% of screen height
+            height: screenHeight * 0.02, // 3% of screen height
           ),
           Padding(
             padding: EdgeInsets.only(left: screenWidth * 0.04),
@@ -137,7 +136,7 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
             ),
           ),
           SizedBox(
-            height: screenHeight * 0.01, // 3% of screen height
+            height: screenHeight * 0.0, // 3% of screen height
           ),
           Expanded(
             child: FutureBuilder<List<dynamic>>(
