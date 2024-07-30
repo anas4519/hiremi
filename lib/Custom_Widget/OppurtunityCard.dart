@@ -101,11 +101,11 @@ class OpportunityCard extends ConsumerWidget {
                 ],
               ),
               // SizedBox(height: MediaQuery.of(context).size.height*0.01),
-              Row(
+              const Row(
                 children: [
                   const Icon(Icons.school, color: Colors.grey, size: 8),
                   const SizedBox(width: 5),
-                  Text(eligible, style: const TextStyle(fontSize: 8)),
+                  Text('BE/B.TECH/M.TECH/MCA/MBA/BCA/BSC/MSC', style: const TextStyle(fontSize: 8)),
                 ],
               ),
               Row(
