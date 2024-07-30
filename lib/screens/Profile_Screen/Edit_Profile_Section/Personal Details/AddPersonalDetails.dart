@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hiremi_version_two/Screens/Profile_Screen/Edit_Profile_Section/Languages/AddLanguages.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/repository/User.dart';
@@ -14,7 +15,6 @@ import '../../../../Utils/colors.dart';
 import '../../../Drawer_Child_Screens/drawer_child.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 
-import '../Languages/AddLanguages.dart';
 import '../widgets/TextFieldWithTitle.dart';
 
 class AddPersonalDetails extends StatefulWidget {
@@ -50,7 +50,7 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
 
     if (selectedDate != null) {
       setState(() {
-        controller.text = DateFormat('dd/MM/yyyy').format(selectedDate);
+        controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
       });
     }
   }
@@ -257,19 +257,19 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                         children: [
                           Radio(
                               activeColor: Colors.blue,
-                              value: 'Single / Unmarried',
+                              value: 'Single',
                               groupValue:
                                   controller.selectedMaritalStatus.value,
                               onChanged: (value) => controller
                                   .selectedMaritalStatus
-                                  .value = 'Single / Unmarried'),
+                                  .value = 'Single'),
                           Text(
-                            'Single / Unmarried',
+                            'Single',
                             style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 11,
                                 color: controller.selectedMaritalStatus.value ==
-                                        'Single / Unmarried'
+                                        'Single'
                                     ? Colors.black
                                     : AppColors.secondaryText),
                           )
@@ -479,7 +479,32 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                             vertical: Sizes.responsiveHorizontalSpace(context),
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
-                      onPressed: () {
+                      onPressed: ()async {
+                        if(formKey.currentState!.validate() && isValid()){
+                          final details = {
+                            'gender' : controller.selectedGender.value,
+                            'marital_status': controller.selectedMaritalStatus.value,
+                            'home_town': homeController.text,
+                            'pincode': pinCodeController.text,
+                            'local_address': localAddressController.text,
+                            'permanent_address': permanentAddressController.text,
+                            'date_of_birth' : dobController.text,
+                            'ability': controller.differentlyAbled.value,
+                            'category': categoryController.text,
+                            'profile': controller.profileId.toString(),
+                          };
+                          final success = await controller.addPersonalDetails(details);
+                          if (success) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewNavbar(
+                                    initTabIndex: 3,
+                                  )),
+                                  (Route<dynamic> route) => false,
+                            );
+                          } else {}
+                        }
                       },
                       child: const Text(
                         'Save',
@@ -499,7 +524,30 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                             vertical: Sizes.responsiveSm(context),
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
+                        if(formKey.currentState!.validate() && isValid()){
+                          final details = {
+                            'gender' : controller.selectedGender.value,
+                            'marital_status': controller.selectedMaritalStatus.value,
+                            'home_town': homeController.text,
+                            'pincode': pinCodeController.text,
+                            'local_address': localAddressController.text,
+                            'permanent_address': permanentAddressController.text,
+                            'date_of_birth' : dobController.text,
+                            'ability': controller.differentlyAbled.value,
+                            'category': categoryController.text,
+                            'profile': controller.profileId.toString(),
+                          };
+                          final success = await controller.addPersonalDetails(details);
+                          if (success) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AddLanguages()),
+                                  (Route<dynamic> route) => false,
+                            );
+                          } else {}
+                        }
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,

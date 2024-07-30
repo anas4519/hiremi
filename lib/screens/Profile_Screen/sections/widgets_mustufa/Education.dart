@@ -20,17 +20,17 @@ class Education extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if(education!.isNotEmpty)
-          SizedBox(height: Sizes.responsiveMd(context)),
+          if (education != null && education!.isNotEmpty)
+            SizedBox(height: Sizes.responsiveMd(context)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: education!
                 .map((edu) => EducationChild(
-                    course: edu['education']!,
-                    place: edu['course']!,
-                    marks: edu['marks']!,
-                    duration: edu['passing_year']!,
-            ))
+                      course: edu['education']!,
+                      place: edu['course']!,
+                      marks: edu['marks']!,
+                      duration: edu['passing_year']!,
+                    ))
                 .toList(),
           ),
         ],

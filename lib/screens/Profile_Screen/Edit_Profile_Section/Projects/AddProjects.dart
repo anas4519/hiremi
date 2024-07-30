@@ -44,7 +44,7 @@ class _AddProjectsState extends State<AddProjects> {
 
     if (selectedDate != null) {
       setState(() {
-        controller.text = DateFormat('MM/yyyy').format(selectedDate);
+        controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
       });
     }
   }
@@ -296,17 +296,30 @@ class _AddProjectsState extends State<AddProjects> {
                             vertical: Sizes.responsiveHorizontalSpace(context),
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (formKey.currentState!.validate() &&
                             projectStatus.isNotEmpty) {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NewNavbar(
-                                      initTabIndex: 3,
-                                    )),
-                            (Route<dynamic> route) => false,
-                          );
+                          final details = {
+                            'project_title': titleController.text,
+                            'client': clientController.text,
+                            'link': projectLinkController.text,
+                            'start_date': startingDateController.text,
+                            'status': projectStatus,
+                            'end_date' :  completionDateController.text,
+                            'description': descriptionController.text,
+                            'profile': controller.profileId.toString(),
+                          };
+                          final success = await controller.addProjects(details);
+                          if (success) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewNavbar(
+                                    initTabIndex: 3,
+                                  )),
+                                  (Route<dynamic> route) => false,
+                            );
+                          }
                         }
                       },
                       child: const Text(
@@ -327,11 +340,29 @@ class _AddProjectsState extends State<AddProjects> {
                             vertical: Sizes.responsiveSm(context),
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (formKey.currentState!.validate() &&
                             projectStatus.isNotEmpty) {
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(
-                              builder: (ctx) => const AddPersonalDetails()));
+                          final details = {
+                            'project_title': titleController.text,
+                            'client': clientController.text,
+                            'link': projectLinkController.text,
+                            'start_date': startingDateController.text,
+                            'status': projectStatus,
+                            'end_date' :  completionDateController.text,
+                            'description': descriptionController.text,
+                            'profile': controller.profileId.toString(),
+                          };
+                          final success = await controller.addProjects(details);
+                          if (success) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AddPersonalDetails()),
+                                  (Route<dynamic> route) => false,
+                            );
+                          }
+                          else{}
                         }
                       },
                       child: Row(

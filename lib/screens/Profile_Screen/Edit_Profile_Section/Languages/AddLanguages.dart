@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
-
 
 import '../../../../Notofication_screen.dart';
 import '../../../../Utils/AppSizes.dart';
@@ -13,8 +11,10 @@ import '../widgets/TextFieldWithTitle.dart';
 
 class AddLanguages extends StatefulWidget {
   const AddLanguages({
-    super.key, this.profileId,
+    super.key,
+    this.profileId,
   });
+
   final int? profileId;
 
   @override
@@ -59,13 +59,15 @@ class _AddLanguagesState extends State<AddLanguages> {
           title: const Text(
             "Edit Profile",
             style: TextStyle(
-                fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
+                fontSize: 16.0,
+                fontWeight: FontWeight.w600,
+                color: Colors.black),
           ),
           centerTitle: true,
           actions: [
             Padding(
               padding:
-              EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+                  EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
               child: Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -114,8 +116,7 @@ class _AddLanguagesState extends State<AddLanguages> {
                             SValidator.validateEmptyText('Language', value),
                         suffix: GestureDetector(
                           onTap: () {
-                            if (formKey.currentState!.validate()) {
-                            }
+                            if (formKey.currentState!.validate()) {}
                           },
                           child: Icon(
                             Icons.add,
@@ -139,18 +140,22 @@ class _AddLanguagesState extends State<AddLanguages> {
                                     Sizes.responsiveHorizontalSpace(context),
                                 horizontal: Sizes.responsiveMdSm(context)),
                           ),
-                          onPressed: () {
-                            if (formKey.currentState!.validate() ||
-                                controller.languages.isEmpty) {
-                              return;
+                          onPressed: () async {
+                            if (formKey.currentState!.validate()) {
+                              final success = await controller
+                                  .addLanguages(languageController.text);
+                              if (success) {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => NewNavbar(
+                                            initTabIndex: 3,
+                                          )),
+                                  (Route<dynamic> route) => false,
+                                );
+                              }
+                              else{}
                             }
-                            Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>NewNavbar(initTabIndex: 3,)),
-                          (Route<dynamic> route) => false,
-                    );
-
                           },
                           child: const Text(
                             'Save',
