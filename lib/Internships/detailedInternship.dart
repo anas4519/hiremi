@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hiremi_version_two/Internships/eligibilityCriteria.dart';
+import 'package:hiremi_version_two/Eligibility_Criteria_About_Company.dart';
+import 'package:hiremi_version_two/Fresher_Jobs/roleDetails.dart';
+import 'package:hiremi_version_two/Fresher_Jobs/skillsRequired.dart';
 import 'package:hiremi_version_two/Internships/HeaderSectionInternship.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
-import 'package:hiremi_version_two/Internships/roleDetails.dart';
-import 'package:hiremi_version_two/Internships/skillsRequired.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 
@@ -23,7 +23,7 @@ class DetailedInternship extends StatefulWidget {
   final double ctc;
 
   const DetailedInternship({
-    Key? key,
+    super.key,
     required this.id,
     required this.profile,
     required this.location,
@@ -37,7 +37,7 @@ class DetailedInternship extends StatefulWidget {
     required this.description,
     required this.termsAndConditions,
     required this.ctc,
-  }) : super(key: key);
+  });
 
   @override
   State<DetailedInternship> createState() => _DetailedInternshipState();
@@ -50,15 +50,29 @@ class _DetailedInternshipState extends State<DetailedInternship> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
+        title: const Text(
+          'Internships',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) => const NotificationScreen()));
-            },
-            icon: const Icon(Icons.notifications_outlined),
-            style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)),
+          Padding(
+            padding:
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+            child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const NotificationScreen(),
+                      ));
+                    },
+                    icon: const Icon(Icons.notifications_outlined),
+                  ),
+                )),
           ),
         ],
       ),
@@ -80,10 +94,12 @@ class _DetailedInternshipState extends State<DetailedInternship> {
                 location: widget.location,
                 ctc: widget.ctc,
               ),
-              SizedBox(height: Sizes.responsiveXl(context)),
+
+              Divider(),
+              SizedBox(height: Sizes.responsiveXl(context) * 0.5),
 
               /// Role Details
-              RoleDetailsInternship(
+              RoleDetailsFresher(
                 profile: widget.profile,
                 location: widget.location,
                 ctc: widget.ctc,
@@ -94,7 +110,7 @@ class _DetailedInternshipState extends State<DetailedInternship> {
               ),
 
               /// Skill Required
-              SkillRequiredInternship(
+              SkillRequiredFresher(
                 skillsRequired: widget.skillsRequired,
               ),
               SizedBox(
@@ -102,11 +118,7 @@ class _DetailedInternshipState extends State<DetailedInternship> {
               ),
 
               /// Eligibility Criteria
-              EligibilityCriteriaAboutCompanyInternship(
-                education: widget.education,
-                whoCanApply: widget.whoCanApply,
-                companyName: widget.companyName,
-              ),
+              EligibilityCriteriaAboutCompanyFresher(),
             ],
           ),
         ),

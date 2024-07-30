@@ -168,18 +168,29 @@ class _DetailedFresherJobsState extends State<DetailedFresherJobs> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
-        // title: const Text('Fresher Jobs', style:  TextStyle(
-        //     fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.black),),
+        title: const Text(
+          'Fresher Jobs',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (ctx) => const NotificationScreen()));
-            },
-            icon: const Icon(Icons.notifications_outlined),
-            style: ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(AppColors.bgBlue)
-            ),
+          Padding(
+            padding:
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+            child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const NotificationScreen(),
+                      ));
+                    },
+                    icon: const Icon(Icons.notifications_outlined),
+                  ),
+                )),
           ),
         ],
       ),
@@ -235,7 +246,7 @@ class _DetailedFresherJobsState extends State<DetailedFresherJobs> {
               ),
 
               /// Eligibility Criteria
-              EligibilityCriteriaAboutCompanyFresher(
+              const EligibilityCriteriaAboutCompanyFresher(
 
               ),
             ],

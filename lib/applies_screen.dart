@@ -9,7 +9,7 @@ import 'package:hiremi_version_two/fresherJobs.dart';
 
 class AppliesScreen extends StatefulWidget {
   
-  const AppliesScreen({Key? key}) : super(key: key);
+  const AppliesScreen({super.key});
 
   @override
   State<AppliesScreen> createState() => _AppliesScreenState();
@@ -54,7 +54,7 @@ class _AppliesScreenState extends State<AppliesScreen> {
                 padding:  EdgeInsets.all(screenWidth*0.02),
                 child: TextButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> InternshipsScreen(isVerified: false)));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const InternshipsScreen(isVerified: false)));
                   },
                   style: ButtonStyle(
                     shape: WidgetStateProperty.all<RoundedRectangleBorder>(

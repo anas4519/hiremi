@@ -102,14 +102,24 @@ class RoleDetailsFresher extends StatelessWidget {
                 fontSize: 14.0,
                 fontWeight: FontWeight.bold,
                 color: AppColors.primary)),
-        SizedBox(height: Sizes.responsiveLg(context)),
-        Text(
-          'Location: $location',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: AppColors.green,
-          ),
+        SizedBox(height: Sizes.responsiveLg(context)*0.5),
+        Row(
+          children: [
+            Text(
+              'Location: ',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: AppColors.green,
+              ),
+            ),
+            Text(
+              location,
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            )
+          ],
         ),
         SizedBox(
           height: Sizes.responsiveXs(context),
@@ -157,8 +167,7 @@ class RoleDetailsFresher extends StatelessWidget {
               ),
             ),
             Padding(
-              padding:
-              EdgeInsets.only(left: Sizes.responsiveXxs(context)),
+              padding: EdgeInsets.only(left: Sizes.responsiveXxs(context)),
               // First
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,27 +176,27 @@ class RoleDetailsFresher extends StatelessWidget {
                       context: context,
                       number: '1.',
                       text:
-                      'Sourcing and Recruiting: Identify and recruit potential candidates through various channels.'),
+                          'Sourcing and Recruiting: Identify and recruit potential candidates through various channels.'),
                   buildBulletPoint(
                       context: context,
                       number: '2.',
                       text:
-                      'Screening Resumes: Evaluate candidate qualifications and skills.'),
+                          'Screening Resumes: Evaluate candidate qualifications and skills.'),
                   buildBulletPoint(
                       context: context,
                       number: '3.',
                       text:
-                      'Conducting Interviews: Arrange and conduct interviews with potential candidates.'),
+                          'Conducting Interviews: Arrange and conduct interviews with potential candidates.'),
                   buildBulletPoint(
                       context: context,
                       number: '4.',
                       text:
-                      'Coordinating: Manage and coordinate with hiring managers to fulfill staffing needs.'),
+                          'Coordinating: Manage and coordinate with hiring managers to fulfill staffing needs.'),
                   buildBulletPoint(
                       context: context,
                       number: '5.',
                       text:
-                      'Maintaining Records: Keep accurate records of all candidates and their status in the hiring process.'),
+                          'Maintaining Records: Keep accurate records of all candidates and their status in the hiring process.'),
                 ],
               ),
             )
