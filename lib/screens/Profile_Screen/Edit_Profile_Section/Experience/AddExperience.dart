@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
-
+import 'package:hiremi_version_two/Screens/Profile_Screen/Edit_Profile_Section/Projects/AddProjects.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/screens/Drawer_Child_Screens/drawer_child.dart';
+import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../Notofication_screen.dart';
-import '../Projects/AddProjects.dart';
 import '../widgets/TextFieldWithTitle.dart';
 
 class AddExperience extends StatefulWidget {
   const AddExperience({super.key, this.profileId});
+
   final int? profileId;
 
   @override
@@ -46,7 +46,7 @@ class _AddExperienceState extends State<AddExperience> {
 
     if (selectedDate != null) {
       setState(() {
-        controller.text = DateFormat('MM/yyyy').format(selectedDate);
+        controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
       });
     }
   }
@@ -56,6 +56,7 @@ class _AddExperienceState extends State<AddExperience> {
         jobType.isNotEmpty &&
         isCurrentCompany.isNotEmpty;
   }
+
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -88,13 +89,15 @@ class _AddExperienceState extends State<AddExperience> {
           title: const Text(
             "Edit Profile",
             style: TextStyle(
-                fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
+                fontSize: 16.0,
+                fontWeight: FontWeight.w600,
+                color: Colors.black),
           ),
           centerTitle: true,
           actions: [
             Padding(
               padding:
-              EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+                  EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
               child: Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -159,10 +162,10 @@ class _AddExperienceState extends State<AddExperience> {
                           children: [
                             Radio(
                               activeColor: Colors.blue,
-                              value: 'Yes',
+                              value: 'YES',
                               groupValue: experience,
                               onChanged: (value) => setState(() {
-                                experience = 'Yes';
+                                experience = 'YES';
                               }),
                             ),
                             Text(
@@ -170,7 +173,7 @@ class _AddExperienceState extends State<AddExperience> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 11,
-                                  color: experience == 'Yes'
+                                  color: experience == 'YES'
                                       ? Colors.black
                                       : AppColors.secondaryText),
                             )
@@ -180,11 +183,11 @@ class _AddExperienceState extends State<AddExperience> {
                           children: [
                             Radio(
                               activeColor: Colors.blue,
-                              value: 'No',
+                              value: 'NO',
                               groupValue: experience,
                               onChanged: (value) {
                                 setState(() {
-                                  experience = 'No';
+                                  experience = 'NO';
                                 });
                               },
                             ),
@@ -193,7 +196,7 @@ class _AddExperienceState extends State<AddExperience> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 11,
-                                  color: experience == 'No'
+                                  color: experience == 'NO'
                                       ? Colors.black
                                       : AppColors.secondaryText),
                             )
@@ -225,18 +228,39 @@ class _AddExperienceState extends State<AddExperience> {
                           children: [
                             Radio(
                               activeColor: Colors.blue,
-                              value: 'Full-time',
+                              value: 'On-Site',
                               groupValue: jobType,
                               onChanged: (value) => setState(() {
-                                jobType = 'Full-time';
+                                jobType = 'On-Site';
                               }),
                             ),
                             Text(
-                              'Full-time',
+                              'On-Site',
                               style: TextStyle(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 11,
-                                  color: jobType == 'Full-time'
+                                  color: jobType == 'On-Site'
+                                      ? Colors.black
+                                      : AppColors.secondaryText),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Radio(
+                              activeColor: Colors.blue,
+                              value: 'Hybrid',
+                              groupValue: jobType,
+                              onChanged: (value) => setState(() {
+                                jobType = 'Hybrid';
+                              }),
+                            ),
+                            Text(
+                              'Hybrid',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 11,
+                                  color: jobType == 'Hybrid'
                                       ? Colors.black
                                       : AppColors.secondaryText),
                             )
@@ -345,10 +369,10 @@ class _AddExperienceState extends State<AddExperience> {
                           children: [
                             Radio(
                               activeColor: Colors.blue,
-                              value: 'Yes',
+                              value: 'YES',
                               groupValue: isCurrentCompany,
                               onChanged: (value) => setState(() {
-                                isCurrentCompany = 'Yes';
+                                isCurrentCompany = 'YES';
                               }),
                             ),
                             Text(
@@ -356,7 +380,7 @@ class _AddExperienceState extends State<AddExperience> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 11,
-                                  color: isCurrentCompany == 'Yes'
+                                  color: isCurrentCompany == 'YES'
                                       ? Colors.black
                                       : AppColors.secondaryText),
                             )
@@ -366,11 +390,11 @@ class _AddExperienceState extends State<AddExperience> {
                           children: [
                             Radio(
                               activeColor: Colors.blue,
-                              value: 'No',
+                              value: 'NO',
                               groupValue: isCurrentCompany,
                               onChanged: (value) {
                                 setState(() {
-                                  isCurrentCompany = 'No';
+                                  isCurrentCompany = 'NO';
                                 });
                               },
                             ),
@@ -379,7 +403,7 @@ class _AddExperienceState extends State<AddExperience> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 11,
-                                  color: isCurrentCompany == 'No'
+                                  color: isCurrentCompany == 'NO'
                                       ? Colors.black
                                       : AppColors.secondaryText),
                             )
@@ -419,17 +443,37 @@ class _AddExperienceState extends State<AddExperience> {
                                       Sizes.responsiveHorizontalSpace(context),
                                   horizontal: Sizes.responsiveMdSm(context)),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               if (formKey.currentState!.validate() &&
                                   isValid()) {
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => NewNavbar(
-                                            initTabIndex: 3,
-                                          )),
-                                  (Route<dynamic> route) => false,
-                                );
+                                final success = await controller.addExperience(
+                                    experience,
+                                    jobType,
+                                    organizationController.text,
+                                    jobTitleController.text,
+                                    skillSetController.text,
+                                    joiningDateController.text,
+                                    isCurrentCompany,
+                                    leavingDateController.text ?? '');
+                                if (success) {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => NewNavbar(
+                                              initTabIndex: 3,
+                                            )),
+                                    (Route<dynamic> route) => false,
+                                  );
+                                } else {}
+                                //   Navigator.pushAndRemoveUntil(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => NewNavbar(
+                                //               initTabIndex: 3,
+                                //             )),
+                                //     (Route<dynamic> route) => false,
+                                //   );
+                                // }
                               }
                             },
                             child: const Text(
@@ -451,11 +495,35 @@ class _AddExperienceState extends State<AddExperience> {
                                   vertical: Sizes.responsiveSm(context),
                                   horizontal: Sizes.responsiveMdSm(context)),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               if (formKey.currentState!.validate() &&
                                   isValid()) {
-                                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                    builder: (ctx) => const AddProjects()));
+                                final success = await controller.addExperience(
+                                    experience,
+                                    jobType,
+                                    organizationController.text,
+                                    jobTitleController.text,
+                                    skillSetController.text,
+                                    joiningDateController.text,
+                                    isCurrentCompany,
+                                    leavingDateController.text ?? '');
+                                if (success) {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const AddProjects()),
+                                    (Route<dynamic> route) => false,
+                                  );
+                                } else {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const AddProjects()),
+                                    (Route<dynamic> route) => false,
+                                  );
+                                }
                               }
                             },
                             child: Row(

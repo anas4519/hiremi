@@ -40,6 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
@@ -49,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               top: Sizes.responsiveDefaultSpace(context),
               bottom: Sizes.responsiveXxl(context) * 2.5),
           child: Obx(
-                () => Column(
+            () => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ProfileStatusSection(
@@ -66,8 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(
                   height: Sizes.responsiveMd(context),
                 ),
-                ResumeSection(
-                  resumeLink: controller.resumeLink.value,
+                const ResumeSection(
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -80,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   state: controller.state.value,
                   whatsappNumber: controller.whatsappNumber.value,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  const AddBasicDetails())),
+                      builder: (context) => const AddBasicDetails())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -88,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ProfileSummary(
                   summary: controller.summary.value,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  const AddProfileSummary())),
+                      builder: (context) => const AddProfileSummary())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -96,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 KeySkills(
                   skills: controller.skills,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  const AddKeySkills())),
+                      builder: (context) => const AddKeySkills())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -104,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Education(
                   education: controller.educationDetails,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  const AddEducation())),
+                      builder: (context) => const AddEducation())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -112,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Experience(
                   experience: controller.experience,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  const AddExperience())),
+                      builder: (context) => const AddExperience())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Projects(
                   projects: controller.projects,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  const AddProjects())),
+                      builder: (context) => const AddProjects())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -135,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mStatus: controller.selectedMaritalStatus.value,
                   pAddress: controller.permanentAddress.value,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  const AddPersonalDetails())),
+                      builder: (context) => const AddPersonalDetails())),
                 ),
                 SizedBox(
                   height: Sizes.responsiveMd(context),
@@ -146,12 +146,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Languages(
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>  const AddLanguages())),
+                      builder: (context) => const AddLanguages())),
                   languages: controller.languages,
                 ),
               ],
             ),
-          ),),
+          ),
+        ),
       ),
     );
   }

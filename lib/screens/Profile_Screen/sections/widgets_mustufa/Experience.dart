@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
@@ -22,17 +24,17 @@ class Experience extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (experience!.isNotEmpty) SizedBox(height: Sizes.responsiveMd(context)),
-          if (experience != null)
+          if (experience!.isNotEmpty || experience != null)
+            SizedBox(height: Sizes.responsiveMd(context)),
             Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: experience!
                     .map((experience) => ExperienceChild(
-                        title: experience['jobTitle']!,
-                        jobType: experience['jobType']!,
-                        company: experience['organization']!,
-                        startingTime: experience['joiningDate']!,
-                        leavingTime: experience['leavingDate']!))
+                        title: experience['job_title']!,
+                        jobType: experience['work_environment']!,
+                        company: experience['company_name']!,
+                        startingTime: experience['start_date']!,
+                        leavingTime: experience['end_date']!))
                     .toList()),
         ],
       ),
@@ -98,7 +100,7 @@ class ExperienceChild extends StatelessWidget {
               height: Sizes.responsiveXxs(context),
             ),
             Text(
-              '$jobType • $startingTime - ${leavingTime ?? 'Present'}',
+              '$jobType • $startingTime - ${leavingTime == 'null' ? 'Present' : leavingTime}',
               style: TextStyle(
                 fontSize: 6.5,
                 fontWeight: FontWeight.w500,

@@ -6,10 +6,8 @@ import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileCont
 class ResumeSection extends StatefulWidget {
   const ResumeSection({
     super.key,
-    required this.resumeLink,
   });
 
-  final String resumeLink;
 
   @override
   State<ResumeSection> createState() => _ResumeSectionState();
@@ -18,15 +16,7 @@ class ResumeSection extends StatefulWidget {
 class _ResumeSectionState extends State<ResumeSection> {
   final controller = ProfileController.instance;
 
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      resumeLink.text = controller.resumeLink.value;
-    });
-  }
 
-  final TextEditingController resumeLink = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +109,7 @@ class _ResumeSectionState extends State<ResumeSection> {
             SizedBox(
               height: Sizes.responsiveLg(context),
               child: TextField(
-                controller: resumeLink,
+                controller: controller.resumeLink,
                 cursorColor: AppColors.black,
                 textAlign: TextAlign.start,
                 style: const TextStyle(
@@ -185,9 +175,9 @@ class _ResumeSectionState extends State<ResumeSection> {
                         horizontal: Sizes.responsiveMdSm(context)),
                   ),
                   onPressed: () async {
-                    if (resumeLink.text.isNotEmpty) {
+                    if (controller.resumeLink.text.isNotEmpty) {
                       FocusScope.of(context).unfocus();
-                      await controller.addResumeLink(resumeLink.text);
+                      await controller.addResumeLink(controller.resumeLink.text);
                     }
                   },
                   child: Row(

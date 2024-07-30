@@ -29,12 +29,12 @@ class Projects extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: projects!
                   .map((project) => ProjectsChild(
-                        title: project['ProjectTitle']!,
-                        startingDate: project['StartingDate']!,
-                        endingDate: project['CompletedDate']!,
-                        description: project['Description']!,
-                        link: project['ProjectLink']!,
-                        status: project['ProjectStatus']!,
+                        title: project['project_title']!,
+                        startingDate: project['start_date']!,
+                        endingDate: project['end_date']!,
+                        description: project['description']!,
+                        link: project['link']!,
+                        status: project['status']!,
                       ))
                   .toList()),
         ],
