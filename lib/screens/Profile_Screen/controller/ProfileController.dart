@@ -34,6 +34,7 @@ class ProfileController extends GetxController {
     if (details['status'] != 'NA') {
       lookingFor.value = details['looking_for'] ?? '';
       email.value = details['email'] ?? '';
+      print(email.value);
       city.value = details['city'] ?? '';
       phoneNumber.value = details['phone_number'] ?? '';
       state.value = details['state'] ?? '';
@@ -263,22 +264,15 @@ class ProfileController extends GetxController {
         body: details,
       );
       if (response.statusCode == 201) {
-        Get.snackbar('Congratulations', 'Your Basic Details Has been Updated.',
-            colorText: Colors.white,
-            backgroundColor: Colors.green,
-            snackPosition: SnackPosition.BOTTOM,
-            margin: const EdgeInsets.all(25));
+        Loaders.successSnakBar(title: 'Congratulations',message: 'Your Basic Details Has been Updated');
+        fetchBasicDetails();
         return true;
       } else {
         return false;
       }
     } catch (e) {
       print(e.toString());
-      Get.snackbar('Oops', 'Something went Wrong.',
-          colorText: Colors.white,
-          backgroundColor: Colors.red,
-          snackPosition: SnackPosition.BOTTOM,
-          margin: const EdgeInsets.all(25));
+      Loaders.errorSnackBar(title: 'Oops',message: 'Something went Wrong');
       return false;
     }
   }
@@ -301,6 +295,7 @@ class ProfileController extends GetxController {
         await fetchSummary();
         return true;
       } else {
+        print(response.body);
         return false;
       }
     } catch (e) {

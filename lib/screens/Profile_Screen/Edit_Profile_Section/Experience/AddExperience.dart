@@ -51,12 +51,57 @@ class _AddExperienceState extends State<AddExperience> {
     }
   }
 
+  bool validateCurrentCompany() {
+    if (isCurrentCompany.isEmpty) {
+      setState(() {
+        isCurrentCompanyEmpty = true;
+      });
+      return true;
+    } else {
+      setState(() {
+        isCurrentCompanyEmpty = false;
+      });
+      return false;
+    }
+  }
+
+  bool validateIsWorkEnvironment() {
+    if (jobType.isEmpty) {
+      setState(() {
+        isWorkEnvironmentEmpty = true;
+      });
+      return true;
+    } else {
+      setState(() {
+        isWorkEnvironmentEmpty = false;
+      });
+      return false;
+    }
+  }
+
+  bool validateIsWorkExperience() {
+    if (experience.isEmpty) {
+      setState(() {
+        isWorkExperienceEmpty = true;
+      });
+      return true;
+    } else {
+      setState(() {
+        isWorkExperienceEmpty = false;
+      });
+      return false;
+    }
+  }
+
   bool isValid() {
     return experience.isNotEmpty &&
         jobType.isNotEmpty &&
         isCurrentCompany.isNotEmpty;
   }
 
+  bool isWorkExperienceEmpty = false;
+  bool isWorkEnvironmentEmpty = false;
+  bool isCurrentCompanyEmpty = false;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -166,6 +211,7 @@ class _AddExperienceState extends State<AddExperience> {
                               groupValue: experience,
                               onChanged: (value) => setState(() {
                                 experience = 'YES';
+                                validateIsWorkExperience();
                               }),
                             ),
                             Text(
@@ -188,6 +234,7 @@ class _AddExperienceState extends State<AddExperience> {
                               onChanged: (value) {
                                 setState(() {
                                   experience = 'NO';
+                                  validateIsWorkExperience();
                                 });
                               },
                             ),
@@ -204,6 +251,7 @@ class _AddExperienceState extends State<AddExperience> {
                         ),
                       ],
                     ),
+                    if (isWorkExperienceEmpty) buildRadioValidation(),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -232,6 +280,7 @@ class _AddExperienceState extends State<AddExperience> {
                               groupValue: jobType,
                               onChanged: (value) => setState(() {
                                 jobType = 'On-Site';
+                                validateIsWorkEnvironment();
                               }),
                             ),
                             Text(
@@ -253,6 +302,7 @@ class _AddExperienceState extends State<AddExperience> {
                               groupValue: jobType,
                               onChanged: (value) => setState(() {
                                 jobType = 'Hybrid';
+                                validateIsWorkEnvironment();
                               }),
                             ),
                             Text(
@@ -275,6 +325,7 @@ class _AddExperienceState extends State<AddExperience> {
                               onChanged: (value) {
                                 setState(() {
                                   jobType = 'Remote';
+                                  validateIsWorkEnvironment();
                                 });
                               },
                             ),
@@ -291,6 +342,7 @@ class _AddExperienceState extends State<AddExperience> {
                         ),
                       ],
                     ),
+                    if (isWorkEnvironmentEmpty) buildRadioValidation(),
                     Row(
                       children: [
                         Expanded(
@@ -373,6 +425,7 @@ class _AddExperienceState extends State<AddExperience> {
                               groupValue: isCurrentCompany,
                               onChanged: (value) => setState(() {
                                 isCurrentCompany = 'YES';
+                                validateCurrentCompany();
                               }),
                             ),
                             Text(
@@ -395,6 +448,7 @@ class _AddExperienceState extends State<AddExperience> {
                               onChanged: (value) {
                                 setState(() {
                                   isCurrentCompany = 'NO';
+                                  validateCurrentCompany();
                                 });
                               },
                             ),
@@ -411,6 +465,7 @@ class _AddExperienceState extends State<AddExperience> {
                         ),
                       ],
                     ),
+                    if (isCurrentCompanyEmpty) buildRadioValidation(),
                     TextFieldWithTitle(
                       controller: leavingDateController,
                       title: 'Leaving Date, if “No” selected above.',
@@ -465,15 +520,10 @@ class _AddExperienceState extends State<AddExperience> {
                                     (Route<dynamic> route) => false,
                                   );
                                 } else {}
-                                //   Navigator.pushAndRemoveUntil(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => NewNavbar(
-                                //               initTabIndex: 3,
-                                //             )),
-                                //     (Route<dynamic> route) => false,
-                                //   );
-                                // }
+                              } else {
+                                validateIsWorkEnvironment();
+                                validateIsWorkExperience();
+                                validateCurrentCompany();
                               }
                             },
                             child: const Text(
@@ -515,15 +565,11 @@ class _AddExperienceState extends State<AddExperience> {
                                             const AddProjects()),
                                     (Route<dynamic> route) => false,
                                   );
-                                } else {
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const AddProjects()),
-                                    (Route<dynamic> route) => false,
-                                  );
                                 }
+                              } else {
+                                validateIsWorkEnvironment();
+                                validateIsWorkExperience();
+                                validateCurrentCompany();
                               }
                             },
                             child: Row(
@@ -553,5 +599,16 @@ class _AddExperienceState extends State<AddExperience> {
             ),
           ),
         ));
+  }
+
+  Padding buildRadioValidation() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 0, bottom: 10, left: 12, right: 0),
+      child: Text(
+        'Please select an option',
+        style: TextStyle(
+            color: Colors.red[800], fontSize: 12, fontWeight: FontWeight.w400),
+      ),
+    );
   }
 }

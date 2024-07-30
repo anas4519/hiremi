@@ -70,8 +70,8 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
     'Puducherry',
   ];
 
-  String selectedState = 'Madhya Pradesh';
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  bool isLookingForEmpty = false;
 
   @override
   void initState() {
@@ -79,16 +79,29 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
     super.initState();
     setState(() {
       cityController.text = controller.city.value;
-      selectedState = controller.state.value;
+      stateController.text = controller.state.value;
       emailController.text = controller.email.value;
       phoneController.text = controller.phoneNumber.value;
       whatsappController.text = controller.whatsappNumber.value;
     });
   }
 
+  bool validateLookingFor() {
+    if (controller.lookingFor.value.isEmpty) {
+      setState(() {
+        isLookingForEmpty = true;
+      });
+      return true;
+    } else {
+      setState(() {
+        isLookingForEmpty = false;
+      });
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var selectedState = 'Assam';
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -194,9 +207,10 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
                             activeColor: Colors.blue,
                             value: 'Internships',
                             groupValue: controller.lookingFor.value,
-                            onChanged: (value) => {
-                                  controller.lookingFor.value = value as String
-                                }),
+                            onChanged: (value) {
+                              controller.lookingFor.value = value as String;
+                              validateLookingFor();
+                            }),
                         const Text(
                           'Internships',
                           style: TextStyle(
@@ -214,6 +228,7 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
                             groupValue: controller.lookingFor.value,
                             onChanged: (value) {
                               controller.lookingFor.value = value as String;
+                              validateLookingFor();
                             }),
                         const Text(
                           'Fresher Jobs',
@@ -232,6 +247,7 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
                             groupValue: controller.lookingFor.value,
                             onChanged: (value) {
                               controller.lookingFor.value = value as String;
+                              validateLookingFor();
                             }),
                         const Text(
                           'Experienced Jobs',
@@ -245,6 +261,7 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
                   ],
                 ),
               ),
+              if (isLookingForEmpty) buildRadioValidation(),
               SizedBox(
                 height: Sizes.responsiveMd(context),
               ),
@@ -261,51 +278,15 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
               buildLabeledTextField(
                 context,
                 'State',
-                selectedState,
+                'Assam',
                 controller: stateController,
                 dropdownItems: states,
+                validator: (value) =>
+                    SValidator.validateEmptyText('State', value),
                 onChanged: (value) => setState(() {
                   stateController.text = value!;
                 }),
               ),
-              SizedBox(
-                height: Sizes.responsiveMd(context),
-              ),
-              // SizedBox(
-              //   height: 50,
-              //   child: DropdownButtonFormField<String>(
-              //     value: selectedState,
-              //     onChanged: (value) {
-              //       setState(() {
-              //         selectedState = value!;
-              //       });
-              //     },
-              //     items: states.map<DropdownMenuItem<String>>((String value) {
-              //       return DropdownMenuItem<String>(
-              //         value: value,
-              //         child: Text(value, style: const TextStyle(fontSize: 12),),
-              //       );
-              //     }).toList(),
-              //     decoration: InputDecoration(
-              //       labelText: 'State',
-              //       hintText: 'Select State',
-              //       enabledBorder: const OutlineInputBorder(
-              //         borderSide: BorderSide(color: Colors.grey, width: 1),
-              //       ),
-              //       focusedBorder: const OutlineInputBorder(
-              //         borderSide: BorderSide(color: Colors.grey, width: 1),
-              //       ),
-              //       border: const OutlineInputBorder(),
-              //       filled: false,
-              //       fillColor: Colors.grey,
-              //       contentPadding: EdgeInsets.symmetric(
-              //         vertical: Sizes.responsiveMd(context),
-              //         horizontal: Sizes.responsiveMd(context),
-              //       ),
-              //     ),
-              //     isExpanded: true,
-              //   ),
-              // ),
               SizedBox(
                 height: Sizes.responsiveMd(context),
               ),
@@ -353,7 +334,7 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
                       ),
                       onPressed: () async {
                         if (bdKey.currentState!.validate() &&
-                            controller.lookingFor.isNotEmpty) {
+                            !isLookingForEmpty) {
                           final details = {
                             "looking_for":
                                 controller.lookingFor.value.toString(),
@@ -378,14 +359,7 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
                             );
                           }
                         } else {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NewNavbar(
-                                      initTabIndex: 3,
-                                    )),
-                            (Route<dynamic> route) => false,
-                          );
+                          validateLookingFor();
                         }
                       },
                       child: const Text(
@@ -408,7 +382,7 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
                       ),
                       onPressed: () async {
                         if (bdKey.currentState!.validate() &&
-                            controller.lookingFor.isNotEmpty) {
+                            !isLookingForEmpty) {
                           final details = {
                             "looking_for":
                                 controller.lookingFor.value.toString(),
@@ -432,14 +406,7 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
                             );
                           }
                         } else {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NewNavbar(
-                                      initTabIndex: 3,
-                                    )),
-                            (Route<dynamic> route) => false,
-                          );
+                          validateLookingFor();
                         }
                       },
                       child: Row(
@@ -472,6 +439,17 @@ class _AddBasicDetailsState extends State<AddBasicDetails> {
           ),
         ),
       )),
+    );
+  }
+
+  Padding buildRadioValidation() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
+      child: Text(
+        'Please select an option',
+        style: TextStyle(
+            color: Colors.red[800], fontSize: 12, fontWeight: FontWeight.w400),
+      ),
     );
   }
 

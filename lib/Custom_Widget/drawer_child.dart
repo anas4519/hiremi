@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:hiremi_version_two/Custom_Widget/Custom_alert_box.dart';
 import 'package:hiremi_version_two/Forget_Your_Password.dart';
 import 'package:hiremi_version_two/Help_Support.dart';
@@ -10,6 +11,7 @@ import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/about_us.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
 import 'package:hiremi_version_two/repository/User.dart';
+import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -317,6 +319,7 @@ class _DrawerChildState extends ConsumerState<DrawerChild> {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
                   await prefs.setString('isLogin', 'false');
+                  Get.delete<ProfileController>();
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => const LogIn()),
@@ -346,6 +349,7 @@ class _DrawerChildState extends ConsumerState<DrawerChild> {
                     onPressed: () async {
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
+                      Get.delete<ProfileController>();
                       await prefs.setString('isLogin', 'false');
                       Navigator.pushAndRemoveUntil(
                         context,

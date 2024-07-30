@@ -1,25 +1,21 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hiremi_version_two/Screens/Profile_Screen/Edit_Profile_Section/Languages/AddLanguages.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
-import 'package:hiremi_version_two/repository/User.dart';
-import 'package:http/http.dart' as http;
+import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../Notofication_screen.dart';
 import '../../../../Utils/AppSizes.dart';
 import '../../../../Utils/colors.dart';
 import '../../../Drawer_Child_Screens/drawer_child.dart';
-import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
-
 import '../widgets/TextFieldWithTitle.dart';
 
 class AddPersonalDetails extends StatefulWidget {
-  const AddPersonalDetails({super.key, this.profileId});
-  final int? profileId;
+  const AddPersonalDetails({
+    super.key,
+  });
 
   @override
   State<AddPersonalDetails> createState() => _AddPersonalDetailsState();
@@ -54,6 +50,46 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
       });
     }
   }
+
+  void validateGender() {
+    if (controller.selectedGender.isEmpty) {
+      setState(() {
+        isGenderEmpty = true;
+      });
+    } else {
+      setState(() {
+        isGenderEmpty = false;
+      });
+    }
+  }
+
+  void validateMarital() {
+    if (controller.selectedMaritalStatus.isEmpty) {
+      setState(() {
+        isMaritalStatusEmpty = true;
+      });
+    } else {
+      setState(() {
+        isMaritalStatusEmpty = false;
+      });
+    }
+  }
+
+  void validateAbled() {
+    if (controller.differentlyAbled.isEmpty) {
+      setState(() {
+        isAbledEmpty = true;
+      });
+    } else {
+      setState(() {
+        isAbledEmpty = false;
+      });
+    }
+  }
+
+  bool isGenderEmpty = false;
+  bool isMaritalStatusEmpty = false;
+  bool isAbledEmpty = false;
 
   @override
   void initState() {
@@ -178,12 +214,14 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                       Row(
                         children: [
                           Radio(
-                            activeColor: Colors.blue,
-                            value: 'Male',
-                            groupValue: controller.selectedGender.value,
-                            onChanged: (value) =>
-                                controller.selectedGender.value = 'Male',
-                          ),
+                              activeColor: Colors.blue,
+                              value: 'Male',
+                              groupValue: controller.selectedGender.value,
+                              onChanged: (value) {
+                                controller.selectedGender.value =
+                                    value.toString();
+                                validateGender();
+                              }),
                           Text(
                             'Male',
                             style: TextStyle(
@@ -198,12 +236,14 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                       Row(
                         children: [
                           Radio(
-                            activeColor: Colors.blue,
-                            value: 'Female',
-                            groupValue: controller.selectedGender.value,
-                            onChanged: (value) =>
-                                controller.selectedGender.value = 'Female',
-                          ),
+                              activeColor: Colors.blue,
+                              value: 'Female',
+                              groupValue: controller.selectedGender.value,
+                              onChanged: (value) {
+                                controller.selectedGender.value =
+                                    value.toString();
+                                validateGender();
+                              }),
                           Text(
                             'Female',
                             style: TextStyle(
@@ -219,12 +259,14 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                       Row(
                         children: [
                           Radio(
-                            activeColor: Colors.blue,
-                            value: 'Other',
-                            groupValue: controller.selectedGender.value,
-                            onChanged: (value) =>
-                                controller.selectedGender.value = 'Other',
-                          ),
+                              activeColor: Colors.blue,
+                              value: 'Other',
+                              groupValue: controller.selectedGender.value,
+                              onChanged: (value) {
+                                controller.selectedGender.value =
+                                    value.toString();
+                                validateGender();
+                              }),
                           Text(
                             'Other',
                             style: TextStyle(
@@ -239,6 +281,7 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                       ),
                     ]),
                   ),
+                  if (isGenderEmpty) buildRadioValidation(),
                 ],
               ),
               Column(
@@ -260,9 +303,11 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                               value: 'Single',
                               groupValue:
                                   controller.selectedMaritalStatus.value,
-                              onChanged: (value) => controller
-                                  .selectedMaritalStatus
-                                  .value = 'Single'),
+                              onChanged: (value) {
+                                controller.selectedMaritalStatus.value =
+                                    value.toString();
+                                validateMarital();
+                              }),
                           Text(
                             'Single',
                             style: TextStyle(
@@ -282,8 +327,11 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                               value: 'Married',
                               groupValue:
                                   controller.selectedMaritalStatus.value,
-                              onChanged: (value) => controller
-                                  .selectedMaritalStatus.value = 'Married'),
+                              onChanged: (value) {
+                                controller.selectedMaritalStatus.value =
+                                    value.toString();
+                                validateMarital();
+                              }),
                           Text(
                             'Married',
                             style: TextStyle(
@@ -303,8 +351,11 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                               value: 'Other',
                               groupValue:
                                   controller.selectedMaritalStatus.value,
-                              onChanged: (value) => controller
-                                  .selectedMaritalStatus.value = 'Other'),
+                              onChanged: (value) {
+                                controller.selectedMaritalStatus.value =
+                                    value.toString();
+                                validateMarital();
+                              }),
                           Text(
                             'Other',
                             style: TextStyle(
@@ -321,6 +372,7 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                   ),
                 ],
               ),
+              if (isMaritalStatusEmpty) buildRadioValidation(),
               Row(
                 children: [
                   Expanded(
@@ -420,8 +472,11 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                                 activeColor: Colors.blue,
                                 value: 'Yes',
                                 groupValue: controller.differentlyAbled.value,
-                                onChanged: (value) =>
-                                    controller.differentlyAbled.value = 'Yes'),
+                                onChanged: (value) {
+                                  controller.differentlyAbled.value =
+                                      value.toString();
+                                  validateAbled();
+                                }),
                             Text(
                               'Yes',
                               style: TextStyle(
@@ -440,8 +495,11 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                                 activeColor: Colors.blue,
                                 value: 'No',
                                 groupValue: controller.differentlyAbled.value,
-                                onChanged: (value) =>
-                                    controller.differentlyAbled.value = 'No'),
+                                onChanged: (value) {
+                                  controller.differentlyAbled.value =
+                                      value.toString();
+                                  validateAbled();
+                                }),
                             Text(
                               'No',
                               style: TextStyle(
@@ -457,6 +515,7 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                       ],
                     ),
                   ),
+                  if (isAbledEmpty) buildRadioValidation(),
                 ],
               ),
               TextFieldWithTitle(
@@ -479,31 +538,38 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                             vertical: Sizes.responsiveHorizontalSpace(context),
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
-                      onPressed: ()async {
-                        if(formKey.currentState!.validate() && isValid()){
+                      onPressed: () async {
+                        if (formKey.currentState!.validate() && isValid()) {
                           final details = {
-                            'gender' : controller.selectedGender.value,
-                            'marital_status': controller.selectedMaritalStatus.value,
+                            'gender': controller.selectedGender.value,
+                            'marital_status':
+                                controller.selectedMaritalStatus.value,
                             'home_town': homeController.text,
                             'pincode': pinCodeController.text,
                             'local_address': localAddressController.text,
-                            'permanent_address': permanentAddressController.text,
-                            'date_of_birth' : dobController.text,
+                            'permanent_address':
+                                permanentAddressController.text,
+                            'date_of_birth': dobController.text,
                             'ability': controller.differentlyAbled.value,
                             'category': categoryController.text,
                             'profile': controller.profileId.toString(),
                           };
-                          final success = await controller.addPersonalDetails(details);
+                          final success =
+                              await controller.addPersonalDetails(details);
                           if (success) {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => NewNavbar(
-                                    initTabIndex: 3,
-                                  )),
-                                  (Route<dynamic> route) => false,
+                                        initTabIndex: 3,
+                                      )),
+                              (Route<dynamic> route) => false,
                             );
                           } else {}
+                        } else {
+                          validateAbled();
+                          validateMarital();
+                          validateGender();
                         }
                       },
                       child: const Text(
@@ -525,28 +591,35 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
                             horizontal: Sizes.responsiveMdSm(context)),
                       ),
                       onPressed: () async {
-                        if(formKey.currentState!.validate() && isValid()){
+                        if (formKey.currentState!.validate() && isValid()) {
                           final details = {
-                            'gender' : controller.selectedGender.value,
-                            'marital_status': controller.selectedMaritalStatus.value,
+                            'gender': controller.selectedGender.value,
+                            'marital_status':
+                                controller.selectedMaritalStatus.value,
                             'home_town': homeController.text,
                             'pincode': pinCodeController.text,
                             'local_address': localAddressController.text,
-                            'permanent_address': permanentAddressController.text,
-                            'date_of_birth' : dobController.text,
+                            'permanent_address':
+                                permanentAddressController.text,
+                            'date_of_birth': dobController.text,
                             'ability': controller.differentlyAbled.value,
                             'category': categoryController.text,
                             'profile': controller.profileId.toString(),
                           };
-                          final success = await controller.addPersonalDetails(details);
+                          final success =
+                              await controller.addPersonalDetails(details);
                           if (success) {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const AddLanguages()),
-                                  (Route<dynamic> route) => false,
+                              (Route<dynamic> route) => false,
                             );
-                          } else {}
+                          }
+                        } else {
+                          validateAbled();
+                          validateMarital();
+                          validateGender();
                         }
                       },
                       child: Row(
@@ -575,6 +648,17 @@ class _AddPersonalDetailsState extends State<AddPersonalDetails> {
             ]),
           ),
         ),
+      ),
+    );
+  }
+
+  Padding buildRadioValidation() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 0, bottom: 10, left: 12, right: 0),
+      child: Text(
+        'Please select an option',
+        style: TextStyle(
+            color: Colors.red[800], fontSize: 12, fontWeight: FontWeight.w400),
       ),
     );
   }

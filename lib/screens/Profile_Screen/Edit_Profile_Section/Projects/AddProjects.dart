@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
+import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../Notofication_screen.dart';
 import '../../../../Utils/AppSizes.dart';
 import '../../../../Utils/colors.dart';
 import '../../../Drawer_Child_Screens/drawer_child.dart';
-import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
 import '../Personal Details/AddPersonalDetails.dart';
 import '../widgets/TextFieldWithTitle.dart';
 
@@ -49,6 +49,22 @@ class _AddProjectsState extends State<AddProjects> {
     }
   }
 
+  bool validateProjectStatus() {
+    if (projectStatus.isEmpty) {
+      setState(() {
+        isProjectStatusEmpty = true;
+      });
+      return true;
+    } else {
+      setState(() {
+        isProjectStatusEmpty = false;
+      });
+      return false;
+    }
+  }
+
+  bool isProjectStatusEmpty = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +101,7 @@ class _AddProjectsState extends State<AddProjects> {
         actions: [
           Padding(
             padding:
-            EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
             child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -178,77 +194,74 @@ class _AddProjectsState extends State<AddProjects> {
               SizedBox(
                 height: Sizes.responsiveMd(context),
               ),
-              Column(
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const Text(
+                    'Project Status',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    '*',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Project Status',
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w500),
+                      Radio(
+                        activeColor: Colors.blue,
+                        value: 'Completed',
+                        groupValue: projectStatus,
+                        onChanged: (value) => setState(() {
+                          projectStatus = 'Completed';
+                          validateProjectStatus();
+                        }),
                       ),
                       Text(
-                        '*',
+                        'Completed',
                         style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.primary,
-                        ),
-                      ),
+                            fontWeight: FontWeight.w400,
+                            fontSize: 11,
+                            color: projectStatus == 'Completed'
+                                ? Colors.black
+                                : AppColors.secondaryText),
+                      )
                     ],
                   ),
                   Row(
                     children: [
-                      Row(
-                        children: [
-                          Radio(
-                            activeColor: Colors.blue,
-                            value: 'Completed',
-                            groupValue: projectStatus,
-                            onChanged: (value) => setState(() {
-                              projectStatus = 'Completed';
-                            }),
-                          ),
-                          Text(
-                            'Completed',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 11,
-                                color: projectStatus == 'Completed'
-                                    ? Colors.black
-                                    : AppColors.secondaryText),
-                          )
-                        ],
+                      Radio(
+                        activeColor: Colors.blue,
+                        value: 'Ongoing',
+                        groupValue: projectStatus,
+                        onChanged: (value) {
+                          setState(() {
+                            projectStatus = 'Ongoing';
+                            validateProjectStatus();
+                          });
+                        },
                       ),
-                      Row(
-                        children: [
-                          Radio(
-                            activeColor: Colors.blue,
-                            value: 'Ongoing',
-                            groupValue: projectStatus,
-                            onChanged: (value) {
-                              setState(() {
-                                projectStatus = 'Ongoing';
-                              });
-                            },
-                          ),
-                          Text(
-                            'Ongoing',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 11,
-                                color: projectStatus == 'Ongoing'
-                                    ? Colors.black
-                                    : AppColors.secondaryText),
-                          )
-                        ],
-                      ),
+                      Text(
+                        'Ongoing',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 11,
+                            color: projectStatus == 'Ongoing'
+                                ? Colors.black
+                                : AppColors.secondaryText),
+                      )
                     ],
                   ),
                 ],
               ),
+              if (isProjectStatusEmpty) buildRadioValidation(),
               TextFieldWithTitle(
                 title: 'Completion Date, if “Completed” selected above.',
                 starNeeded: false,
@@ -262,8 +275,8 @@ class _AddProjectsState extends State<AddProjects> {
                 ),
                 readOnly: true,
                 textInputType: const TextInputType.numberWithOptions(),
-                validator: (value) => projectStatus == 'No'
-                    ? SValidator.validateEmptyText('Leaving Date', value)
+                validator: (value) => projectStatus == 'Completed'
+                    ? SValidator.validateEmptyText('Completion Date', value)
                     : null,
                 onTap: () =>
                     _selectDate(context, controller: completionDateController),
@@ -305,7 +318,7 @@ class _AddProjectsState extends State<AddProjects> {
                             'link': projectLinkController.text,
                             'start_date': startingDateController.text,
                             'status': projectStatus,
-                            'end_date' :  completionDateController.text,
+                            'end_date': completionDateController.text,
                             'description': descriptionController.text,
                             'profile': controller.profileId.toString(),
                           };
@@ -315,11 +328,13 @@ class _AddProjectsState extends State<AddProjects> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => NewNavbar(
-                                    initTabIndex: 3,
-                                  )),
-                                  (Route<dynamic> route) => false,
+                                        initTabIndex: 3,
+                                      )),
+                              (Route<dynamic> route) => false,
                             );
                           }
+                        } else {
+                          validateProjectStatus();
                         }
                       },
                       child: const Text(
@@ -349,7 +364,7 @@ class _AddProjectsState extends State<AddProjects> {
                             'link': projectLinkController.text,
                             'start_date': startingDateController.text,
                             'status': projectStatus,
-                            'end_date' :  completionDateController.text,
+                            'end_date': completionDateController.text,
                             'description': descriptionController.text,
                             'profile': controller.profileId.toString(),
                           };
@@ -358,11 +373,13 @@ class _AddProjectsState extends State<AddProjects> {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const AddPersonalDetails()),
-                                  (Route<dynamic> route) => false,
+                                  builder: (context) =>
+                                      const AddPersonalDetails()),
+                              (Route<dynamic> route) => false,
                             );
-                          }
-                          else{}
+                          } else {}
+                        } else {
+                          validateProjectStatus();
                         }
                       },
                       child: Row(
@@ -391,6 +408,17 @@ class _AddProjectsState extends State<AddProjects> {
             ]),
           ),
         ),
+      ),
+    );
+  }
+
+  Padding buildRadioValidation() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 0, bottom: 10, left: 12, right: 0),
+      child: Text(
+        'Please select an option',
+        style: TextStyle(
+            color: Colors.red[800], fontSize: 12, fontWeight: FontWeight.w400),
       ),
     );
   }

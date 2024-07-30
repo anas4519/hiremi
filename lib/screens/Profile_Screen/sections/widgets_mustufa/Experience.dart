@@ -24,7 +24,7 @@ class Experience extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (experience!.isNotEmpty || experience != null)
+          if (experience!.isNotEmpty)
             SizedBox(height: Sizes.responsiveMd(context)),
             Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

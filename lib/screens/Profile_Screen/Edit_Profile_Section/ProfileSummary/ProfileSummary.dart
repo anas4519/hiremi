@@ -4,6 +4,7 @@ import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:hiremi_version_two/Utils/validators/validation.dart';
 import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/screens/Profile_Screen/controller/ProfileController.dart';
+import 'package:hiremi_version_two/screens/Profile_Screen/sections/widgets_mustufa/appbar/AppBar.dart';
 import '../../../../Notofication_screen.dart';
 import '../../../Drawer_Child_Screens/drawer_child.dart';
 import '../Key Skills/AddKeySkills.dart';
@@ -40,57 +41,8 @@ class _AddProfileSummaryState extends State<AddProfileSummary> {
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       key: scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: Padding(
-          padding: EdgeInsets.only(
-              left: Sizes.responsiveDefaultSpace(context),
-              top: Sizes.responsiveSm(context),
-              bottom: Sizes.responsiveSm(context)),
-          child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: AppColors.bgBlue,
-              ),
-              child: Center(
-                child: IconButton(
-                    onPressed: () => scaffoldKey.currentState?.openDrawer(),
-                    icon: const Icon(
-                      Icons.notes_outlined,
-                      size: 22,
-                    )),
-              )),
-        ),
-        title: const Text(
-          "Edit Profile",
-          style: TextStyle(
-              fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
-        ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding:
-                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
-            child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.bgBlue,
-                ),
-                child: Center(
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => const NotificationScreen(),
-                      ));
-                    },
-                    icon: const Icon(Icons.notifications_outlined),
-                  ),
-                )),
-          ),
-        ],
-      ),
-      drawer: const Drawer(
-        child: DrawerChild(),
+      appBar: SAppbar(
+        title: 'Edit Profile', scaffoldKey: scaffoldKey,
       ),
       body: Padding(
         padding: EdgeInsets.only(
@@ -154,15 +106,6 @@ class _AddProfileSummaryState extends State<AddProfileSummary> {
                             summaryController.text
                           );
                           if (success) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => NewNavbar(
-                                        initTabIndex: 3,
-                                      )),
-                              (Route<dynamic> route) => false,
-                            );
-                          } else {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(

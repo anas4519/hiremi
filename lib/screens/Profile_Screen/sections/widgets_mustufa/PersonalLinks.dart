@@ -35,6 +35,7 @@ class _PersonalLinksState extends State<PersonalLinks> {
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if(controller.personalLinks.isNotEmpty)
             SizedBox(height: Sizes.responsiveMd(context)),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,8 +52,6 @@ class _PersonalLinksState extends State<PersonalLinks> {
       ),
     );
   }
-
-
 }
 
 class PersonalLinksChild extends StatefulWidget {
