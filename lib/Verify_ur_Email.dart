@@ -484,12 +484,13 @@ class _VerifyUrEmailState extends State<VerifyUrEmail> {
                             children: [
                               TextSpan(
                                 text: "Enter One Time Password",
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.black, fontSize: 16),
                               ),
                               TextSpan(
                                 text: " *",
                                 style: TextStyle(
                                   color: Colors.red,
+                                  fontSize: 16
                                 ),
                               ),
                             ],
@@ -521,7 +522,7 @@ class _VerifyUrEmailState extends State<VerifyUrEmail> {
                         ),
                       ),
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.0185),
+                          height: MediaQuery.of(context).size.height * 0.005),
                       Padding(
                         padding: EdgeInsets.all(
                             MediaQuery.of(context).size.width * 0.04),

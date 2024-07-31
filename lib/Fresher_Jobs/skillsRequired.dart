@@ -26,7 +26,7 @@ class SkillRequiredFresher extends StatelessWidget {
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 4.0),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFE5EE),
+                color: const Color(0xFFFFF6E5),
                 borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01),
               ),
               padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.01),

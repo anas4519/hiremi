@@ -441,11 +441,11 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                             children: [
                               TextSpan(
                                 text: " New Password",
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.black, fontSize: 16),
                               ),
                               TextSpan(
                                 text: " *",
-                                style: TextStyle(color: Colors.red), // Red asterisk
+                                style: TextStyle(color: Colors.red, fontSize: 16), // Red asterisk
                               ),
                             ],
                           ),
@@ -478,11 +478,11 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                             children: [
                               TextSpan(
                                 text: "Confirm new Password",
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.black, fontSize: 16),
                               ),
                               TextSpan(
                                 text: " *",
-                                style: TextStyle(color: Colors.red), // Red asterisk
+                                style: TextStyle(color: Colors.red, fontSize: 16), // Red asterisk
                               ),
                             ],
                           ),
