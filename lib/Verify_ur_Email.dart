@@ -374,6 +374,7 @@
 //     );
 //   }
 // }
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Apis/api.dart';
 import 'package:hiremi_version_two/api_services/user_services.dart';
@@ -395,6 +396,7 @@ class _VerifyUrEmailState extends State<VerifyUrEmail> {
   final UserService _userService = UserService();
   TextEditingController otpController = TextEditingController();
   bool isLoading = false;
+  final _formKey = GlobalKey<FormState>();
 
   Future<void> validateOTP(String otp) async {
     setState(() {
@@ -402,8 +404,8 @@ class _VerifyUrEmailState extends State<VerifyUrEmail> {
     });
 
     try {
-
-      final response = await _userService.createPostApi({"otp": otp}, ApiUrls.otpValidation);
+      final response =
+          await _userService.createPostApi({"otp": otp}, ApiUrls.otpValidation);
       setState(() {
         isLoading = false;
       });
@@ -415,12 +417,12 @@ class _VerifyUrEmailState extends State<VerifyUrEmail> {
         print("Hdjhf");
         Navigator.pushReplacement(
           context,
-          SlidePageRoute(page: CreateNewPassword()),
+          SlidePageRoute(page: const CreateNewPassword()),
         );
       } else {
         print(response.statusCode);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid OTP. Please try again.')),
+          const SnackBar(content: Text('Invalid OTP. Please try again.')),
         );
       }
     } catch (e) {
@@ -429,7 +431,8 @@ class _VerifyUrEmailState extends State<VerifyUrEmail> {
       });
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred. Please try again later.')),
+        const SnackBar(
+            content: Text('An error occurred. Please try again later.')),
       );
     }
   }
@@ -446,23 +449,17 @@ class _VerifyUrEmailState extends State<VerifyUrEmail> {
                   child: Image.asset(
                     'images/Hiremi_new_Icon.png',
                     width: MediaQuery.of(context).size.width * 0.6,
-                    height: MediaQuery.of(context).size.height * 0.25,
+                    height: MediaQuery.of(context).size.height * 0.15,
                   ),
                 ),
-                Text(
+                const Text(
                   "Verify Your Email Address",
                   style: TextStyle(
                     fontSize: 21.0,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Text(
-                  "Hey, have You Received",
-                  style: TextStyle(
-                    fontSize: 21.0,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                 Center(
                   child: Image.asset(
                     'images/EnterOTP.png',
@@ -477,11 +474,13 @@ class _VerifyUrEmailState extends State<VerifyUrEmail> {
                   borderWidth: 0.53,
                   child: Column(
                     children: [
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0215),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0215),
                       Padding(
-                        padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.09),
+                        padding: EdgeInsets.only(
+                            right: MediaQuery.of(context).size.width * 0.09),
                         child: RichText(
-                          text: TextSpan(
+                          text: const TextSpan(
                             children: [
                               TextSpan(
                                 text: "Enter One Time Password",
@@ -497,90 +496,126 @@ class _VerifyUrEmailState extends State<VerifyUrEmail> {
                           ),
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0115),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0115),
+                      Form(
+                        key: _formKey,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  MediaQuery.of(context).size.width * 0.1),
+                          child: CurvedTextField(
+                            controller: otpController,
+                            hintText: "XXXXXX",
+                            prefixIcon: Icons.account_circle,
+                            obscureText: false,
+                            validator: (value) {
+                              if (value == null || value.length != 6) {
+                                return 'Enter Valid OTP';
+                              } else if (!RegExp(r'^\d{6}$').hasMatch(value)) {
+                                return 'OTP must be 6 digits';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0185),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
-                        child: CurvedTextField(
-                          controller: otpController,
-                          hintText: "XXXXXX",
-                          prefixIcon: Icons.account_circle,
-                          obscureText: false,
-                        ),
-                      ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0185),
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "Please Enter your ",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            TextSpan(
-                              text: "six digit ",
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                            TextSpan(
-                              text: "that you have received in your mailbox.",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            TextSpan(
-                              text: " ",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            WidgetSpan(
-                              child: TextButton(
-                                onPressed: () {
-                                  print("Resend OTP clicked");
-                                },
-                                child: Text(
-                                  "Resend OTP",
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                ),
+                        padding: EdgeInsets.all(
+                            MediaQuery.of(context).size.width * 0.04),
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            children: [
+                              const TextSpan(
+                                text: "Please Enter your ",
+                                style: TextStyle(color: Colors.black),
                               ),
-                            ),
-                          ],
+                              const TextSpan(
+                                text: "six digit ",
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                              const TextSpan(
+                                text:
+                                    " code that you have received in your mailbox.",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              const TextSpan(
+                                text: " ",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              TextSpan(
+                                text: "Resend OTP",
+                                style: const TextStyle(
+                                  color: Colors.blue, // Link color
+                                  decoration: TextDecoration
+                                      .underline, // Optional: underline
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    print('Resend OTP clicked');
+                                  },
+                              ),
+                              // WidgetSpan(
+                              //   child: TextButton(
+                              //     onPressed: () {
+                              //       print("Resend OTP clicked");
+                              //     },
+                              //     child: const Text(
+                              //       "Resend OTP",
+                              //       style: TextStyle(
+                              //         color: Colors.blue,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                            ],
+                          ),
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0285),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0285),
                       Center(
                         child: isLoading
-                            ? CircularProgressIndicator()
+                            ? const CircularProgressIndicator()
                             : CustomElevatedButton(
-                          width: MediaQuery.of(context).size.width * 0.775,
-                          height: MediaQuery.of(context).size.height * 0.0625,
-                          text: 'Confirm',
-                          onPressed: () async {
-                           // validateOTP(otpController.text.toString().trim());
-                            String otp = otpController.text.toString().trim();
-                            Map<String, dynamic> body = {
-                              "otp": otp,
-                            };
-                            final responce = await _userService.createPostApi(
-                                body, ApiUrls.otpValidation);
+                                width:
+                                    MediaQuery.of(context).size.width * 0.775,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.0625,
+                                text: 'Confirm',
+                                onPressed: () async {
+                                  // validateOTP(otpController.text.toString().trim());
+                                  _formKey.currentState!.validate();
+                                  String otp =
+                                      otpController.text.toString().trim();
+                                  Map<String, dynamic> body = {
+                                    "otp": otp,
+                                  };
+                                  final responce =
+                                      await _userService.createPostApi(
+                                          body, ApiUrls.otpValidation);
 
-                            if (responce.statusCode == 200) {
-                              Navigator.pushReplacement(
-                                context,
-                                SlidePageRoute(page: CreateNewPassword()),
-                              );
-                              // ignore: use_build_context_synchronously
-                              print(responce.statusCode);
-                              print(responce.body);
-
-                            }
-                            else
-                              {
-                                print(responce.statusCode);
-                                print(responce.body);
-                              }
-
-                          },
-                        ),
+                                  if (responce.statusCode == 200) {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      SlidePageRoute(
+                                          page: const CreateNewPassword()),
+                                    );
+                                    // ignore: use_build_context_synchronously
+                                    print(responce.statusCode);
+                                    print(responce.body);
+                                  } else {
+                                    print(responce.statusCode);
+                                    print(responce.body);
+                                  }
+                                },
+                              ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0747),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0747),
                     ],
                   ),
                 ),

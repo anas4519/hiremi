@@ -395,35 +395,29 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                   child: Image.asset(
                     'images/Hiremi_new_Icon.png',
                     width: MediaQuery.of(context).size.width * 0.6,
-                    height: MediaQuery.of(context).size.height * 0.25,
+                    height: MediaQuery.of(context).size.height * 0.15,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(0.0),
+                const Padding(
+                  padding: EdgeInsets.all(0.0),
                   child: Text.rich(
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: "Create new Password.\n",
+                          text: "Create new Password",
                           style: TextStyle(
                             fontSize: 21.0,
                             fontWeight: FontWeight.w600,
                             color: Colors.black, // Default text color
                           ),
                         ),
-                        TextSpan(
-                          text: " Make it stronger",
-                          style: TextStyle(
-                            fontSize: 21.0,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black, // Default text color
-                          ),
-                        ),
+                        
                       ],
                     ),
                     textAlign: TextAlign.center, // Center align the text
                   ),
                 ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
                 Center(
                   child: Image.asset(
                     'images/ResetPassword.png',
@@ -436,16 +430,17 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                   borderColor: Colors.black,
                   borderWidth: 0.53,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: MediaQuery.of(context).size.height * 0.0215),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.0115),
                       Padding(
-                        padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.611),
+                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1),
                         child: RichText(
-                          text: TextSpan(
+                          text: const TextSpan(
                             children: [
                               TextSpan(
-                                text: "Password",
+                                text: " New Password",
                                 style: TextStyle(color: Colors.black),
                               ),
                               TextSpan(
@@ -456,7 +451,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                           ),
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0205),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
                         child: CurvedTextField(
@@ -475,11 +470,11 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                           },
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0115),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                       Padding(
-                        padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.411),
+                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1),
                         child: RichText(
-                          text: TextSpan(
+                          text: const TextSpan(
                             children: [
                               TextSpan(
                                 text: "Confirm new Password",
@@ -493,7 +488,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                           ),
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0205),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
                         child: CurvedTextField(
@@ -512,27 +507,30 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                           },
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0247),
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "Password must be ",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            TextSpan(
-                              text: "8 digit",
-                              style: TextStyle(color: Colors.blue), // Change text color to blue
-                            ),
-                            TextSpan(
-                              text: " long with combination of\nalphanumeric value",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ],
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                      Padding(
+                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1),
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: const TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "Password must be ",
+                                style: TextStyle(color: Colors.black, fontSize: 8),
+                              ),
+                              TextSpan(
+                                text: "8 digit",
+                                style: TextStyle(color: Colors.blue, fontSize: 8), // Change text color to blue
+                              ),
+                              TextSpan(
+                                text: " long",
+                                style: TextStyle(color: Colors.black, fontSize: 8),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0285),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.08),
                       Center(
                         child: CustomElevatedButton(
                           width: MediaQuery.of(context).size.width * 0.775,
@@ -558,7 +556,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                                   // ignore: use_build_context_synchronously
                                   Navigator.pushReplacement(
                                     context,
-                                    SlidePageRoute(page: LogIn()),
+                                    SlidePageRoute(page: const LogIn()),
                                   );
                                 }
                                 else {
