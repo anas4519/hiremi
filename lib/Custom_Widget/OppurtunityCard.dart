@@ -9,6 +9,7 @@ import 'Custom_alert_box.dart';
 class OpportunityCard extends ConsumerWidget {
   const OpportunityCard({
     super.key,
+    required this.id,
     required this.dp,
     required this.profile,
     required this.companyName,
@@ -23,9 +24,10 @@ class OpportunityCard extends ConsumerWidget {
     required this.education,
     required this.skillsRequired,
     required this.whoCanApply,
-    required this.eligible
+    required this.isApplied,
   });
 
+  final int id;
   final Image dp;
   final String profile;
   final String companyName;
@@ -40,12 +42,14 @@ class OpportunityCard extends ConsumerWidget {
   final String education;
   final String skillsRequired;
   final String whoCanApply;
-  final String eligible;
+  final bool isApplied;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var isVerified = ref.watch(verificationProvider);
+    final isVerified = ref.watch(verificationProvider);
     return Container(
+      width: MediaQuery.of(context).size.width * 0.95,
+      // height: MediaQuery.of(context).size.height * 0.234,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -100,12 +104,11 @@ class OpportunityCard extends ConsumerWidget {
                   Text(location, style: const TextStyle(fontSize: 8)),
                 ],
               ),
-              // SizedBox(height: MediaQuery.of(context).size.height*0.01),
-              const Row(
+              Row(
                 children: [
                   const Icon(Icons.school, color: Colors.grey, size: 8),
                   const SizedBox(width: 5),
-                  Text('BE/B.TECH/M.TECH/MCA/MBA/BCA/BSC/MSC', style: const TextStyle(fontSize: 8)),
+                  Text(whoCanApply, style: const TextStyle(fontSize: 8)),
                 ],
               ),
               Row(
@@ -149,13 +152,12 @@ class OpportunityCard extends ConsumerWidget {
                       MaterialPageRoute(
                         builder: (ctx) => type == 'Job'
                             ? DetailedFresherJobs(
-                                id: 0,
+                                // exp: exp,
+                                id: id,
                                 profile: profile,
                                 location: location,
                                 codeRequired: '',
-
                                 code: 0,
-
                                 companyName: companyName,
                                 education: education,
                                 skillsRequired: skillsRequired,
@@ -163,11 +165,12 @@ class OpportunityCard extends ConsumerWidget {
                                 whoCanApply: '',
                                 description: description,
                                 termsAndConditions: '',
-                                ctc: double.parse(
-                                    ctc), // Convert to appropriate type if needed
+                                ctc: double.parse(ctc),
+                                exp:
+                                    exp, // Convert to appropriate type if needed
                               )
                             : DetailedInternship(
-                                id: 0,
+                                id: id,
                                 profile: profile,
                                 location: location,
                                 codeRequired: '',
@@ -196,9 +199,9 @@ class OpportunityCard extends ConsumerWidget {
                     ),
                   ),
                 ),
-                child: const Text(
-                  'Apply Now >',
-                  style: TextStyle(fontSize: 10),
+                child: Text(
+                  isApplied ? "Applied" : "Apply Now >",
+                  style: const TextStyle(fontSize: 10),
                 ),
               )
             ],

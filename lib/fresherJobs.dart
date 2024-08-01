@@ -4,6 +4,7 @@ import 'package:hiremi_version_two/Custom_Widget/OppurtunityCard.dart';
 import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FresherJobs extends StatefulWidget {
   const FresherJobs({Key? key, required this.isVerified}) : super(key: key);
@@ -15,12 +16,38 @@ class FresherJobs extends StatefulWidget {
 
 class _FresherJobsState extends State<FresherJobs> {
   late Future<List<dynamic>> futureJobs;
+  late Future<List<dynamic>> futureApplications;
+  int? userId;
 
   @override
   void initState() {
     super.initState();
+    _retrieveId();
+    futureJobs = _getJobs();
+    futureApplications = _getApplications();
+  }
+
+   Future<void> _retrieveId() async {
+    final prefs = await SharedPreferences.getInstance();
+    final int? savedId = prefs.getInt('userId');
+    if (savedId != null) {
+      setState(() {
+        userId = savedId;
+      });
+      print("Retrieved id is $savedId");
+    } else {
+      print("No id found in SharedPreferences");
+    }
+  }
+
+  Future<List<dynamic>> _getJobs() async {
     final apiService = ApiService('http://13.127.81.177:8000/api/fresherjob/');
-    futureJobs = apiService.fetchData();
+    return await apiService.fetchData();
+  }
+
+  Future<List<dynamic>> _getApplications() async {
+    final apiService = ApiService('http://13.127.81.177:8000/api/job-applications/');
+    return await apiService.fetchData();
   }
 
   @override
@@ -146,7 +173,13 @@ class _FresherJobsState extends State<FresherJobs> {
                     ),
                   );
                 } else {
-                  final jobs = snapshot.data!;
+                  final jobs = snapshot.data![0];
+                  final applications = snapshot.data![1];
+
+                  final appliedJobs = applications
+                      .where((application) => application['register'] == userId)
+                      .map((application) => application['experiencejob'])
+                      .toSet();
                   return SingleChildScrollView(
                     child: Padding(
                       padding: EdgeInsets.all(screenWidth * 0.04),
@@ -166,6 +199,7 @@ class _FresherJobsState extends State<FresherJobs> {
                           SizedBox(height: screenHeight * 0.03),
                           Column(
                             children: jobs.map((job) {
+                              bool isApplied = appliedJobs.contains(job['id']);
                               return Padding(
                                 padding: EdgeInsets.only(
                                     bottom: screenHeight * 0.03),
@@ -174,7 +208,6 @@ class _FresherJobsState extends State<FresherJobs> {
                                   profile: job['profile'] ?? 'N/A',
                                   companyName: job['company_name'] ?? 'N/A',
                                   location: job['location'] ?? 'N/A',
-                                  eligible: job['eligibility'] ?? 'N/A',
                                   stipend: job['CTC']?.toString() ?? 'N/A',
                                   mode: 'Remote',
                                   type: 'Job',
@@ -185,7 +218,8 @@ class _FresherJobsState extends State<FresherJobs> {
                                       'No description available',
                                   education: job['education'],
                                   skillsRequired: job['skills_required'],
-                                  whoCanApply: job['who_can_apply'],
+                                  whoCanApply: job['who_can_apply'], id: job['id'],
+                                  isApplied: isApplied,
                                 ),
                               );
                             }).toList(),

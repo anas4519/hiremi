@@ -250,7 +250,7 @@ class _AppliesScreenState extends State<AppliesScreen> {
                       child: TextButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => const Experienced_Jobs()));
+                              builder: (ctx) => const ExperiencedJobs()));
                         },
                         style: ButtonStyle(
                           shape:

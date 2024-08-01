@@ -11,7 +11,6 @@ import 'package:hiremi_version_two/Custom_Widget/verification_status.dart';
 import 'package:hiremi_version_two/InternshipScreen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
-import 'package:hiremi_version_two/bottomnavigationbar.dart';
 import 'package:hiremi_version_two/experienced_jobs.dart';
 import 'package:hiremi_version_two/fresherJobs.dart';
 import 'package:hiremi_version_two/providers/verified_provider.dart';
@@ -170,7 +169,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     'images/icons/Hiremi Verified Banner5.png'
   ];
 
-    @override
+  @override
   Widget build(BuildContext context) {
     bool isVerified = ref.watch(verificationProvider);
     final screenWidth = MediaQuery.of(context).size.width;
@@ -391,7 +390,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           child: TextButton(
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (ctx) => const Experienced_Jobs()));
+                                  builder: (ctx) => const ExperiencedJobs()));
                             },
                             child: Row(
                               children: [
@@ -440,15 +439,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                     horizontal: Sizes.responsiveMd(context)),
                 child: Column(
                   children: _jobs.map((job) {
+                    
                     return Padding(
                       padding: EdgeInsets.only(bottom: screenHeight * 0.02),
                       child: OpportunityCard(
+                        
                         dp: Image.asset('images/icons/logo1.png'),
                         // Placeholder image
                         profile: job['profile'] ?? 'N/A',
                         companyName: job['company_name'] ?? 'N/A',
                         location: job['location'] ?? 'N/A',
-                        eligible: job['eligibility'] ?? 'N/A',
+                        // eligible: job['eligibility'] ?? 'N/A',
                         stipend: job['Stipend']?.toString() ?? 'N/A',
                         mode: 'Remote',
                         // Replace with actual data if available
@@ -464,7 +465,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                             job['description'] ?? 'No description available',
                         education: job['education'],
                         skillsRequired: job['skills_required'],
-                        whoCanApply: job['who_can_apply'],
+                        whoCanApply: job['who_can_apply'], id: job['id'],
+
+                        //here
+                        isApplied: false,
                       ),
                     );
                   }).toList(),

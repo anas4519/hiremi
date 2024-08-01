@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/API_Integration/Internship/Apiservices.dart';
 import 'package:hiremi_version_two/Custom_Widget/OppurtunityCard.dart';
-
 import 'package:hiremi_version_two/Notofication_screen.dart';
 import 'package:hiremi_version_two/Utils/AppSizes.dart';
 import 'package:hiremi_version_two/Utils/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InternshipsScreen extends StatefulWidget {
-  //const InternshipsScreen({super.key, required this.isVerified});
   const InternshipsScreen({super.key, required this.isVerified});
   final bool isVerified;
 
@@ -17,12 +16,39 @@ class InternshipsScreen extends StatefulWidget {
 
 class _InternshipsScreenState extends State<InternshipsScreen> {
   late Future<List<dynamic>> futureJobs;
+  late Future<List<dynamic>> futureApplications;
+  int? userId;
 
   @override
   void initState() {
     super.initState();
+    _retrieveId();
+    futureJobs = _fetchJobs();
+    futureApplications = _fetchApplications();
+  }
+
+  Future<void> _retrieveId() async {
+    final prefs = await SharedPreferences.getInstance();
+    final int? savedId = prefs.getInt('userId');
+    if (savedId != null) {
+      setState(() {
+        userId = savedId;
+      });
+      print("Retrieved id is $savedId");
+    } else {
+      print("No id found in SharedPreferences");
+    }
+  }
+
+  Future<List<dynamic>> _fetchJobs() async {
     final apiService = ApiService('http://13.127.81.177:8000/api/internship/');
-    futureJobs = apiService.fetchData();
+    final jobs = await apiService.fetchData();
+    return jobs;
+  }
+
+  Future<List<dynamic>> _fetchApplications() async {
+    final apiService = ApiService('http://13.127.81.177:8000/api/internship-applications/');
+    return await apiService.fetchData();
   }
 
   @override
@@ -118,7 +144,7 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
             ),
           ),
           SizedBox(
-            height: screenHeight * 0.02, // 3% of screen height
+            height: screenHeight * 0.03, // 3% of screen height
           ),
           Padding(
             padding: EdgeInsets.only(left: screenWidth * 0.04),
@@ -135,11 +161,11 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
             ),
           ),
           SizedBox(
-            height: screenHeight * 0.0, // 3% of screen height
+            height: screenHeight * 0.00, // 3% of screen height
           ),
           Expanded(
             child: FutureBuilder<List<dynamic>>(
-              future: futureJobs,
+              future: Future.wait([futureJobs, futureApplications]),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -169,13 +195,21 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
                     ),
                   );
                 } else {
-                  final jobs = snapshot.data!;
+                  final jobs = snapshot.data![0] as List<dynamic>;
+                  final applications = snapshot.data![1] as List<dynamic>;
+
+                  // Check which jobs the user has already applied for
+                  final appliedJobs = applications
+                      .where((application) => application['register'] == userId)
+                      .map((application) => application['experiencejob'])
+                      .toSet();
                   return SingleChildScrollView(
                     child: Padding(
                       padding: EdgeInsets.all(
                           screenWidth * 0.04), // 4% of screen width
                       child: Column(
                         children: jobs.map((job) {
+                          bool isApplied = appliedJobs.contains(job['id']);
                           return Padding(
                             padding:
                                 EdgeInsets.only(bottom: screenHeight * 0.02),
@@ -185,7 +219,7 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
                               profile: job['profile'] ?? 'N/A',
                               companyName: job['company_name'] ?? 'N/A',
                               location: job['location'] ?? 'N/A',
-                              eligible: job['eligibility'] ?? 'N/A',
+                              // eligible: job['eligibility'] ?? 'N/A',
                               stipend: job['Stipend']?.toString() ?? 'N/A',
                               mode:
                                   'Remote', // Replace with actual data if available
@@ -200,7 +234,10 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
                                   'No description available',
                               education: job['education'],
                               skillsRequired: job['skills_required'],
-                              whoCanApply: job['who_can_apply'],
+                              whoCanApply: job['who_can_apply'], id: job['id'],
+
+                              //here
+                              isApplied: isApplied,
                             ),
                           );
                         }).toList(),
