@@ -527,7 +527,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal:
-                                MediaQuery.of(context).size.width / 2.75),
+                                MediaQuery.of(context).size.width / 4),
                         child: RichText(
                           textAlign: TextAlign.center,
                           text: const TextSpan(
@@ -535,18 +535,18 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                               TextSpan(
                                 text: "Password must be ",
                                 style:
-                                    TextStyle(color: Colors.black, fontSize: 8),
+                                    TextStyle(color: Colors.black),
                               ),
                               TextSpan(
-                                text: "8 digit",
+                                text: "8 digits",
                                 style: TextStyle(
                                     color: Colors.blue,
-                                    fontSize: 8), // Change text color to blue
+                                    ), // Change text color to blue
                               ),
                               TextSpan(
-                                text: " long",
+                                text: " long.",
                                 style:
-                                    TextStyle(color: Colors.black, fontSize: 8),
+                                    TextStyle(color: Colors.black),
                               ),
                             ],
                           ),

@@ -4,6 +4,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hiremi_version_two/API_Integration/Internship/Apiservices.dart';
+import 'package:hiremi_version_two/Custom_Widget/Alerts/password_changed.dart';
+import 'package:hiremi_version_two/Custom_Widget/Alerts/successfully_registered.dart';
 import 'package:hiremi_version_two/Custom_Widget/OppurtunityCard.dart';
 import 'package:hiremi_version_two/Custom_Widget/Verifiedtrue.dart';
 import 'package:hiremi_version_two/Custom_Widget/banners.dart';

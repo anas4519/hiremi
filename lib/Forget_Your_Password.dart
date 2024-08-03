@@ -186,11 +186,11 @@ class _Forget_Your_PasswordState extends State<Forget_Your_Password> {
                                 style: TextStyle(color: Colors.black),
                               ),
                               TextSpan(
-                                text: "verification",
+                                text: "verification code",
                                 style: TextStyle(color: Colors.blue),
                               ), // Change text color to blue
                               TextSpan(
-                                text: " code in\nyour mail box.",
+                                text: " in\nyour mail box.",
                                 style: TextStyle(color: Colors.black),
                               ),
                             ],

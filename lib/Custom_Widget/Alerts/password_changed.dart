@@ -20,12 +20,12 @@ class PasswordChangedPopup extends StatelessWidget {
           width: screenWidth,
           padding: EdgeInsets.only(
               top: screenHeight * 0.04, bottom: screenHeight * 0.05),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(16),
               topRight: Radius.circular(16),
             ),
-            color: Colors.green,
+            color: AppColors.green,
           ),
           child: Center(
             child: Column(
