@@ -7,7 +7,7 @@ import 'package:hiremi_version_two/Utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FresherJobs extends StatefulWidget {
-  const FresherJobs({Key? key, required this.isVerified}) : super(key: key);
+  const FresherJobs({super.key, required this.isVerified});
   final bool isVerified;
 
   @override
@@ -67,6 +67,8 @@ class _FresherJobsState extends State<FresherJobs> {
             padding:
                 EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
             child: Container(
+              height: 40,
+              width: 40,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.bgBlue,
@@ -78,7 +80,7 @@ class _FresherJobsState extends State<FresherJobs> {
                         builder: (ctx) => const NotificationScreen(),
                       ));
                     },
-                    icon: const Icon(Icons.notifications_outlined),
+                    icon: const Icon(Icons.notifications_outlined, size: 24,),
                   ),
                 )),
           ),
@@ -139,11 +141,11 @@ class _FresherJobsState extends State<FresherJobs> {
             ),
           ),
           SizedBox(
-            width: screenWidth * 0.02, // 2% of screen width
+            width: screenWidth * 0.0, // 2% of screen width
           ),
           Expanded(
             child: FutureBuilder<List<dynamic>>(
-              future: futureJobs,
+              future: Future.wait([futureJobs, futureApplications]),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -181,6 +183,7 @@ class _FresherJobsState extends State<FresherJobs> {
                       .map((application) => application['experiencejob'])
                       .toSet();
                   return SingleChildScrollView(
+                    
                     child: Padding(
                       padding: EdgeInsets.all(screenWidth * 0.04),
                       child: Column(
@@ -196,9 +199,9 @@ class _FresherJobsState extends State<FresherJobs> {
                               textAlign: TextAlign.left,
                             ),
                           ),
-                          SizedBox(height: screenHeight * 0.03),
+                          SizedBox(height: screenHeight * 0.01),
                           Column(
-                            children: jobs.map((job) {
+                            children: jobs.map<Widget>((job) {
                               bool isApplied = appliedJobs.contains(job['id']);
                               return Padding(
                                 padding: EdgeInsets.only(

@@ -37,26 +37,28 @@ class _HelpSupportState extends State<HelpSupport> {
           ),
           centerTitle: true,
           actions: [
-            Padding(
-              padding:
-                  EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
-              child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.bgBlue,
+          Padding(
+            padding:
+                EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
+            child: Container(
+              height: 40,
+              width: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.bgBlue,
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const NotificationScreen(),
+                      ));
+                    },
+                    icon: const Icon(Icons.notifications_outlined, size: 24,),
                   ),
-                  child: Center(
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => const NotificationScreen(),
-                        ));
-                      },
-                      icon: const Icon(Icons.notifications_outlined),
-                    ),
-                  )),
-            ),
-          ],
+                )),
+          ),
+        ],
         ),
         body: SingleChildScrollView(
             child: Padding(

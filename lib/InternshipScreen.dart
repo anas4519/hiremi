@@ -68,6 +68,8 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
             padding:
                 EdgeInsets.only(right: Sizes.responsiveDefaultSpace(context)),
             child: Container(
+              height: 40,
+              width: 40,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.bgBlue,
@@ -79,7 +81,7 @@ class _InternshipsScreenState extends State<InternshipsScreen> {
                         builder: (ctx) => const NotificationScreen(),
                       ));
                     },
-                    icon: const Icon(Icons.notifications_outlined),
+                    icon: const Icon(Icons.notifications_outlined, size: 24,),
                   ),
                 )),
           ),
