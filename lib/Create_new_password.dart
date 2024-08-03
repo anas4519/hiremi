@@ -357,6 +357,7 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:hiremi_version_two/Custom_Widget/Alerts/password_changed.dart';
 import 'package:hiremi_version_two/api_services/base_services.dart';
 import 'package:hiremi_version_two/api_services/user_services.dart';
 import 'package:http/http.dart' as http;
@@ -376,11 +377,10 @@ class CreateNewPassword extends StatefulWidget {
 
 class _CreateNewPasswordState extends State<CreateNewPassword> {
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final UserService _userService = UserService();
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -411,13 +411,14 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                             color: Colors.black, // Default text color
                           ),
                         ),
-                        
                       ],
                     ),
                     textAlign: TextAlign.center, // Center align the text
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                ),
                 Center(
                   child: Image.asset(
                     'images/ResetPassword.png',
@@ -432,28 +433,37 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0215),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0115),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0215),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0115),
                       Padding(
-                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1),
+                        padding: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * 0.1),
                         child: RichText(
                           text: const TextSpan(
                             children: [
                               TextSpan(
                                 text: " New Password",
-                                style: TextStyle(color: Colors.black, fontSize: 16),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
                               ),
                               TextSpan(
                                 text: " *",
-                                style: TextStyle(color: Colors.red, fontSize: 16), // Red asterisk
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 16), // Red asterisk
                               ),
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.1),
                         child: CurvedTextField(
                           controller: _passwordController,
                           hintText: "********",
@@ -470,109 +480,149 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                           },
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.02),
                       Padding(
-                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1),
+                        padding: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * 0.1),
                         child: RichText(
                           text: const TextSpan(
                             children: [
                               TextSpan(
                                 text: "Confirm new Password",
-                                style: TextStyle(color: Colors.black, fontSize: 16),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
                               ),
                               TextSpan(
                                 text: " *",
-                                style: TextStyle(color: Colors.red, fontSize: 16), // Red asterisk
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 16), // Red asterisk
                               ),
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.1),
                         child: CurvedTextField(
                           controller: _confirmPasswordController,
                           hintText: "********",
                           prefixIcon: Icons.lock,
                           obscureText: true,
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              // return 'Please confirm your password';
-                            }
-                            if (value != _passwordController.text) {
-                              //return 'Passwords do not match';
+                            if (value == null || value.isEmpty || value != _passwordController.text) {
+                              return 'Passwords do not match';
                             }
                             return null;
                           },
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01),
                       Padding(
-                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1),
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width / 2.75),
                         child: RichText(
                           textAlign: TextAlign.center,
                           text: const TextSpan(
                             children: [
                               TextSpan(
                                 text: "Password must be ",
-                                style: TextStyle(color: Colors.black, fontSize: 8),
+                                style:
+                                    TextStyle(color: Colors.black, fontSize: 8),
                               ),
                               TextSpan(
                                 text: "8 digit",
-                                style: TextStyle(color: Colors.blue, fontSize: 8), // Change text color to blue
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 8), // Change text color to blue
                               ),
                               TextSpan(
                                 text: " long",
-                                style: TextStyle(color: Colors.black, fontSize: 8),
+                                style:
+                                    TextStyle(color: Colors.black, fontSize: 8),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.08),
                       Center(
                         child: CustomElevatedButton(
                           width: MediaQuery.of(context).size.width * 0.775,
                           height: MediaQuery.of(context).size.height * 0.0625,
                           text: 'Reset Password',
                           onPressed: () async {
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (BuildContext context) {
+                            //     return AlertDialog(
+                            //         contentPadding: EdgeInsets.zero,
+                            //         backgroundColor: Colors.white,
+                            //         shape: RoundedRectangleBorder(
+                            //           borderRadius: BorderRadius.circular(20),
+                            //         ),
+                            //         content: const PasswordChangedPopup());
+                            //   },
+                            // );
+
                             if (_formKey.currentState?.validate() ?? false) {
                               // resetPassword(
                               //   _passwordController.text,
                               //   _confirmPasswordController.text,
                               // );
                               // bool isPasswordValid = await _checkPassword();
-                              bool isPasswordValid =true;
+                              bool isPasswordValid = true;
 
-                              if(isPasswordValid) {
+                              if (isPasswordValid) {
                                 Map<String, dynamic> body = {
                                   "pass1": _passwordController.text.toString(),
-                                  "pass2": _confirmPasswordController.text.toString()
+                                  "pass2":
+                                      _confirmPasswordController.text.toString()
                                 };
                                 var response = await _userService.createPostApi(
                                     body, ApiUrls.passwordReset);
                                 if (response.statusCode == 200) {
                                   // ignore: use_build_context_synchronously
-                                  Navigator.pushReplacement(
-                                    context,
-                                    SlidePageRoute(page: const LogIn()),
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                          contentPadding: EdgeInsets.zero,
+                                          backgroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          content:
+                                              const PasswordChangedPopup());
+                                    },
                                   );
-                                }
-                                else {
+                                  // Navigator.pushReplacement(
+                                  //   context,
+                                  //   SlidePageRoute(page: const LogIn()),
+                                  // );
+                                } else {
                                   String errorMessage = response.body;
                                   // ignore: use_build_context_synchronously
                                   print(response.body);
                                   print("---------");
                                   print(response.statusCode);
-
                                 }
                               }
                             }
                           },
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0447),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0447),
                     ],
                   ),
                 ),

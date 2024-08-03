@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hiremi_version_two/Controller/Register_controller.dart';
+import 'package:hiremi_version_two/Custom_Widget/Alerts/successfully_registered.dart';
 import 'package:hiremi_version_two/Custom_Widget/Curved_Container.dart';
 import 'package:hiremi_version_two/Custom_Widget/Elevated_Button.dart';
 import 'package:hiremi_version_two/Custom_Widget/SliderPageRoute.dart';
 import 'package:hiremi_version_two/Login.dart';
 import 'package:hiremi_version_two/Models/register_model.dart';
+import 'package:hiremi_version_two/verified_popup.dart';
 import 'package:intl/intl.dart';
 
 class Registers extends StatefulWidget {
@@ -511,10 +513,25 @@ class _RegistersState extends State<Registers> {
                           print(registrationSuccess);
                           if (registrationSuccess) {
                             // Registration successful, navigate to login or next screen
-                            Navigator.pushReplacement(
-                              context,
-                              SlidePageRoute(page: const LogIn()),
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                    contentPadding: EdgeInsets.zero,
+                                    backgroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    content: SuccessfullyRegisteredPopup(
+                                      name: _fullNameController.text,
+                                    ));
+                              },
                             );
+
+                            // Navigator.pushReplacement(
+                            //   context,
+                            //   SlidePageRoute(page: const LogIn()),
+                            // );
                           } else {
                             // Show error message to user
                             ScaffoldMessenger.of(context).showSnackBar(
